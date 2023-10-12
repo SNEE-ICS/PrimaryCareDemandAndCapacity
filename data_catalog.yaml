@@ -18,12 +18,12 @@ data_sources:
       - name: High international migration variant
         zip_url: https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/populationandmigration/populationprojections/datasets/clinicalcommissioninggroupsinenglandz2/2018basedhighinternationalmigrationvariant/2018snppccgpop17032020165006.zip
         source_type: csv_in_zip
-        file: 2018 SNPP CCG pop persons.csv
+        csv_file: 2018 SNPP CCG pop persons.csv
         readme: SNPP Z2 high CCG Pop_read me
   - name: NHS GP Appointments by Region
     description: NHS England / digital published version of GP appointments, by sub-ICB area
     source_type: csv_in_zip
-    url: https://files.digital.nhs.uk/3D/ED1EDE/Appointments_GP_Regional_CSV_Aug_23.zip
+    zip_url: https://files.digital.nhs.uk/3D/ED1EDE/Appointments_GP_Regional_CSV_Aug_23.zip
     csv_file: Regional_CSV_SuffolkNEEssex.csv
     website_url: https://digital.nhs.uk/data-and-information/publications/statistical/appointments-in-general-practice
 exceptions: []
