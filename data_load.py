@@ -1,6 +1,8 @@
+from typing import Dict, Any, List, Literal, Optional, Union
 from enum import Enum
+from abc import ABC
+from typing_extensions import Annotated
 from pydantic import BaseModel, Field
-from typing import Dict, Any, List, Literal, Optional, Type, Union
 import yaml
 
 
@@ -14,40 +16,42 @@ class DataCatalogEntryType(Enum):
     SCENARIOS = "scenarios"
 
 
-class DataCatalogEntry(BaseModel):
+class DataCatalogBase(BaseModel, ABC):
     name: str
-    source_type: DataCatalogEntryType
     description: str
-    website_url: Optional[str]
-    readme: Optional[str]
+    website_url: Optional[str] = None
+    readme: Optional[str] = None
 
 
-class ScenariosCatalogEntry(DataCatalogEntry):
-    source_type = Literal[DataCatalogEntryType.SCENARIOS]
-    scenarios: List[DataCatalogEntry]
+class ScenariosCatalogEntry(DataCatalogBase):
+    source_type: Literal["scenarios"] = "scenarios"
+    scenarios: List["DataCatalogEntry"]
 
 
-class DataCatalogueCSV(DataCatalogEntry):
-    source_type = Union[Literal[DataCatalogEntryType.CSV],
-                         Literal[DataCatalogEntryType.CSV_IN_ZIP]]
+class CSVCatalogEntry(DataCatalogBase):
+    source_type: Literal["csv"] = "csv"
     csv_file: str
 
 
-class DataCatalogueCSVinZIP(DataCatalogueCSV):
-    source_type = Literal[DataCatalogEntryType.CSV_IN_ZIP]
+class CSVinZIPCatalogEntry(CSVCatalogEntry):
+    source_type: Literal["csv_in_zip"] = "csv_in_zip"
     zip_url: str
 
 
-class SQLQuery(DataCatalogEntry):
-    source_type: Literal[DataCatalogEntryType.DATABASE]
+class SQLQueryCatalogEntry(DataCatalogBase):
+    source_type: Literal["sql_query"] = "sql_query"
     sqlalchemy_url: str
     query: str
 
+# 'Register' these types with pydantic
+DataCatalogEntry = Annotated[Union[ScenariosCatalogEntry, CSVCatalogEntry,CSVinZIPCatalogEntry], Field(discriminator='source_type')]
+
+
 class DataCatalog(BaseModel):
     domain: str
-    data_sources: List[Type[DataCatalogEntry]]
-    exceptions: list
-    notes: str
+    data_sources: List[DataCatalogEntry]
+    exceptions: list = Field(default_factory=list)
+    notes: Optional[str] = None
 
     @classmethod
     def load_from_yaml(cls, catalog_path: str = "data_catalog.yaml") -> "DataCatalog":
@@ -68,15 +72,17 @@ class DataCatalog(BaseModel):
         try:
             yaml_dict: Dict[str, Any] = yaml.safe_load(
                 open(catalog_path, 'r', encoding='utf-8'))
-        except FileNotFoundError as e:
+        except FileNotFoundError as error:
             raise FileNotFoundError(
-                f"Could not find data catalog at {catalog_path}, check filepath.") from e
-        except yaml.YAMLError as e:
+                f"Could not find data catalog at {catalog_path}, check filepath.") from error
+        except yaml.YAMLError as error:
             raise yaml.YAMLError(
-                f"Could not load data catalog at {catalog_path}, check formatting.") from e
-        except Exception as e:
+                f"Could not load data catalog at {catalog_path}, check formatting.") from error
+        except Exception as error:
             raise Exception(
-                f"Could not load data catalog at {catalog_path}, please check file is valid") from e
+                f"Could not load data catalog at {catalog_path}, please check file is valid") from error
+
+        
 
         cat_instance = cls.model_validate(yaml_dict)
         return cat_instance
