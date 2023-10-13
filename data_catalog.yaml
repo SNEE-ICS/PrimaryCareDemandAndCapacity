@@ -1,11 +1,10 @@
 domain: snee_ics
-data_sources:
+scenario_data_sources:
   - name: ONS Population projections by single year of age mid-2018 to mid-2043
     description: Population projections from 2018-2045 provided by ONS. Unfortunately this is not yet using the 2021 census as a base.
-    source_type: scenarios
     website_url: https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationprojections/datasets/clinicalcommissioninggroupsinenglandz2
     scenarios:
-      - name: Base scenario
+      - name: Principal projection
         zip_url: https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/populationandmigration/populationprojections/datasets/localauthoritiesinenglandz1/2018based/2018snpppopulation.zip
         source_type: csv_in_zip
         csv_file: 2018 SNPP Population persons.csv
@@ -15,13 +14,16 @@ data_sources:
         source_type: csv_in_zip
         csv_file: 2018 SNPP CCG pop persons.csv
         readme: SNPP Z2 10year CCG Pop_read me
+        description: The 10-year migration variant was created because of user demand for analysing the differences arising from migration assumptions based off 10 years of historical data rather than the five years that are used in the principal projection. 
       - name: High international migration variant
         zip_url: https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/populationandmigration/populationprojections/datasets/clinicalcommissioninggroupsinenglandz2/2018basedhighinternationalmigrationvariant/2018snppccgpop17032020165006.zip
+        description: The high and low international migration variants were created to inform user interest in these areas. 
         source_type: csv_in_zip
         csv_file: 2018 SNPP CCG pop persons.csv
         readme: SNPP Z2 high CCG Pop_read me
+single_data_sources:
   - name: NHS GP Appointments by Region
-    description: NHS England / digital published version of GP appointments, by sub-ICB area
+    description: NHS England / digital published version of GP appointments, by sub-ICB area.
     source_type: csv_in_zip
     zip_url: https://files.digital.nhs.uk/3D/ED1EDE/Appointments_GP_Regional_CSV_Aug_23.zip
     csv_file: Regional_CSV_SuffolkNEEssex.csv
