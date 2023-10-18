@@ -1,14 +1,15 @@
 from typing import Dict, Any, List, Literal, Optional, Union
 from enum import Enum
-from abc import ABC
+from abc import ABC, abstractmethod
+from io import BytesIO
+from zipfile import ZipFile
+
+
 from typing_extensions import Annotated
 import requests
-
 from pydantic import BaseModel, Field
 import yaml
 import pandas as pd
-from zipfile import ZipFile
-from io import BytesIO
 
 
 class DataCatalogEntryType(Enum):
@@ -20,54 +21,126 @@ class DataCatalogEntryType(Enum):
     API = "api"
 
 
+class DataCatalogLoadType(str, Enum):
+    CATALOG: str = "catalog"
+    DF: str = "dataframe"
+    PY_NATIVE: str = "python_native"
+
+
 class DataCatalogBase(BaseModel, ABC):
     name: str
     description: str
+    load_as: DataCatalogLoadType
+    read_kwargs: Optional[dict] = None
     website_url: Optional[str] = None
     readme: Optional[str] = None
+
+    @abstractmethod
+    def load(self, read_kwargs: dict | None = None) -> Any:
+        """converts loads the data source into a python object
+
+        Returns:
+            Any: the data source
+        """
+        if self.load_as == DataCatalogLoadType.CATALOG:
+            pass  # do nothing this is overloaded
+        elif self.load_as == DataCatalogLoadType.DF:
+            return self.to_pandas_dataframe(read_kwargs)
+        elif self.load_as == DataCatalogLoadType.PY_NATIVE:
+            return self.to_dict(read_kwargs)
+        else:
+            raise NotImplementedError(f"{self.load_as} load not implemented")
 
 
 class CSVCatalogEntry(DataCatalogBase):
     source_type: Literal["csv"] = "csv"
     csv_file: str
 
-    def to_pandas_dataframe(self, pandas_read_csv_kwargs: dict | None = None) -> pd.DataFrame:
+    def to_pandas_dataframe(self, read_kwargs: dict | None = None) -> pd.DataFrame:
         """Loads the csv file into a pandas dataframe
 
         Returns:
             pd.DataFrame: the dataframe
         """
-        if pandas_read_csv_kwargs is None:
+        if read_kwargs is None:
             read_csv_kwargs = {}
         else:
-            read_csv_kwargs = pandas_read_csv_kwargs
+            read_csv_kwargs = read_kwargs
         return pd.read_csv(self.csv_file, **read_csv_kwargs)
+
+    def to_dict(self, read_kwargs: dict | None = None) -> dict:
+        """Loads the csv file into a dictionary
+
+        Returns:
+            dict: the dictionary
+        """
+
+        return pd.read_csv(self.csv_file, read_kwargs).to_dict()
 
 
 class CSVinZIPCatalogEntry(CSVCatalogEntry):
+    """
+    Catalog entry for a csv file in a zip file.
+    """
     source_type: Literal["csv_in_zip"] = "csv_in_zip"
     zip_url: str
     csv_file: str
+    zip_file: ZipFile | None = None  # only used for loading, temporary
 
-    def to_pandas_dataframe(self, pandas_read_csv_kwargs: dict | None = None) -> pd.DataFrame:
-        # download / extract zip file to buffer and read csv from buffer
+    def load(self, read_kwargs: dict | None = None) -> Any:
+        """Loads the csv file into a python object
+
+        Args:
+            read_kwargs (dict | None, optional): passed to pandas.read_csv(). Defaults to None.
+
+        Raises:
+            requests.HTTPError: raised if there is an error downloading the zip file
+            NotImplementedError: raised when attempting a 
+
+        Returns:
+            Any: _description_
+        """
+
         if self.zip_url.startswith("http"):
             zip_file_response = requests.get(self.zip_url, timeout=1000)
             if zip_file_response.status_code != 200:
                 raise requests.HTTPError(
-                    f"Could not download zip file from {self.zip_url}, status code {zip_file_response.status_code}")
+                    f"Could not download zip file from {self.zip_url}, \
+                        status code {zip_file_response.status_code}"
+                )
             zip_bytes = BytesIO(zip_file_response.content)
             zip_bytes.seek(0)
-            zip_obj = ZipFile(zip_bytes)
+            self.zip_file = ZipFile(zip_bytes)
         else:
             # assume local file object
-            zip_obj = ZipFile(self.zip_url)
-            # use pandas to read csv from zip file
-        if pandas_read_csv_kwargs is None:
+            self.zip_file = ZipFile(self.zip_url)
+
+        if self.load_as == DataCatalogLoadType.DF:
+            return self.to_pandas_dataframe(read_kwargs)
+        elif self.load_as == DataCatalogLoadType.PY_NATIVE:
+            return self.to_pandas_dataframe(read_kwargs).to_dict()
+        elif self.load_as == DataCatalogLoadType.CATALOG:
+            raise NotImplementedError(
+                f"{self.load_as} load not implemented for zip files")
+        self.zip_file = None
+
+    class Config:
+        arbitrary_types_allowed = True  # allow zip_file to be set to ZipFile object
+
+    def to_pandas_dataframe(self, read_kwargs: dict | None = None) -> pd.DataFrame:
+        # download / extract zip file to buffer and read csv from buffer
+
+        # use pandas to read csv from zip file
+        if read_kwargs is None:
             read_csv_kwargs = {}
         else:
-            read_csv_kwargs = pandas_read_csv_kwargs
-        return pd.read_csv(zip_obj.open(self.csv_file, 'r'), **read_csv_kwargs)
+            read_csv_kwargs = read_kwargs
+
+        csv_file = self.zip_file.open(self.csv_file, 'r')
+        return pd.read_csv(csv_file, **read_csv_kwargs)
+
+    def to_dict(self, read_kwargs: dict | None = None) -> dict:
+        return self.to_pandas_dataframe(read_kwargs).to_dict()
 
 
 class SQLQueryCatalogEntry(DataCatalogBase):
@@ -75,17 +148,25 @@ class SQLQueryCatalogEntry(DataCatalogBase):
     query: str
     database_metadata: Optional[Dict[str, Any]] = None
 
-    def to_pandas_dataframe(self, pandas_read_sql_kwargs: Optional[dict] = None) -> pd.DataFrame:
+    def to_pandas_dataframe(self, read_kwargs: Optional[dict] = None) -> pd.DataFrame:
         """Loads the sql query into a pandas dataframe
 
         Returns:
             pd.DataFrame: the dataframe
         """
-        if pandas_read_sql_kwargs is None:
+        if read_kwargs is None:
             read_sql_kwargs = {}
         else:
-            read_sql_kwargs = pandas_read_sql_kwargs
+            read_sql_kwargs = read_kwargs
         return pd.read_sql(self.query, **read_sql_kwargs)
+
+    def load(self, read_kwargs: Optional[dict] = None) -> Any:
+        """converts loads the data source into a python object
+
+        Returns:
+            Any: the data source
+        """
+        return self.to_pandas_dataframe(read_kwargs=read_kwargs)
 
 
 # 'Register' these types with pydantic
@@ -94,10 +175,36 @@ DataCatalogEntry = Annotated[Union[CSVCatalogEntry, CSVinZIPCatalogEntry,
 
 
 class ScenariosCatalogEntry(DataCatalogBase):
+    load_as: DataCatalogLoadType = DataCatalogLoadType.CATALOG  # override load_as
     scenarios: List[DataCatalogEntry]
+
+    def load(self, read_kwargs: dict | None = None) -> Dict[str, Any]:
+        """Loads each of the scenarios into a dictionary, keyed by scenario name
+
+        Args:
+            load_kwargs (Optional[dict], optional): _description_. Defaults to None.
+
+        Returns:
+            Dict[str, Any]: _description_
+        """
+        scenario_data = {}
+
+        for scenario in self.scenarios:
+            if scenario.read_kwargs is not None:
+                scenario_kwargs = scenario.read_kwargs.get(
+                    scenario.name, {})
+            else:
+                scenario_kwargs = {}
+            scenario_data[scenario.name] = scenario.load(
+                **scenario_kwargs)
+        return scenario_data
 
 
 class DataCatalog(BaseModel):
+    """Class which documents the data sources used in a model run
+    consists of single data sources (catalog entries) and scenario data sources (sub-catalog of entries)
+    """
+
     domain: str
     single_data_sources: List[DataCatalogEntry]
     scenario_data_sources: List[ScenariosCatalogEntry]
@@ -130,7 +237,22 @@ class DataCatalog(BaseModel):
                 f"Could not load data catalog at {catalog_path}, check formatting.") from error
         except Exception as error:
             raise Exception(
-                f"Could not load data catalog at {catalog_path}, please check file is valid") from error
+                f"Could not load data catalog at {catalog_path}, \
+                    please check file is valid") from error
 
         cat_instance = cls.model_validate(yaml_dict)
         return cat_instance
+
+
+
+if __name__ == '__main__':
+    my_catalog = DataCatalog.load_from_yaml()
+
+    single_sources = {source.name: source.load()
+                      for source in my_catalog.single_data_sources}
+    
+    print(single_sources)
+
+    ons_scenarios = my_catalog.scenario_data_sources[0].load()
+
+    print(ons_scenarios)
