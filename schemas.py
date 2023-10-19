@@ -22,12 +22,16 @@ class DataCatalogEntryType(Enum):
 
 
 class DataCatalogLoadType(str, Enum):
+    """Enum for the different ways to load data sources"""
     CATALOG: str = "catalog"
     DF: str = "dataframe"
     PY_NATIVE: str = "python_native"
 
 
 class DataCatalogBase(BaseModel, ABC):
+    """
+    Base class for data catalog entries.
+    """
     name: str
     description: str
     load_as: DataCatalogLoadType
