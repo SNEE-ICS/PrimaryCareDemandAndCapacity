@@ -53,20 +53,15 @@ single_data_sources:
     zip_url: https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2023/10/Annual-CSV-2023-24-Published-October-2023-HJYTR.zip
     csv_file: Annual CSV 2023-24 Published October 2023 HJYTR.csv
     website_url: https://www.england.nhs.uk/statistics/statistical-work-areas/outpatient-referrals/
-  - name: 2023-24 Monthly Outpatient Referrals Data
-    description: The Monthly Referral Return (MRR) contains data relating to GP and other referrals for first consultant-led outpatient appointments focusing on all treatment functions and specific acute treatment functions. MRR figures are submitted monthly from June 2020 by NHS trusts and independent sector providers treating NHS patients.
-    source_type: csv_in_zip
-    load_as: dataframe
-    zip_url: https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2023/10/Annual-CSV-2023-24-Published-October-2023-HJYTR.zip
-    csv_file: Annual CSV 2023-24 Published October 2023 HJYTR.csv
-    website_url: https://www.england.nhs.uk/statistics/statistical-work-areas/outpatient-referrals/
   - name: 2022-23 Monthly Outpatient Referrals Data
+    description: The Monthly Referral Return (MRR) contains data relating to GP and other referrals for first consultant-led outpatient appointments focusing on all treatment functions and specific acute treatment functions. MRR figures are submitted monthly from June 2020 by NHS trusts and independent sector providers treating NHS patients.
     source_type: csv_in_zip
     load_as: dataframe
     zip_url: https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2023/07/Annual-CSV-2022-23-including-revisions-Oct-22-Feb-23-final-1.zip
     csv_file: Annual CSV 2022-23 including revisions Oct 22- Feb 23 final 1.csv
     website_url: https://www.england.nhs.uk/statistics/statistical-work-areas/outpatient-referrals/
   - name: 2021-22 Monthly Outpatient Referrals Data
+    description: The Monthly Referral Return (MRR) contains data relating to GP and other referrals for first consultant-led outpatient appointments focusing on all treatment functions and specific acute treatment functions. MRR figures are submitted monthly from June 2020 by NHS trusts and independent sector providers treating NHS patients.
     source_type: csv_in_zip
     load_as: dataframe
     zip_url: https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2023/04/Annual-CSV-2021-22-Revised-April-23-inc-Oct-21-to-Mar-22-revisions.zip
