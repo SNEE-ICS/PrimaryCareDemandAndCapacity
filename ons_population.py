@@ -5,6 +5,10 @@ import pandas as pd
 from schemas import DataCatalogEntry
 import constants as const
 
+
+DEFAULT_AGE_BINS = 5
+DEFAULT_TIME_PERIOD = 'daily'
+
 class ONSPopulationScenario:
 
 
@@ -17,7 +21,7 @@ class ONSPopulationScenario:
         self.time_period = 'daily'
         self.name = self.ons_catalog_entry.name
     
-    def interpolated_population(self, time_period: Literal['daily','monthly','yearly'] = 'daily', yearly_age_bins:Literal[None,'5','10','Total'] = '5'):
+    def interpolated_population(self, time_period: Literal['daily','monthly','yearly'] = DEFAULT_TIME_PERIOD, yearly_age_bins:Literal[None,'5','10','Total'] = DEFAULT_AGE_BINS):
         """
         Returns the population for a given sub_icb, age_group and date.
         """
@@ -30,18 +34,20 @@ class ONSPopulationScenario:
         df = self.ons_raw_df.copy()
         # create sub-icb column and drop na, drop
         df = df.assign(sub_icb = lambda df: df['AREA_NAME'].map(const.CCG_SUB_ICB)).dropna()
-        if yearly_age_bins != 'Total' or yearly_age_bins is None:
+        if yearly_age_bins == 'Total' or yearly_age_bins is None:
             # Drop 'All ages' in AGE_GROUP
+            df = df.loc[df['AGE_GROUP'] == 'All ages']
+        else:
             df = df.loc[df['AGE_GROUP'] != 'All ages']
         # Create bins and labels for age groups
-        if yearly_age_bins == '5':
-            bins = [i for i in range(0,91,5)] + [150]
-            labels = [f'{i}-{i+4}' for i in range(0,90,5)] + ['90+']
-        elif yearly_age_bins == '10':
-            bins = [i for i in range(0,91,10)] + [150]
-            labels = [f'{i}-{i+9}' for i in range(0,90,10)] + ['90+']
-        # Replace '90 and over' with 90 and convert to int
         if yearly_age_bins == '5' or yearly_age_bins == '10':
+            if yearly_age_bins == '5':
+                bins = [i for i in range(0,91,5)] + [150]
+                labels = [f'{i}-{i+4}' for i in range(0,90,5)] + ['90+']
+            elif yearly_age_bins == '10':
+                bins = [i for i in range(0,91,10)] + [150]
+                labels = [f'{i}-{i+9}' for i in range(0,90,10)] + ['90+']
+        # Replace '90 and over' with 90 and convert to int
             df['AGE_GROUP'] = df['AGE_GROUP'].replace("90 and over", 90).astype(int)
             # Create age groups
             df['AGE_GROUP'] = pd.cut(df['AGE_GROUP'], bins, labels = labels,include_lowest = True, right = False)

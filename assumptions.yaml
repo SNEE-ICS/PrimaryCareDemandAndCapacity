@@ -1,2 +1,39 @@
 version: 0.1
-file_type: assumptions and constants
+file_type: assumptions and constants current version
+referral_rates:
+  - acute:
+    - area: 06L # Ipswich and east suffolk
+      GP: 4.96
+      Other: 3.6
+    - area: 07K # west suffolk
+      GP: 3.4
+      Other: 4.75
+    - area: 06T # north east essex
+      GP: 3.83
+      Other: 2.62
+  - community:
+    - area: 06L # Ipswich and east suffolk
+      rate: 0.0
+    - area: 07K # west suffolk
+      rate: 0.0
+    - area: 06T # north east essex
+      rate: 1.2
+did_not_attend: # percentages
+  - area: 06L # Ipswich and east suffolk
+    GP: 0.8
+    Other: 3.4
+  - area: 07K # west suffolk
+    GP: 1.5
+    Other: 3.9
+  - area: 06T # north east essex
+    GP: 2.2
+    Other: 6.7
+unmet_demand:
+  - area: 06L # Ipswich and east suffolk
+    rate: 3.32
+  - area: 07K # West suffolk
+    rate: 1.38
+  - area: 06T # North east essex
+    rate: 16.14
+
+  

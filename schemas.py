@@ -247,8 +247,6 @@ class DataCatalog(BaseModel):
         cat_instance = cls.model_validate(yaml_dict)
         return cat_instance
 
-
-
 if __name__ == '__main__':
     my_catalog = DataCatalog.load_from_yaml()
 
