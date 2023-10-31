@@ -61,7 +61,7 @@ class ONSPopulationScenario:
         # convert population to int
         df['population'] = df['population'].astype(int)
         # group by age group, date and sub_icb
-        df= df.groupby(['AGE_GROUP','Date','sub_icb']).sum().reset_index()
+        df= df.groupby(['AGE_GROUP','Date','sub_icb']).sum(observed=True).reset_index()
         # interpolate
         df = self._interpolate_subpopulations(df, 'sub_icb', 'AGE_GROUP', time_period=time_period)
         self.interpolated_df = df.copy()
