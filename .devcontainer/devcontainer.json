@@ -1,5 +1,5 @@
 {"image":"mcr.microsoft.com/devcontainers/universal:2",
-"postStartCommand": "source .venv/bin/activate",
+"postStartCommand": "source .venv/bin/activate && pip install requirements.txt",
 "customizations/vscode/extensions": [
     "ms-python.python",
     "ms-toolsai.jupyter"
