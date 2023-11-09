@@ -11,6 +11,8 @@ from pydantic import BaseModel, Field
 import yaml
 import pandas as pd
 
+import constants as const
+
 
 class DataCatalogEntryType(Enum):
     """Enum for the different types of data sources"""
@@ -246,6 +248,21 @@ class DataCatalog(BaseModel):
 
         cat_instance = cls.model_validate(yaml_dict)
         return cat_instance
+
+
+class CommunityReferralRates(BaseModel):
+    area:Literal[tuple(const.CCG_SUB_ICB.keys())]
+    rate: float
+
+class AcuteReferralRates(BaseModel):
+    area: Literal[tuple(const.CCG_SUB_ICB.keys())]
+    gp: float = Field(..., alias='GP')
+    Other:float = Field(..., alias='Other')
+
+class ReferralRates(BaseModel):
+    acute: List[AcuteReferralRates]
+    community: List[CommunityReferralRates]
+
 
 if __name__ == '__main__':
     my_catalog = DataCatalog.load_from_yaml()
