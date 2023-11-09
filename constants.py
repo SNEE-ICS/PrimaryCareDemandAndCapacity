@@ -28,6 +28,11 @@ SUB_ICB_CODES = {"06L": IPS_EAST_SUFF,
                  "07K": WEST_SUFF,
                  "06T": NE_ESSEX}
 
+# ONS CODE
+ONS_CODES = {"E38000086": IPS_EAST_SUFF,
+                 "E38000204": WEST_SUFF,
+                 "E38000117": NE_ESSEX}
+
 # CCG to sub-ICB
 CCG_SUB_ICB = {"NHS Ipswich and East Suffolk CCG": IPS_EAST_SUFF,
                "NHS West Suffolk CCG": WEST_SUFF,
