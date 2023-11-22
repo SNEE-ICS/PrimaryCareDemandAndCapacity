@@ -17,24 +17,6 @@ def get_numdays(df_:pd.DataFrame):
 
     return num_days_in_month_v_(years,months)
 
-def get_workingdays(a_:np.array):
-    years, months =  a_.year, a_.month
-
-    #
-    def _num_workingdays_in_month(year,month):
-        workingdays = 0
-        day = 1
-        while day <= calendar.monthrange(year,month)[1]:
-            the_date =  dt.datetime(year,month,day)
-            if the_date.isoweekday() and the_date not in const.ENGLAND_BANK_HOLIDAYS:
-                workingdays +=1
-            day += 1
-        return workingdays
-
-    vec_workingdays = np.vectorize(_num_workingdays_in_month)
-    return vec_workingdays(years, months)
-
-
 def calc_oadr_status(ons_age_group:str):
 
     ons_age_group = ons_age_group.replace(" and over", "")
@@ -48,4 +30,7 @@ def calc_oadr_status(ons_age_group:str):
         return 'Retired'
     else:
         return None
+    
+def get_num_workingdays(start_end)->int:
+    return np.busday_count(np.datetime64('2021-01-01'), np.datetime64('2021-12-31'), holidays=const.HOLIDAYS)
 
