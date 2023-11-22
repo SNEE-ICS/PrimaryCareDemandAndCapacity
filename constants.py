@@ -1,6 +1,7 @@
 from typing import Final, Dict, Type
 import datetime as dt
 import holidays
+import math 
 
 
 # NHS ENGLAND APPOINTMENTS
@@ -42,3 +43,7 @@ ICB_ONS_AREAS = {"Tendring": NE_ESSEX,
                  "Mid Suffolk": IPS_EAST_SUFF,
                  "Suffolk Coastal": IPS_EAST_SUFF,
                  "Ipswich": IPS_EAST_SUFF}
+
+# Used for time of year encoding
+MONTH_CYCLICAL_ENCODING =  {"sin":{month: math.sin(2 * math.pi * month/12) for month in range(1,13)}
+                            , "cos": {month: math.cos(2 * math.pi * month/12) for month in range(1,13)}}
