@@ -10,6 +10,7 @@ import requests
 from pydantic import BaseModel, Field
 import yaml
 import pandas as pd
+from io import BytesIO
 
 import constants as const
 
@@ -132,6 +133,7 @@ class CSVinZIPCatalogEntry(CSVCatalogEntry):
 
     class Config:
         arbitrary_types_allowed = True  # allow zip_file to be set to ZipFile object
+    
 
     def to_pandas_dataframe(self, read_kwargs: dict | None = None) -> pd.DataFrame:
         # download / extract zip file to buffer and read csv from buffer
@@ -147,6 +149,51 @@ class CSVinZIPCatalogEntry(CSVCatalogEntry):
 
     def to_dict(self, read_kwargs: dict | None = None) -> dict:
         return self.to_pandas_dataframe(read_kwargs).to_dict()
+    
+class HTTPRequestCSVCatalogEntry(CSVCatalogEntry):
+    """
+    Catalog entry for a csv file requested via http get request
+    """
+    source_type: Literal["csv_http_request"] = "csv_http_request"
+    request_url: str
+    csv_file: Optional[BytesIO] = None # override in this case
+
+
+    def load(self)->None:
+        """Loads the csv file into a python object
+
+        Args:
+            read_kwargs (dict | None, optional): passed to pandas.read_csv(). Defaults to None.
+
+        Raises:
+            requests.HTTPError: raised if there is an error downloading the zip file
+            NotImplementedError: raised when attempting a 
+
+        Returns:
+            Any: _description_
+        """
+
+        csv_file_response = requests.get(self.request_url, timeout=1000)
+        if csv_file_response.status_code != 200:
+            raise requests.HTTPError(
+                f"Could not download csv file from {self.request_url}, \
+                    status code {csv_file_response.status_code}"
+            )
+        else:
+            csv_bytes = BytesIO(csv_file_response.content)
+            csv_bytes.seek(0)
+
+            if self.load_as == DataCatalogLoadType.DF:
+                return self.to_pandas_dataframe()
+            elif self.load_as == DataCatalogLoadType.PY_NATIVE:
+                return self.to_pandas_dataframe().to_dict()
+            elif self.load_as == DataCatalogLoadType.CATALOG:
+                raise NotImplementedError(
+                    f"{self.load_as} load not implemented for web requests")
+            
+    class Config:
+        arbitrary_types_allowed = True  # allow zip_file to be set to ZipFile object
+
 
 
 class SQLQueryCatalogEntry(DataCatalogBase):
