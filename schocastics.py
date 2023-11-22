@@ -1,4 +1,4 @@
-from typing import Callable, Dict, Literal, Type, Any
+from typing import Callable, Dict, Literal, Type, Any,List
 
 from scipy.stats import lognormal, expon
 from pydantic import BaseModel, dataclass
@@ -16,7 +16,7 @@ class AppointmentDistribution(BaseModel):
     dist_type: Literal[tuple(DIST_TYPES.keys())]
     lower_limit:int = Field(default=APPOINTMENT_LOWER_LIMIT_MINUTES)
     upper_limit:int = Field(default=APPOINTMENT_UPPER_LIMIT_MINUTES)
-    params:Dict[str, Any] = Field(..., default_factory=dict)
+    params:List[str, Any] = Field(..., default_factory=dict)
 
     def create_samples(self, n_samples=NUM_SAMPLES)->np.ndarray:
         """
