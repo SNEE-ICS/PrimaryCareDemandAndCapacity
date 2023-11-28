@@ -3,7 +3,7 @@ from typing import Final, Dict, Type, Literal
 import pandas as pd
 
 from schemas import DataCatalogEntry
-import constants as const
+import src.constants as const
 
 
 DEFAULT_AGE_BINS = 5
