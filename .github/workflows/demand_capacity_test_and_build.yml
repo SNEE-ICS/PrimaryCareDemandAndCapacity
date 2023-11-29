@@ -47,7 +47,7 @@ jobs:
       # Install pip and pytest
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip nbconvert
           pip install -r requirements.txt
       - name: Find notebook filenames and save to variable
         # shell script to find all notebooks in the notebooks folder and save to a variable
@@ -58,7 +58,7 @@ jobs:
         run: |
           cd ${{ env.NOTEBOOKS_PATH }}
           while read -r notebook; do
-            python -m jupyter execute "$notebook" --allow-errors
+            python -m jupyter nbconvert --execute "$notebook" --allow-errors
           done < notebooks.txt
       - name: Store data/plot artifacts
         # 
