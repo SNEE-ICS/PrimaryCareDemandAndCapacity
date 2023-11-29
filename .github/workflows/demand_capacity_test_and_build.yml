@@ -52,7 +52,7 @@ jobs:
       - name: Find notebook filenames and save to variable
         # shell script to find all notebooks in the notebooks folder and save to a variable
         run: |
-          find ${{ env.NOTEBOOKS_PATH }} -name "*.ipynb" > notebooks.txt
+          find ${{ env.NOTEBOOKS_PATH }} -name "*.ipynb" > ${{ env.NOTEBOOKS_PATH }}notebooks.txt
       - name: Run notebooks
         # shell script to run all notebooks in the repo
         run: |
@@ -60,7 +60,7 @@ jobs:
           while read -r notebook; do
             jupyter execute "$notebook" --allow-errors --ExecutePreprocessor.timeout=600
           done < notebooks.txt
-      - name: store data artifacts
+      - name: Store data/plot artifacts
         # 
         uses: actions/upload-artifact@v2
         with:
