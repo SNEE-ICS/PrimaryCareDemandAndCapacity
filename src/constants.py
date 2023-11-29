@@ -1,4 +1,4 @@
-from typing import Final, Dict, Type
+from typing import Final, Dict, NamedTuple, Type
 import datetime as dt
 import holidays
 
@@ -47,3 +47,11 @@ ICB_ONS_AREAS = {"Tendring": NE_ESSEX,
                  "Mid Suffolk": IPS_EAST_SUFF,
                  "Suffolk Coastal": IPS_EAST_SUFF,
                  "Ipswich": IPS_EAST_SUFF}
+
+
+# Location for outputs
+NOTEBOOK_OUTPUT_BASE_PATH = "../outputs/"
+NOTEBOOK_OUTPUT_TABLES_PATH = NOTEBOOK_OUTPUT_BASE_PATH + "tables/"
+NOTEBOOK_OUTPUT_FIGURES_PATH = NOTEBOOK_OUTPUT_BASE_PATH + "figures/"
+SIMULATION_RESULTS_PATH = NOTEBOOK_OUTPUT_BASE_PATH + "simulation_results/"
+

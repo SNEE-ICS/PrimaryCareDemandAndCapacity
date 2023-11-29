@@ -4,7 +4,7 @@ from scipy.stats import lognormal, expon
 from pydantic import BaseModel, dataclass
 import numpy as np
 
-import constants as const
+import src.constants as const
 
 APPOINTMENT_LOWER_LIMIT_MINUTES = 1
 APPOINTMENT_UPPER_LIMIT_MINUTES = 60

@@ -1,0 +1,49 @@
+name: Run Jupyter notebooks and publish outputs
+
+on:
+  [workflow_dispatch, workflow_call]
+
+jobs:
+  notebooks:
+    name: Run Jupyter notebooks
+    runs-on: ubuntu-latest
+    env:
+      # Set the path to the notebooks folder
+      NOTEBOOKS_PATH: notebooks/actionstest/
+      OUTPUTS_PATH: outputs/
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python # Set Python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      # Install pip and pytest
+      - name: Install dependencies
+          
+        run: |
+          python -m pip install --upgrade pip nbconvert
+          pip install -r requirements.txt
+      - name: Find notebook filenames and save to variable
+        # shell script to find all notebooks in the notebooks folder and save to a variable
+        run: |
+          cd ${{ env.NOTEBOOKS_PATH }}
+          find . -name "*.ipynb" > notebooks.txt
+      - name: Run notebooks
+        # shell script to run all notebooks in the repo
+        # this will save outputs to ${{env.OUTPUTS_PATH }} folder
+        run: |
+          cd ${{ env.NOTEBOOKS_PATH }}
+          while read -r notebook; do
+            python -m jupyter nbconvert --to html --execute "$notebook" --allow-errors
+          done < notebooks.txt
+      - name: Store data/plot artifacts
+        # 
+        uses: actions/upload-artifact@v3
+        with:
+          # upload all of 'outputs' directory
+          # upload notebooks as html
+          path: |
+            ${{env.NOTEBOOKS_PATH }}*.html
+            ${{ env.OUTPUTS_PATH}}
+          # name the artifact
+          name: notebook-outputs
