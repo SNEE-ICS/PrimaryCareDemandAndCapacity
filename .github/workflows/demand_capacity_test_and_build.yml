@@ -63,10 +63,12 @@ jobs:
           done < notebooks.txt
       - name: Store data/plot artifacts
         # 
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           # upload all of 'outputs' directory
-          path: ${{ env.OUTPUTS_PATH }}
+          path: |
+            ${{env.NOTEBOOKS_PATH }}*.html
+            ${{ env.OUTPUTS_PATH}}
           # name the artifact
           name: notebook-outputs
         
