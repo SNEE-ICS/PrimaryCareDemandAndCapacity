@@ -59,7 +59,7 @@ jobs:
         run: |
           cd ${{ env.NOTEBOOKS_PATH }}
           while read -r notebook; do
-            python -m jupyter nbconvert --to html--execute "$notebook" --allow-errors
+            python -m jupyter nbconvert --to html --execute "$notebook" --allow-errors
           done < notebooks.txt
       - name: Store data/plot artifacts
         # 
