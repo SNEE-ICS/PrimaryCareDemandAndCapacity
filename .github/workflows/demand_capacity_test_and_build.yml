@@ -58,7 +58,7 @@ jobs:
         run: |
           cd ${{ env.NOTEBOOKS_PATH }}
           while read -r notebook; do
-            jupyter execute "$notebook" --allow-errors --ExecutePreprocessor.timeout=600
+            python -m jupyter execute "$notebook" --allow-errors
           done < notebooks.txt
       - name: Store data/plot artifacts
         # 
