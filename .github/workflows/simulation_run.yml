@@ -14,7 +14,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Run notebooks
-              uses: $GITHUB_REPOSITORY/.github/workflows/notebook_run.yml
+              uses: $GITHUB_REPOSITORY/.github/workflows/notebook_run.yml@${{ inputs.branch_name}}
 
     simulation:
         runs-on: ubuntu-latest
