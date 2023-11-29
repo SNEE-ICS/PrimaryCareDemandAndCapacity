@@ -5,7 +5,6 @@ on: [push]
 jobs:
   test:
     name: Python pytest
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -37,8 +36,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # Set the path to the notebooks folder
-      NOTEBOOKS_PATH: notebooks/outputstest
-      OUTPUTS_PATH: outputs
+      NOTEBOOKS_PATH: notebooks/outputstest/
+      OUTPUTS_PATH: outputs/
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python # Set Python version
