@@ -52,7 +52,8 @@ jobs:
       - name: Find notebook filenames and save to variable
         # shell script to find all notebooks in the notebooks folder and save to a variable
         run: |
-          find ${{ env.NOTEBOOKS_PATH }} -name "*.ipynb" > ${{ env.NOTEBOOKS_PATH }}notebooks.txt
+          cd ${{ env.NOTEBOOKS_PATH }}
+          find . -name "*.ipynb" > notebooks.txt
       - name: Run notebooks
         # shell script to run all notebooks in the repo
         run: |
