@@ -8,7 +8,7 @@ jobs:
     name: Run Jupyter notebooks
     runs-on: ubuntu-latest
     env:
-      # Set the path to the notebooks folder
+      # Set the path to the notebooks directory
       NOTEBOOKS_PATH: notebooks/actionstest/
       OUTPUTS_PATH: outputs/
     steps:
@@ -24,13 +24,14 @@ jobs:
           python -m pip install --upgrade pip nbconvert
           pip install -r requirements.txt
       - name: Find notebook filenames and save to variable
-        # shell script to find all notebooks in the notebooks folder and save to a variable
+        # shell script to cd into notebooks dir
+        # find all notebooks in the notebooks directory and save to notebooks.txt
         run: |
           cd ${{ env.NOTEBOOKS_PATH }}
           find . -name "*.ipynb" > notebooks.txt
       - name: Run notebooks
-        # shell script to run all notebooks in the repo
-        # this will save outputs to ${{env.OUTPUTS_PATH }} folder
+        # shell script to run all notebooks from notebooks.txt
+        # this will save outputs to ${{env.OUTPUTS_PATH }} directory
         run: |
           cd ${{ env.NOTEBOOKS_PATH }}
           while read -r notebook; do

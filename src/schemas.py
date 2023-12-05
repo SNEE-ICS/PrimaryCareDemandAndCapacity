@@ -249,6 +249,44 @@ class DataCatalog(BaseModel):
         cat_instance = cls.model_validate(yaml_dict)
         return cat_instance
 
+    def get_catalog_entry_by_name(self, name: str) -> DataCatalogEntry:
+        """Returns a data catalog entry by name
+
+        Args:
+            name (str): name of the data catalog entry
+
+        Raises:
+            KeyError: if the name is not found
+
+        Returns:
+            DataCatalogEntry: the data catalog entry
+        """
+        for entry in self.single_data_sources:
+            if entry.name == name:
+                return entry
+        raise KeyError(f"Could not find data catalog entry with name {name}")
+
+    def get_catalog_scenario_by_name(self, name: str, scenario_name:str) -> DataCatalogEntry:
+        """Returns a data catalog entry by name
+
+        Args:
+            name (str): name of the data catalog entry
+
+        Raises:
+            KeyError: if the name is not found
+
+        Returns:
+            DataCatalogEntry: the data catalog entry
+        """
+        for entry in self.scenario_data_sources:
+            if entry.name == name:
+                try:
+                    return entry.scenarios[scenario_name]
+                except KeyError as error:
+                    raise KeyError(f"Could not find scenario {scenario_name} in {name}") from error
+        raise KeyError(f"Could not find data catalog entry with name {name}")
+
+
 
 class CommunityReferralRates(BaseModel):
     area:Literal[tuple(const.CCG_SUB_ICB.keys())]

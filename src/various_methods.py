@@ -2,8 +2,9 @@ import calendar
 import numpy as np
 import datetime as dt
 import pandas as pd
+from dataclasses import dataclass
 
-import constants as const
+import src.constants as const
 
 def get_numdays(df_:pd.DataFrame):
     month_values = df_.index.get_level_values('APPOINTMENT_MONTH')
@@ -48,4 +49,18 @@ def calc_oadr_status(ons_age_group:str):
         return 'Retired'
     else:
         return None
+    
 
+@dataclass
+class PlotCounter:
+    """simple object to count plots in each notebook run
+    and conveniently make names"""
+    name: str
+    count: int = 1
+
+    @property
+    def plot_name(self):
+        # temporary variable to hold count whilst incremented
+        current_count = self.count
+        self.count += 1 # increment count
+        return f"{self.name}_{current_count}"
