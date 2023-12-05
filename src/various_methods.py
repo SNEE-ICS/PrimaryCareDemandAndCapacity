@@ -53,6 +53,8 @@ def calc_oadr_status(ons_age_group:str):
 
 @dataclass
 class PlotCounter:
+    """simple object to count plots in each notebook run
+    and conveniently make names"""
     name: str
     count: int = 1
 
