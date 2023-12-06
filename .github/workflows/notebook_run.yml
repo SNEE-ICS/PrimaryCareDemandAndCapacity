@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # Set the path to the notebooks directory
-      NOTEBOOKS_PATH: notebooks/actionstest/
+      NOTEBOOKS_PATH: notebooks/
       OUTPUTS_PATH: outputs/
     steps:
       - uses: actions/checkout@v4
