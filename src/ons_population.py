@@ -21,10 +21,24 @@ class ONSPopulationScenario:
         self.time_period = 'daily'
         self.name = self.ons_catalog_entry.name
     
-    def interpolated_population(self, time_period: Literal['daily','monthly','yearly'] = DEFAULT_TIME_PERIOD, yearly_age_bins:Literal[None,'5','10','Total'] = DEFAULT_AGE_BINS):
+    def interpolated_population(self, 
+                                time_period: Literal['daily','monthly','yearly'] = DEFAULT_TIME_PERIOD, 
+                                yearly_age_bins:Literal[None,'5','10','Total'] = DEFAULT_AGE_BINS):
         """
-        Returns the population for a given sub_icb, age_group and date.
+        Interpolates the population data based on the specified time period and age bins.
+
+        Args:
+            time_period (Literal['daily','monthly','yearly'], optional): The time period for interpolation. Defaults to DEFAULT_TIME_PERIOD.
+            yearly_age_bins (Literal[None,'5','10','Total'], optional): The age bins for interpolation. Defaults to DEFAULT_AGE_BINS.
+
+        Returns:
+            pandas.DataFrame: The interpolated population data.
         """
+        # code implementation...
+    def interpolated_population(self, 
+                                time_period: Literal['daily','monthly','yearly'] = DEFAULT_TIME_PERIOD, 
+                                yearly_age_bins:Literal[None,'5','10','Total'] = DEFAULT_AGE_BINS)->pd.DataFrame:
+        
 
         if not self.interpolated_df.empty and self.time_period == time_period and self.yearly_age_bins == yearly_age_bins:
             # return cached df
@@ -68,7 +82,10 @@ class ONSPopulationScenario:
         return df
 
     @staticmethod
-    def _interpolate_subpopulations(df_:pd.DataFrame, cat_col_1:str ='sub_icb', cat_col_2:str='AGE_GROUP', time_period: Literal['daily','monthly','yearly'] = 'daily')->pd.DataFrame:
+    def _interpolate_subpopulations(df_:pd.DataFrame, 
+                                    cat_col_1:str ='sub_icb',
+                                      cat_col_2:str='AGE_GROUP', 
+                                      time_period: Literal['daily','monthly','yearly'] = 'daily')->pd.DataFrame:
         """Interpolates the population for a given sub_icb, age_group and date.
 
         Args:

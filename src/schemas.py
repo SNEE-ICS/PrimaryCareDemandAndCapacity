@@ -288,18 +288,18 @@ class DataCatalog(BaseModel):
 
 
 
-class CommunityReferralRates(BaseModel):
-    area:Literal[tuple(const.CCG_SUB_ICB.keys())]
-    rate: float
+# class CommunityReferralRates(BaseModel):
+#     area:Literal[tuple(const.CCG_SUB_ICB.keys())]
+#     rate: float
 
-class AcuteReferralRates(BaseModel):
-    area: Literal[tuple(const.CCG_SUB_ICB.keys())]
-    gp: float = Field(..., alias='GP')
-    Other:float = Field(..., alias='Other')
+# class AcuteReferralRates(BaseModel):
+#     area: Literal[tuple(const.CCG_SUB_ICB.keys())]
+#     gp: float = Field(..., alias='GP')
+#     Other:float = Field(..., alias='Other')
 
-class ReferralRates(BaseModel):
-    acute: List[AcuteReferralRates]
-    community: List[CommunityReferralRates]
+# class ReferralRates(BaseModel):
+#     acute: List[AcuteReferralRates]
+#     community: List[CommunityReferralRates]
 
 
 if __name__ == '__main__':

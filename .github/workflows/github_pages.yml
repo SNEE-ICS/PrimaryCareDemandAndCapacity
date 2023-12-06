@@ -29,11 +29,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Get notebook outputs
+        uses: actions/download-artifact@v2
+        with:
+          name: notebook-outputs
+          path: notebook-outputs/
+      - name: Move plots to site directory
+        # moves all files with .png to static website directory for images
+        run: |
+          find notebook-outputs/ -name "*.png" -exec mv {} staticWebsite/content/img/ \;
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-      # add step where we download outputs artifacts
       - name: Configure GitHub Pages
         id: pages
         uses: actions/configure-pages@v3
