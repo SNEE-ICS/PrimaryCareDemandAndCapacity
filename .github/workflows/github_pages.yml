@@ -29,11 +29,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Get notebook outputs
-        uses: actions/download-artifact@v2
+      - name: Download notebooks workflow artifact
+        uses: dawidd6/action-download-artifact@v2.28.0
         with:
+          workflow: notebook_run.yml
           name: notebook-outputs
           path: notebook-outputs/
+          if_no_artifact_found: fail
       - name: Move plots to site directory
         # moves all files with .png to static website directory for images
         run: |
