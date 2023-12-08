@@ -161,4 +161,4 @@ cython_debug/
 # pelican website
 output/
 # other outputs
-outputs/
+outputs/*
