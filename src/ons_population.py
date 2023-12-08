@@ -2,8 +2,8 @@
 from typing import Final, Dict, Type, Literal
 import pandas as pd
 
-from schemas import DataCatalogEntry
-import constants as const
+from src.schemas import DataCatalogEntry
+import src.constants as const
 
 
 DEFAULT_AGE_BINS = 5
@@ -23,7 +23,7 @@ class ONSPopulationScenario:
     
     def interpolated_population(self, 
                                 time_period: Literal['daily','monthly','yearly'] = DEFAULT_TIME_PERIOD, 
-                                yearly_age_bins:Literal[None,'5','10','Total'] = DEFAULT_AGE_BINS):
+                                yearly_age_bins:Literal[None,'5','10','Total'] = DEFAULT_AGE_BINS)->pd.DataFrame:
         """
         Interpolates the population data based on the specified time period and age bins.
 
@@ -34,10 +34,6 @@ class ONSPopulationScenario:
         Returns:
             pandas.DataFrame: The interpolated population data.
         """
-        # code implementation...
-    def interpolated_population(self, 
-                                time_period: Literal['daily','monthly','yearly'] = DEFAULT_TIME_PERIOD, 
-                                yearly_age_bins:Literal[None,'5','10','Total'] = DEFAULT_AGE_BINS)->pd.DataFrame:
         
 
         if not self.interpolated_df.empty and self.time_period == time_period and self.yearly_age_bins == yearly_age_bins:
