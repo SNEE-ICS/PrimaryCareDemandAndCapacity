@@ -34,11 +34,6 @@ mv outputs/plots/*.png staticWebsite/content/img/
 
 # step 5: Run Pelican build
 echo "Running Pelican build..."
-#TODO: add pelican build command here
-
-
-
-# step 5: Run Pelican build
-echo "Running Pelican build..."
-#TODO: add pelican build command here
+mkdir -p output
+pelican staticwebsite/content/ -d -o output -s staticWebsite/pelicanconf.py
 
