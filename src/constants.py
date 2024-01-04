@@ -49,7 +49,7 @@ ICB_ONS_AREAS = {"Tendring": NE_ESSEX,
                  "Ipswich": IPS_EAST_SUFF}
 
 #ORG Code
-org_code = {'QJG': 'NHS SUFFOLK AND NORTH EAST ESSEX INTEGRATED CARE BOARD'}
+ORG_CODE = {'QJG': 'NHS SUFFOLK AND NORTH EAST ESSEX INTEGRATED CARE BOARD'}
 
 # Location for outputs
 NOTEBOOK_OUTPUT_BASE_PATH = "../outputs/"
