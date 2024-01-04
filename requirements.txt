@@ -80,3 +80,4 @@ urllib3==2.1.0
 watchfiles==0.21.0
 wcwidth==0.2.12
 category_encoders==2.3.0
+kaleido==0.2.1
