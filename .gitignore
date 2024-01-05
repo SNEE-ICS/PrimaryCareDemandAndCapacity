@@ -163,3 +163,4 @@ output/
 # other outputs
 outputs/*
 staticWebsite/output/*
+staticWebsite/content/notebooks_html/*
