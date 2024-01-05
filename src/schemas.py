@@ -265,8 +265,25 @@ class DataCatalog(BaseModel):
             if entry.name == name:
                 return entry
         raise KeyError(f"Could not find data catalog entry with name {name}")
+    
+    def get_top_level_scenario_by_name(self,name:str)->ScenariosCatalogEntry:
+        """Returns a top level scenario by name
 
-    def get_catalog_scenario_by_name(self, name: str, scenario_name:str) -> DataCatalogEntry:
+        Args:
+            name (str): name of the scenario
+
+        Raises:
+            KeyError: if the name is not found
+
+        Returns:
+            ScenariosCatalogEntry: the scenario
+        """
+        for entry in self.scenario_data_sources:
+            if entry.name == name:
+                return entry
+        raise KeyError(f"Could not find scenario with name {name}")
+
+    def get_scenario_catalog_entry_by_name(self, name: str, scenario_name:str) -> DataCatalogEntry:
         """Returns a data catalog entry by name
 
         Args:
@@ -278,13 +295,11 @@ class DataCatalog(BaseModel):
         Returns:
             DataCatalogEntry: the data catalog entry
         """
-        for entry in self.scenario_data_sources:
-            if entry.name == name:
-                try:
-                    return entry.scenarios[scenario_name]
-                except KeyError as error:
-                    raise KeyError(f"Could not find scenario {scenario_name} in {name}") from error
-        raise KeyError(f"Could not find data catalog entry with name {name}")
+        toplevel_scenario = self.get_top_level_scenario_by_name(name)
+        for entry in toplevel_scenario.scenarios:
+            if entry.name == scenario_name:
+                return entry
+        raise KeyError(f"Could not find scenario data catalog entry with name {name}")
 
 
 
