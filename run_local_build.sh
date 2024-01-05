@@ -33,7 +33,8 @@ echo "Moving png files to images folder..."
 mv outputs/plots/*.png staticWebsite/content/img/
 
 # step 5: Run Pelican build
-echo "Running Pelican build..."
-mkdir -p output
-pelican staticwebsite/content/ -d -o output -s staticWebsite/pelicanconf.py
+echo "Running Pelican server..."
+cd staticWebsite
+pelican -r -l
+
 
