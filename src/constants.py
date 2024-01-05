@@ -52,8 +52,12 @@ ICB_ONS_AREAS = {"Tendring": NE_ESSEX,
 ORG_CODE = {'QJG': 'NHS SUFFOLK AND NORTH EAST ESSEX INTEGRATED CARE BOARD'}
 
 # Location for outputs
-NOTEBOOK_OUTPUT_BASE_PATH = "../outputs/"
+# these are all relative to the repo root directory ! 
+NOTEBOOK_OUTPUT_BASE_PATH = "outputs/"
 NOTEBOOK_OUTPUT_TABLES_PATH = NOTEBOOK_OUTPUT_BASE_PATH + "tables/"
-NOTEBOOK_OUTPUT_FIGURES_PATH = NOTEBOOK_OUTPUT_BASE_PATH + "figures/"
+NOTEBOOK_OUTPUT_FIGURES_PATH = NOTEBOOK_OUTPUT_BASE_PATH + "plots/"
 SIMULATION_RESULTS_PATH = NOTEBOOK_OUTPUT_BASE_PATH + "simulation_results/"
+
+
+ONS_POPULATION_SCENARIOS_NAME = "ONS Population projections by single year of age mid-2018 to mid-2043"
 
