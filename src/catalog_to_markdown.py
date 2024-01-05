@@ -1,24 +1,26 @@
+from string import Template
+import datetime as dt
+
 import pandas as pd
 
 from src.schemas import DataCatalog
 
 
-OUTPUT_MARKDOWN_FILE  = "content/data_catalog.md"
+OUTPUT_MARKDOWN_FILE  = "staticWebsite/content/data_catalog.md"
 
 
 DATASET_COLUMN_MAPPING = {
     "name" : "Name",
     "description" : "Description",
-    "source" : "Source URL",
-    "website" : "Website URL",
-    "file_used" : "File used",
+    "website_url" : "Website URL",
+    "zip_file" : "Source URL",
+    "csv_file" : "Specific Source",
     }
 
-MARKDOWN_TEMPLATE = f"""
-Title: Data Catalog\n\n
-Date: {current_datetime}
-Modified: {current_datetime}
-Category: Python
+MARKDOWN_TEMPLATE = Template("""Title: Data Catalog
+Date: $current_datetime
+Modified: $current_datetime
+Category: DataCatalog
 Tags: catalog, data, nhs-england, ons, population, scenarios
 Slug: data-catalog
 Authors: Andrew Jarman, Ibrahim Khan
@@ -26,13 +28,13 @@ Summary: Data Catalogue for the SNEE-ICS Demand and Capacity Modelling project.
 
 ## NHS England Datasets\n
 <!-- START TABLE 1-->\n
-{table1}
+$table1
 <!-- END TABLE 1-->\n
 ## ONS Population Scenarios\n
 <!-- START TABLE 2-->\n
-{table2}
+$table2
 <!-- END TABLE 2-->\n
-"""
+""")
 
 def create_link(url:str, text:str='Source')->str:
     """Creates html tags for a url 
@@ -55,16 +57,16 @@ def create_link(url:str, text:str='Source')->str:
 
 
 if __name__ == '__main__':  
-    # note that this should be run from this directory (staticWebsite)
+    # note that this should be run from the root directory
     catalog = DataCatalog.load_from_yaml("data_catalog.yaml")
 
     # create a dataframe for each table and rename the columns
     single_source_df = pd.DataFrame(
-        [entry.table_data for entry in  catalog.single_data_sources]
-        ).rename(columns=DATASET_COLUMN_MAPPING)
+        [entry.model_dump() for entry in  catalog.single_data_sources]
+        ).loc[:,list(DATASET_COLUMN_MAPPING.keys())].rename(columns=DATASET_COLUMN_MAPPING)
     ons_df = pd.DataFrame(
-        [entry.table_data for entry in  catalog.scenario_data_sources[0].scenarios]
-        ).rename(columns=DATASET_COLUMN_MAPPING)
+        [entry.model_dump() for entry in  catalog.scenario_data_sources[0].scenarios]
+        ).loc[:,list(DATASET_COLUMN_MAPPING.keys())].rename(columns=DATASET_COLUMN_MAPPING)
     
     # loop through both tables and create links for the source and website columns
     for table in single_source_df, ons_df:
@@ -82,7 +84,8 @@ if __name__ == '__main__':
 
     # write to file
     with open(OUTPUT_MARKDOWN_FILE, "w") as md_file:
-        md_file.write(MARKDOWN_TEMPLATE.format(**tables))
+        file_content = MARKDOWN_TEMPLATE.substitute(current_datetime=dt.datetime.now().isoformat(),**tables) 
+        md_file.write(file_content)
 
 
 
