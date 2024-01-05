@@ -1,4 +1,4 @@
-AUTHOR = 'Andrew Jarman and Ibrahim Khan'
+AUTHOR = 'Andrew Jarman'
 SITENAME = 'Primary Care Demand and Capacity Modelling'
 SITEURL = ""
 
@@ -35,9 +35,15 @@ PAGE_ORDER_BY = 'order'
 
 ARTICLE_ORDER_BY = 'order'
 
-THEME = "notmyidea"
+THEME = "snee_theme"
 
-STATIC_PATHS = 'img'
+FILENAME_METADATA = '(?P<title>.*)'
+
+DEFAULT_DATE = 'fs'
+
+STATIC_PATHS = ['img', 'extras', 'notebooks_html']
+
+EXTRA_PATH_METADATA = {'extras/favicon.ico': {'path': 'favicon.ico'},}
 
 #GITHUB_URL
 
