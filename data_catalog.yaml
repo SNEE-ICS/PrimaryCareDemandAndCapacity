@@ -2,7 +2,7 @@ domain: snee_ics
 exceptions: []
 notes: This is my data sources YAML file.
 scenario_data_sources:
-  - name: ONS Population projections by single year of age mid-2018 to mid-2043
+  - name: ONS Population projections
     description: Population projections from 2018-2045 provided by ONS. Unfortunately this is not yet using the 2021 census as a base, seems to be using 2011 with some kind of revision in 2018.
     website_url: https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationprojections/datasets/clinicalcommissioninggroupsinenglandz2
     scenarios:

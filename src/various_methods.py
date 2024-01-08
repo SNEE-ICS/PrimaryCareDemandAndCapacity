@@ -3,6 +3,8 @@ import numpy as np
 import datetime as dt
 import pandas as pd
 from dataclasses import dataclass
+import math
+from functools import lru_cache
 
 import src.constants as const
 
@@ -27,7 +29,7 @@ def get_workingdays(a_:np.array):
         day = 1
         while day <= calendar.monthrange(year,month)[1]:
             the_date =  dt.datetime(year,month,day)
-            if the_date.isoweekday() and the_date not in const.ENGLAND_BANK_HOLIDAYS:
+            if the_date.isoweekday() < 6 and the_date not in const.ENGLAND_BANK_HOLIDAYS:
                 workingdays +=1
             day += 1
         return workingdays
@@ -63,4 +65,23 @@ class PlotCounter:
         # temporary variable to hold count whilst incremented
         current_count = self.count
         self.count += 1 # increment count
-        return f"{self.name}_{current_count}"
+        return f"{const.NOTEBOOK_OUTPUT_FIGURES_PATH}{self.name}_{current_count}"
+    
+
+@lru_cache(maxsize=12)
+def _month_to_angle(month:int)->float:
+    if month not in range(1,13):
+        raise ValueError('month must be in range 1-12')
+    return month*2*math.pi/12
+
+@lru_cache(maxsize=12)
+def month_num_to_sin(month:int)->float:
+    if month not in range(1,13):
+        raise ValueError('month must be in range 1-12')
+    return math.sin(_month_to_angle(month))
+
+@lru_cache(maxsize=12)
+def month_num_to_cos(month:int)->float:
+    if month not in range(1,13):
+        raise ValueError('month must be in range 1-12')
+    return math.cos(_month_to_angle(month))
