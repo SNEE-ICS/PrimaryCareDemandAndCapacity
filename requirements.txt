@@ -4,7 +4,7 @@ astroid==3.0.1
 asttokens==2.4.0
 backcall==0.2.0
 blinker==1.7.0
-certifi==2023.7.22
+certifi==2023.11.17
 charset-normalizer==3.3.2
 comm==0.2.0
 contourpy==1.1.1
