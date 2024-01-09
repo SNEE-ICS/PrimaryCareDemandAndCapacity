@@ -1,9 +1,9 @@
 Title: Primary Care Referral Rate in SNEE
 Date: 2024-01-04
 Modified: 2024-01-04
-Category: Analysis blogs
+Category: Demand Analysis
 Tags: pelican, publishing
-Slug: Referral rate
+Slug: Referral-rate
 Authors: Ibrahim, Andrew
 Summary: Primary Care referral rates analysis
 

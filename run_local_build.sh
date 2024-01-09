@@ -4,6 +4,7 @@
 # chmod +x run_local_build.sh
 
 # step 0: Activate virtual environment
+echo "Activating virtual environment..."
 source .venv/bin/activate
 
 # step 1: Install dependencies
@@ -31,6 +32,10 @@ echo "Running simulation..."
 # Move the generated png files to the images folder
 echo "Moving png files to images folder..."
 mv outputs/plots/*.png staticWebsite/content/img/
+
+# step 6:
+echo "Moving notebook files to notebooks_html folder..."
+mv outputs/notebooks/*.html staticWebsite/content/notebooks_html/
 
 # step 5: Run Pelican build
 echo "Running Pelican server..."
