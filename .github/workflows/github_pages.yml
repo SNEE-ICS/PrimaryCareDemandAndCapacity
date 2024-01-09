@@ -5,6 +5,7 @@ on:
       settings:
         required: true
         description: "The path to your Pelican settings file (`pelican`'s `--settings` option), for example: 'publishconf.py'"
+        default: "staticWebsite/pelicanconfig.py"
         type: string
       requirements:
         required: false
@@ -40,6 +41,7 @@ jobs:
         # moves all files with .png to static website directory for images
         run: |
           find notebook-outputs/ -name "*.png" -exec mv {} staticWebsite/content/img/ \;
+          find notebook-outputs/ -name "*.html" -exec mv {} statiWebsite/content/notebooks_html/ \; 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
