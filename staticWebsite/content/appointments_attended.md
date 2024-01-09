@@ -13,7 +13,7 @@ Understanding the frequency of missed appointments in SNEE footprints is crucial
 
 
 # Data Sources
-This analysis draws its primary data from the comprehensive appointments dataset provided by NHS England. The dataset encompasses a substantial time span, ranging from April 2021 to August 2023  
+This analysis draws its primary data from the comprehensive appointments dataset provided by NHS England. The dataset encompasses a substantial time span, ranging from April 2021 to August 2023. FY 2021/2022 AND FOR FY23 onlyt ill august/23
 Dataset --> [NHS Digital - Appointments in General Practice](https://digital.nhs.uk/data-and-information/publications/statistical/appointments-in-general-practice)
 
 
