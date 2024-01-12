@@ -5,7 +5,7 @@ import os
 import sys
 
 sys.path.append(os.curdir)
-from publishconf import *
+import pelicanconf
 
 # If your site is available via HTTPS, make sure SITEURL begins with https://
 SITENAME = 'Primary Care Demand and Capacity Modelling'
@@ -21,7 +21,7 @@ PATH = 'content'
 
 TIMEZONE = 'GMT'
 
-STATIC_PATHS = 'img'
+STATIC_PATHS = pelicanconf.STATIC_PATHS
 
 PAGE_ORDER_BY = 'order'
 
