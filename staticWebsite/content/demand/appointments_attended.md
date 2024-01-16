@@ -18,16 +18,32 @@ Dataset --> [NHS Digital - Appointments in General Practice](https://digital.nhs
 
 
 # Methodology
-To comprehensively analyze missed appointments, this study is divided into two main parts::
+Before any analysis, the data was pre-processed. 
 
-1. Using Mean of Appointments: This primarily focuses on comparing the average frequency of missed appointments between the national average and the SNEE-ICB region. It further delves into dissecting missed appointments based on healthcare professional types and diverse appointment modes.
+- Appointment months were converted into FY-years.
+- Extracted national average and proportion for all appointment types.
 
-2. Using Proportions (%) of Appointments: In this approach, the aim is to assess the consistency of missed appointments over time. Moreover, it aims to unravel patterns wherein specific appointment attributes may contribute to a higher likelihood of no-show occurrences. This includes an in-depth exploration of combinations involving Sub-ICB, Staff type, and Appointment type, thereby deriving the mean likelihood of missed appointments within these nuanced parameters.
+1- Comparison with SNEE Area:
 
+- Compared national average and proportion with SNEE area for FY-YEAR 2021, 2022, and 2023.
+- Plotted the comparisons.
 
-**Note** - *Before analysis, 'Appointment months' were converted into Financial years rather than calendar years.*
+2- Detailed Proportion Analysis:
 
-The proportion was calculated by dividing the count of DNA/Attended appointments by the total count of appointments and then multiplying the result by 100 to derive a percentage value.
+- Extracted proportions of attended, DNA, and unknown appointments based on SUB-ICB, healthcare professional type (hcp_type), and appointment mode.
+- Plotted the changes in missed appointments over the years.
+
+3- Correlation Matrix:
+
+- Conducted a correlation matrix analysis to identify factors affecting the likelihood of missing appointments (DNA) in the SNEE area.
+
+4- Identifying Appointment Trends:
+
+- Explored if certain appointments are more likely to be missed.
+- Conducted additional analysis on appointment types with higher likelihood of being missed.
+
+This approach involves a comprehensive examination of various factors influencing appointment attendance, utilizing visualizations for better understanding. This structured analysis should provide valuable insights into missed appointments trends and potential influencing factors in the SNEE area.
+
 
 # Results and inferences 
 
