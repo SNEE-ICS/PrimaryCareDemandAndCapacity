@@ -164,3 +164,4 @@ output/
 outputs/*
 staticWebsite/output/*
 staticWebsite/content/notebooks_html/*
+.vscode/settings.json
