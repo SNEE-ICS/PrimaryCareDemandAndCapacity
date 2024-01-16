@@ -13,7 +13,7 @@ Understanding the frequency of missed appointments in SNEE footprints is crucial
 
 
 # Data Sources
-This analysis draws its primary data from the comprehensive appointments dataset provided by NHS England. The dataset encompasses a substantial time span, ranging from April 2021 to August 2023  
+The primary data for this analysis is derived from the extensive appointments dataset provided by NHS England, spanning from April 2021 to August 2023. While FY21 and FY22 were based on complete annual data, the assessment for FY23 is limited to the available data from April to August.
 Dataset --> [NHS Digital - Appointments in General Practice](https://digital.nhs.uk/data-and-information/publications/statistical/appointments-in-general-practice)
 
 
@@ -43,10 +43,16 @@ The proportion was calculated by dividing the count of DNA/Attended appointments
   </tbody>
 </table>
 
-From the above table we can easily infer that
+<table>
+  <thead><tr><th>Year</th><th>Attended (National)</th><th>Attended (SNEE)</th><th>DNA (National)</th><th>DNA (SNEE)</th></tr></thead>
+  <tbody><tr><td>2021</td><td>579,332.27</td><td>450,111.80</td><td>27,252.80</td><td>16,323.20</td></tr><tr><td>2022</td><td>608,099.22</td><td>465,021.90</td><td>31,568.70</td><td>17,822.60</td></tr><tr><td>2023</td><td>591,085.91</td><td>448,269.20</td><td>29,004.74</td><td>14,968.00</td></tr></tbody>
+</table>
 
-- The average count of non-attended appointments for SNEE-ICB stands notably lower at 101, distinctly below the National Average of 304.
-- Noteworthy is the trajectory in 2022, where this variance intensifies. The National Average escalates from 304 to 334, a significant uptick, while the SNEE-ICB sees a comparably modest shift from 101 to 106.  
+
+From the above table we can easily infer AVERAGE FOR EACH MONTH
+
+- The average count of non-attended appointments for SNEE-ICB stands notably lower, distinctly below the National Average for each year.
+- Noteworthy is the trajectory in 2022, where this variance intensifies. The National Average escalates from  579,332.27 to  608,099.22, a significant uptick, while the SNEE-ICB sees a comparably modest shift from  16,323.20 to  17,822.60.  
 
 We can confirm the lower average of (Attended/DNA) AppointmentsSNEE compared to other ICB'S from the graph below
 ![Average appointments]({attach}/img/appointment_attendance_9.png)
