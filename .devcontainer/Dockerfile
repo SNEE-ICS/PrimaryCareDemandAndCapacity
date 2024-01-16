@@ -1,3 +1,0 @@
-FROM python:${PYTHON_VERSION}
-
-# Additional configurations and dependencies...
