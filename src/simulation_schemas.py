@@ -4,7 +4,7 @@ from abc import ABC
 import yaml
 import random
 
-from pydantic import BaseModel, Field, RootModel, root_validator, ValidationError
+from pydantic import BaseModel, Field, RootModel, model_validator, ValidationError
 
 
 # this is used to define the arguments for the pydantic Field class
@@ -20,6 +20,7 @@ PROPENSITY_ACCURACY_THRESHOLD = 0.001
 
 class YamlLoader(ABC):
     """Protocol to define the methods that the yaml loader must implement"""
+    
     @classmethod
     def read_yaml(cls, file_path: str):
         """
@@ -36,6 +37,33 @@ class YamlLoader(ABC):
             yaml_data = yaml.safe_load(f)
             class_instance = cls(**yaml_data)
             return class_instance
+
+
+# using the pydantic Rootmodel to define a type alias/ schema
+# this is essentially a dictionary structure with a key of type str and value of type int
+PopulationBaseline = RootModel[Dict[str, int]]
+
+# used for a populationEstimate by Area, note the leading underscore so not used directly
+_PopulationBaselineByArea = RootModel[Dict[str, PopulationBaseline]]
+
+# subclassing the Rootmodel to add methods
+class PopulationBaseLinesByArea(_PopulationBaselineByArea, YamlLoader):
+    """Class to load and validate the population estimates yaml file for a yaml file of areas"""
+    pass
+
+
+# As above but for the population growth factors
+PopulationGrowthFactors = RootModel[Dict[str, float]] # age group : growth factor
+
+PopulationGrowthFactorsByArea = RootModel[Dict[str, PopulationGrowthFactors]] # area : PopulationGrowthFactors
+
+_PopulationGrowthFactorScenarios = RootModel[Dict[str, PopulationGrowthFactorsByArea]] # scenario : PopulationGrowthFactorsByArea
+
+class PopulationGrowthFactorScenarios(_PopulationGrowthFactorScenarios, YamlLoader):
+    """Class to load and validate the population growth factor scenarios yaml file for a yaml file of areas"""
+    pass
+
+
         
 
 # using the pydantic Rootmodel to define a type alias/ schema
@@ -61,7 +89,7 @@ class StaffDidNotAttendRatesByDelivery(BaseModel):
     home_visit: float = Field(alias="Home Visit", **PROPENSITY_FIELD_ARGS)
     telephone: float = Field(alias="Telephone", **PROPENSITY_FIELD_ARGS)
     unknown: float = Field(alias="Unknown", **PROPENSITY_FIELD_ARGS)
-    video_online: float = Field(alias="Video/Online", **PROPENSITY_FIELD_ARGS)
+    video_online: float = Field(alias="Video/Online", **PROPENSITY_FIELD_ARGS) 
 
 
 class AreaDidNotAttendRates(BaseModel):
@@ -87,7 +115,7 @@ class BaseChoice(BaseModel, ABC):
     """
     pass
 
-    @root_validator()
+    @model_validator(mode='after')
     @classmethod
     def check_sum(cls, values):
         """Check that the propensity values sum to 1.0"""
@@ -117,17 +145,13 @@ class AppointmentStaffChoice(BaseChoice):
         """
         # get the probabilities as a dictionary
         probabilities_dict: Dict[str, float] = self.model_dump(by_alias=True)
-
-        # randomly select a staff type based on the probabilities using the random module
+        # randomly select a staff type based on the probabilities using the random modu` oi,m1¦¦\le
         staff_type = random.choices(
             list(probabilities_dict.keys()),
             weights=list(probabilities_dict.values()),
             k=1
         )[0]
         # return the selected staff type
-        return staff_type
-
-
 
 
 # not using the _ prefix here as this is just implementing the Rootmodel

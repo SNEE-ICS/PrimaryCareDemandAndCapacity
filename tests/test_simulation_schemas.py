@@ -21,9 +21,10 @@ def test_appointment_times_load_yaml():
 def test_did_not_attend_load_yaml():
     did_not_attend_rates =  DidNotAttendRates.read_yaml('tests/sample_data/dna-appointments.yaml')
     assert isinstance(did_not_attend_rates, DidNotAttendRates)
-    # for k, v in did_not_attend_rates.model_dump().items():
-    #     assert isinstance(k, str)
-    #     v_class = AreaDidNotAttendRates(**v)
+    for k, v in did_not_attend_rates.model_dump().items():
+        assert isinstance(k, str)
+        v_class = AreaDidNotAttendRates(**v)
+        assert isinstance(v_class, AreaDidNotAttendRates)
 
 
 
