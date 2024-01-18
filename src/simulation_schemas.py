@@ -203,21 +203,13 @@ class AppointmentStaffChoice(BaseChoice):
         # return the selected staff type
         return staff_type
 
+# not using the _ prefix here as this is just implementing the Rootmodel
 _StaffTypePropensityByArea = RootModel[Dict[str, AppointmentStaffChoice]]
 
-class StaffTypePropensityByArea(_StaffTypePropensityByArea, YamlLoader):
-    """Class to load and validate the did not attend rates yaml file for a yaml file of areas"""
-    def get(self, area: str) -> AppointmentStaffChoice:
-        """
-        Get the propensity for a given area.
+class StaffTypePropensityByArea(_StaffTypePropensityByArea, YamlLoader, AreaModel):
+    """Class to load and validate the staff type propensity yaml file for a yaml file of areas"""
 
-        Args:
-            area (str): The area to get the propensity for.
-
-        Returns:
-            AppointmentStaffChoice: The propensity for the given area.
-        """
-        return self.root.get(area)
+    pass
 
 
 
@@ -252,10 +244,10 @@ class AppointmentDeliveryChoice(BaseChoice):
         return delivery_type
 
 
-class DeliveryPropensityByStaff(BaseChoice):
-    gp: AppointmentDeliveryChoice = Field(alias="GP", **PROPENSITY_FIELD_ARGS)
-    other: AppointmentDeliveryChoice = Field(alias="Other Practice staff", **PROPENSITY_FIELD_ARGS)
-    unknown: AppointmentDeliveryChoice = Field(alias="Unknown", **PROPENSITY_FIELD_ARGS)
+class DeliveryPropensityByStaff(BaseModel):
+    gp: AppointmentDeliveryChoice = Field(alias="GP")
+    other: AppointmentDeliveryChoice = Field(alias="Other Practice staff")
+    unknown: AppointmentDeliveryChoice = Field(alias="Unknown")
 
 
 _DeliveryPropensityByArea = RootModel[Dict[str, DeliveryPropensityByStaff]]
