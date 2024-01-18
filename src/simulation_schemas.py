@@ -12,8 +12,6 @@ from pydantic import (
     create_model,
 )
 
-from ..src import constants 
-
 # this is used to define the arguments for the pydantic Field class
 # so that probability of non attendance is between 0 and 1
 PROPENSITY_FIELD_ARGS = {
@@ -112,39 +110,47 @@ class BaseChoice(BaseModel, ABC):
 
 # using the pydantic Rootmodel to define a type alias/ schema
 # this is essentially a dictionary structure with a key of type str and value of type int
-PopulationBaseline = create_model(
-    "PopulationBaseline", **{k: (int, ...) for k in constants.GP_LIST_LABELS}
-)
+_PopulationByYear = RootModel[Dict[int, int]]
+class PopulationByYear(_PopulationByYear):
 
+    @property
+    def years(self) -> List[int]:
+        """returns the list of years"""
+        return list(self.model_dump.keys())
+    
+    def get_year(self, year:int):
+        return self.root.get(year)
+
+# then a dictionary keyed by year
+_PopulationByAgeGroup = RootModel[Dict[str, PopulationByYear]]
+class PopulationByAgeGroup(_PopulationByAgeGroup):
+
+    @property
+    def age_groups(self) -> List[str]:
+        """returns the list of age_groups"""
+        return list(self.model_dump().keys())
+    
+    def get_age_group(self, age_group:str)->PopulationByYear:
+        return self.root.get(age_group)
+
+# then a dictionary keyed by area
 # used for a populationEstimate by Area, note the leading underscore so not used directly
-_PopulationBaselineByArea = RootModel[Dict[str, PopulationBaseline]]
+_PopulationByArea = RootModel[Dict[str, PopulationByAgeGroup]]
 
-
-# subclassing the Rootmodel to add methods
-class PopulationBaseLinesByArea(_PopulationBaselineByArea, AreaModel, YamlLoader):
-    """Class to load and validate the population estimates yaml file for a yaml file of areas"""
+class PopulationByArea(_PopulationByArea, AreaModel):
+    """Class to load and validate the population estimates by area"""
 
     pass
 
+_PopulationScenarios = RootModel[Dict[str, PopulationByArea]]
 
-# As above but for the population growth factors
-PopulationGrowthFactors = create_model(
-    "PopulationGrowthFactors", **{k: (float, ...) for k in constants.GP_LIST_LABELS}
-)  # age group : growth factor
+class PopulationScenarios(_PopulationScenarios, YamlLoader):
+    """Class to load and validate the population scenarios yaml file for a yaml file of areas"""
 
-PopulationGrowthFactorsByArea = RootModel[
-    Dict[str, PopulationGrowthFactors]
-]  # area : PopulationGrowthFactors
-
-_PopulationGrowthFactorScenarios = RootModel[
-    Dict[str, PopulationGrowthFactorsByArea]
-]  # scenario : PopulationGrowthFactorsByArea
-
-
-class PopulationGrowthFactorScenarios(_PopulationGrowthFactorScenarios, YamlLoader):
-    """Class to load and validate the population growth factor scenarios yaml file for a yaml file of areas"""
-
-    pass
+    @property
+    def scenarios(self) -> List[str]:
+        """returns the list of scenarios"""
+        return list(self.model_dump().keys())
 
 
 # using the pydantic Rootmodel to define a type alias/ schema

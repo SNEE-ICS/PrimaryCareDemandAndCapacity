@@ -10,6 +10,7 @@ from ..src.simulation_schemas import (
     AreaDidNotAttendRates,
     StaffTypePropensityByArea,
     DeliveryPropensityByArea,
+    PopulationScenarios
 )
 
 # define the path to the sample yaml file from root
@@ -99,3 +100,7 @@ def test_appt_mode_propensity_raises_error():
         DeliveryPropensityByArea.read_yaml(
             "tests/sample_data/appt_mode_propensity_error.yaml"
         )
+        
+def test_population_yaml():
+    population = PopulationScenarios.read_yaml("tests/sample_data/population_projection.yaml")
+    assert isinstance(population, PopulationScenarios)
