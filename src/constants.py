@@ -60,3 +60,7 @@ SIMULATION_RESULTS_PATH = NOTEBOOK_OUTPUT_BASE_PATH + "simulation_results/"
 
 
 ONS_POPULATION_SCENARIOS_NAME = "ONS Population projections by single year of age mid-2018 to mid-2043"
+
+GP_LIST_AGE_BANDS = [i for i in range(-1,90,5)] + [float('inf')] # -1, 4, 9, ... 84, 89, inf used for pd.cut()
+GP_LIST_LABELS = [f"{i+1}-{i+5}" for i in GP_LIST_AGE_BANDS[:-2]] + ["90+"] # 0-4, 5-9, ... 85-89, 90+
+

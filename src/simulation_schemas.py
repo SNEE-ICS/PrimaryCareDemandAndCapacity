@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 from typing import Any, Dict, List, Union, TypeAlias, Type
 import datetime as dt
+=======
+from typing import Dict, Iterable, List, Optional, Set, Tuple, Union, TypeAlias, Type
+>>>>>>> e3f590a (moved conftest)
 from abc import ABC
 import yaml
 import random
@@ -11,9 +15,16 @@ from pydantic import (
     model_validator,
     ValidationError,
     create_model,
+<<<<<<< HEAD
 )
 
 import pandas as pd
+=======
+    ConfigDict
+)
+
+import src.constants as constants   
+>>>>>>> e3f590a (moved conftest)
 
 # this is used to define the arguments for the pydantic Field class
 # so that probability of non attendance is between 0 and 1
@@ -46,6 +57,22 @@ class YamlLoader(ABC):
             yaml_data = yaml.safe_load(f)
             class_instance = cls(**yaml_data)
             return class_instance
+        
+class AreaModel(ABC):
+
+    def get_area(self, area: str) -> Type[BaseModel]:
+        """
+        Get the propensity for a given area.
+
+        Args:
+            area (str): The area to get the details for.
+
+        Returns:
+            Dict[str, float]: The propensity for the given area.
+        """
+        return self.root.get(area)
+
+
 
 
 class AreaModel(ABC):
@@ -110,7 +137,13 @@ class BaseChoice(BaseModel, ABC):
 
 # using the pydantic Rootmodel to define a type alias/ schema
 # this is essentially a dictionary structure with a key of type str and value of type int
+<<<<<<< HEAD
 _PopulationByYear = RootModel[Dict[int, int]]
+=======
+PopulationBaseline = create_model(
+    "PopulationBaseline", **{k: (int, ...) for k in constants.GP_LIST_LABELS}
+)
+>>>>>>> e3f590a (moved conftest)
 
 
 class PopulationByYear(_PopulationByYear):
@@ -139,6 +172,7 @@ class PopulationByAgeGroup(_PopulationByAgeGroup):
 
 # then a dictionary keyed by area
 # used for a populationEstimate by Area, note the leading underscore so not used directly
+<<<<<<< HEAD
 _PopulationByArea = RootModel[Dict[str, PopulationByAgeGroup]]
 
 
@@ -225,6 +259,38 @@ class PopulationScenarios(_PopulationScenarios, YamlLoader):
         return self.root.get(scenario)
 
 
+=======
+_PopulationBaselineByArea = RootModel[Dict[str, PopulationBaseline]]
+
+
+# subclassing the Rootmodel to add methods
+class PopulationBaseLinesByArea(_PopulationBaselineByArea, AreaModel, YamlLoader):
+    """Class to load and validate the population estimates yaml file for a yaml file of areas"""
+
+    pass
+
+
+# As above but for the population growth factors
+PopulationGrowthFactors = create_model(
+    "PopulationGrowthFactors", **{k: (float, ...) for k in constants.GP_LIST_LABELS}
+)  # age group : growth factor
+
+PopulationGrowthFactorsByArea = RootModel[
+    Dict[str, PopulationGrowthFactors]
+]  # area : PopulationGrowthFactors
+
+_PopulationGrowthFactorScenarios = RootModel[
+    Dict[str, PopulationGrowthFactorsByArea]
+]  # scenario : PopulationGrowthFactorsByArea
+
+
+class PopulationGrowthFactorScenarios(_PopulationGrowthFactorScenarios, YamlLoader):
+    """Class to load and validate the population growth factor scenarios yaml file for a yaml file of areas"""
+
+    pass
+
+
+>>>>>>> e3f590a (moved conftest)
 # using the pydantic Rootmodel to define a type alias/ schema
 # this is essentially a dictionary structure with a key of type str and iterable (list) of type float
 AppointmentTimeDistributions = RootModel[Dict[str, List[float]]]
@@ -279,6 +345,30 @@ class DidNotAttendRatesByArea(_DidNotAttendRates, YamlLoader):
     pass
 
 
+<<<<<<< HEAD
+=======
+class BaseChoice(BaseModel, ABC):
+    """
+    Base class for propensity choices, not to be used directly
+    """
+
+    pass
+
+    @model_validator(mode="after")
+    def check_sum(self):
+        """Check that the propensity values sum to 1.0"""
+
+        propensity_sum = sum(self.model_dump().values())
+        # confirm the propensity values sum to 1.0
+        if (
+            propensity_sum > 1 + PROPENSITY_ACCURACY_THRESHOLD
+            or propensity_sum < 1 - PROPENSITY_ACCURACY_THRESHOLD
+        ):
+            raise ValueError(f"Propensity values must sum to 1.0, got {propensity_sum}")
+        return self
+
+
+>>>>>>> e3f590a (moved conftest)
 class AppointmentStaffChoice(BaseChoice):
     """
     Class to represent the propensity of a given staff type for appointments
@@ -288,6 +378,7 @@ class AppointmentStaffChoice(BaseChoice):
     other: float = Field(alias="Other Practice staff", **PROPENSITY_FIELD_ARGS)
     unknown: float = Field(alias="Unknown", **PROPENSITY_FIELD_ARGS)
 
+<<<<<<< HEAD
 
 # not using the _ prefix here as this is just implementing the Rootmodel
 _StaffTypePropensityByArea = RootModel[Dict[str, AppointmentStaffChoice]]
@@ -297,6 +388,43 @@ class StaffTypePropensityByArea(_StaffTypePropensityByArea, YamlLoader, AreaMode
     """Class to load and validate the staff type propensity yaml file for a yaml file of areas"""
 
     pass
+=======
+    def pick_staff_type(self) -> str:
+        """
+        Randomly selects a staff type based on the given probabilities.
+
+        Returns:
+            str: The selected staff type.
+        """
+        # get the probabilities as a dictionary
+        probabilities_dict: Dict[str, float] = self.model_dump(by_alias=True)
+        # randomly select a staff type based on the probabilities using the random modu` oi,m1¦¦\le
+        staff_type = random.choices(
+            list(probabilities_dict.keys()),
+            weights=list(probabilities_dict.values()),
+            k=1,
+        )[0]
+        # return the selected staff type
+        return staff_type
+
+_StaffTypePropensityByArea = RootModel[Dict[str, AppointmentStaffChoice]]
+
+class StaffTypePropensityByArea(_StaffTypePropensityByArea, YamlLoader):
+    """Class to load and validate the did not attend rates yaml file for a yaml file of areas"""
+    def get(self, area: str) -> AppointmentStaffChoice:
+        """
+        Get the propensity for a given area.
+
+        Args:
+            area (str): The area to get the propensity for.
+
+        Returns:
+            AppointmentStaffChoice: The propensity for the given area.
+        """
+        return self.root.get(area)
+
+
+>>>>>>> e3f590a (moved conftest)
 
 
 class AppointmentDeliveryChoice(BaseChoice):
@@ -330,10 +458,17 @@ class AppointmentDeliveryChoice(BaseChoice):
         return delivery_type
 
 
+<<<<<<< HEAD
 class DeliveryPropensityByStaff(BaseModel):
     gp: AppointmentDeliveryChoice = Field(alias="GP")
     other: AppointmentDeliveryChoice = Field(alias="Other Practice staff")
     unknown: AppointmentDeliveryChoice = Field(alias="Unknown")
+=======
+class DeliveryPropensityByStaff(BaseChoice):
+    gp: AppointmentDeliveryChoice = Field(alias="GP", **PROPENSITY_FIELD_ARGS)
+    other: AppointmentDeliveryChoice = Field(alias="Other Practice staff", **PROPENSITY_FIELD_ARGS)
+    unknown: AppointmentDeliveryChoice = Field(alias="Unknown", **PROPENSITY_FIELD_ARGS)
+>>>>>>> e3f590a (moved conftest)
 
 
 _DeliveryPropensityByArea = RootModel[Dict[str, DeliveryPropensityByStaff]]
@@ -341,5 +476,9 @@ _DeliveryPropensityByArea = RootModel[Dict[str, DeliveryPropensityByStaff]]
 
 class DeliveryPropensityByArea(_DeliveryPropensityByArea, YamlLoader):
     """Class to load and validate the did not attend rates yaml file for a yaml file of areas"""
+<<<<<<< HEAD
 
     pass
+=======
+    pass
+>>>>>>> e3f590a (moved conftest)

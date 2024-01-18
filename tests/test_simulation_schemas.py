@@ -3,14 +3,20 @@ import pytest
 from pydantic import ValidationError
 
 from ..src.simulation_schemas import (
+<<<<<<< HEAD
     AppointmentStaffChoice,
+=======
+>>>>>>> e3f590a (moved conftest)
     AreaAppointmentTimeDistributions,
     AppointmentTimeDistributions,
     DidNotAttendRatesByArea,
     AreaDidNotAttendRates,
     StaffTypePropensityByArea,
     DeliveryPropensityByArea,
+<<<<<<< HEAD
     PopulationScenarios
+=======
+>>>>>>> e3f590a (moved conftest)
 )
 
 # define the path to the sample yaml file from root
@@ -26,17 +32,26 @@ def test_appointment_times_load_yaml():
     location_distribution_dict = AreaAppointmentTimeDistributions.read_yaml(
         SAMPLE_APPOINTMENT_TIME_DISTRIBUTIONS_YAML_FILE
     )
+<<<<<<< HEAD
     # assert that it is the correct instance
+=======
+>>>>>>> e3f590a (moved conftest)
     assert isinstance(location_distribution_dict, AreaAppointmentTimeDistributions)
     # iterate though the model
     for k, v in location_distribution_dict.model_dump().items():
         # check the key is str
         assert isinstance(k, str)
+<<<<<<< HEAD
         # construct the class from dictionary
         v_class = AppointmentTimeDistributions(
             **v
         )  
         # assert it is the correct instance/class
+=======
+        v_class = AppointmentTimeDistributions(
+            **v
+        )  # convert the dictionary to a pydantic model
+>>>>>>> e3f590a (moved conftest)
         assert isinstance(v_class, AppointmentTimeDistributions)
         # iterate through the subclass
         for k1, v1 in v.items():
@@ -67,7 +82,11 @@ def test_staff_propensity_yaml():
 
 def test_staff_propensity_yaml_raises_error():
     """This will error as the sum is gt 1"""
+<<<<<<< HEAD
     with pytest.raises(ValueError):
+=======
+    with pytest.raises(ValidationError):
+>>>>>>> e3f590a (moved conftest)
         StaffTypePropensityByArea.read_yaml(
             "tests/sample_data/staff_propensity_error.yaml"
         )
@@ -77,6 +96,7 @@ def test_staff_propensity_pick():
         "tests/sample_data/staff_propensity.yaml"
     )
     # get areas
+<<<<<<< HEAD
     for area in staff_propensity.areas:
         area_propensity:AppointmentStaffChoice = staff_propensity.get_area(area)
         assert isinstance(area_propensity, AppointmentStaffChoice)
@@ -85,6 +105,12 @@ def test_staff_propensity_pick():
         assert isinstance(staff_type, str)
         assert staff_type in ["GP", "Other Practice staff", "Unknown"]
         
+=======
+    areas = list(staff_propensity.model_dump().keys())
+    assert isinstance(staff_propensity, StaffTypePropensityByArea)
+    staff_type = staff_propensity.get(areas[0]).pick_staff_type()
+    assert isinstance(staff_type, str)
+>>>>>>> e3f590a (moved conftest)
 
 
 def test_appt_mode_propensity():
@@ -96,6 +122,7 @@ def test_appt_mode_propensity():
 
 def test_appt_mode_propensity_raises_error():
     """This will error as the sum is gt 1"""
+<<<<<<< HEAD
     with pytest.raises(ValueError):
         DeliveryPropensityByArea.read_yaml(
             "tests/sample_data/appt_mode_propensity_error.yaml"
@@ -104,3 +131,9 @@ def test_appt_mode_propensity_raises_error():
 def test_population_yaml():
     population = PopulationScenarios.read_yaml("tests/sample_data/population_projection.yaml")
     assert isinstance(population, PopulationScenarios)
+=======
+    with pytest.raises(ValidationError):
+        DeliveryPropensityByArea.read_yaml(
+            "tests/sample_data/appt_mode_propensity_error.yaml"
+        )
+>>>>>>> e3f590a (moved conftest)
