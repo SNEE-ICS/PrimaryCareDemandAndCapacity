@@ -15,7 +15,7 @@ pip install -r requirements.txt
 # step 2: unit tests
 echo "Running unit tests..."
 pip install pytest
-pytest tests
+pytest .
 
 # step 3: Run the notebooks using nbconvert
 echo "Running notebooks..."
