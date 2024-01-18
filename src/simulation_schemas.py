@@ -12,7 +12,7 @@ from pydantic import (
     create_model,
 )
 
-import src.constants as constants   
+from ..src import constants 
 
 # this is used to define the arguments for the pydantic Field class
 # so that probability of non attendance is between 0 and 1
