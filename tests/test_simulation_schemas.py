@@ -66,7 +66,7 @@ def test_staff_propensity_yaml():
 
 def test_staff_propensity_yaml_raises_error():
     """This will error as the sum is gt 1"""
-    with pytest.raises(ValidationError):
+    with pytest.raises(ValueError):
         StaffTypePropensityByArea.read_yaml(
             "tests/sample_data/staff_propensity_error.yaml"
         )
@@ -95,7 +95,7 @@ def test_appt_mode_propensity():
 
 def test_appt_mode_propensity_raises_error():
     """This will error as the sum is gt 1"""
-    with pytest.raises(ValidationError):
+    with pytest.raises(ValueError):
         DeliveryPropensityByArea.read_yaml(
             "tests/sample_data/appt_mode_propensity_error.yaml"
         )

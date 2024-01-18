@@ -83,7 +83,7 @@ class BaseChoice(BaseModel, ABC):
             propensity_sum > 1 + PROPENSITY_ACCURACY_THRESHOLD
             or propensity_sum < 1 - PROPENSITY_ACCURACY_THRESHOLD
         ):
-            raise ValidationError(f"Propensity values must sum to 1.0, got {propensity_sum}")
+            raise ValueError(f"Propensity values must sum to 1.0, got {propensity_sum}")
         return self
 
 
