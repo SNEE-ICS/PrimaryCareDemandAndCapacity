@@ -1,4 +1,4 @@
-from typing import Dict, Iterable, List, Optional, Set, Tuple, Union, TypeAlias, Type
+from typing import Any, Dict, List, Union, TypeAlias, Type
 from abc import ABC
 import yaml
 import random
@@ -10,7 +10,6 @@ from pydantic import (
     model_validator,
     ValidationError,
     create_model,
-    ConfigDict
 )
 
 import src.constants as constants   
@@ -49,6 +48,11 @@ class YamlLoader(ABC):
         
 class AreaModel(ABC):
 
+    @property
+    def areas(self) -> List[str]:
+        """returns the list of areas"""
+        return list(self.model_dump().keys())
+    
     def get_area(self, area: str) -> Type[BaseModel]:
         """
         Get the propensity for a given area.
@@ -60,6 +64,48 @@ class AreaModel(ABC):
             Dict[str, float]: The propensity for the given area.
         """
         return self.root.get(area)
+    
+
+class BaseChoice(BaseModel, ABC):
+    """
+    Base class for propensity choices, not to be used directly.
+    The fields are the choices and the values are the probabilities.
+    The sum of the field values must be 1.0.
+    """
+
+    @model_validator(mode="after")
+    def check_sum(self):
+        """Check that the propensity values sum to 1.0"""
+
+        propensity_sum = sum(self.model_dump().values())
+        # confirm the propensity values sum to 1.0
+        if (
+            propensity_sum > 1 + PROPENSITY_ACCURACY_THRESHOLD
+            or propensity_sum < 1 - PROPENSITY_ACCURACY_THRESHOLD
+        ):
+            raise ValidationError(f"Propensity values must sum to 1.0, got {propensity_sum}")
+        return self
+
+
+    def pick(self, n_choices:int=1)->Union[Any, List[Any]]:
+        """
+        Randomly selects one of the fields based on their probabilities (values must be float).
+
+        Returns:
+            str: The selected staff field name.
+        """
+        # get the probabilities as a dictionary
+        probabilities_dict: Dict[str, float] = self.model_dump(by_alias=True)
+        # randomly select a staff type based on the probabilities using the random module
+        field_choices = random.choices(
+            list(probabilities_dict.keys()),
+            weights=list(probabilities_dict.values()),
+            k=n_choices,
+        )
+        if n_choices == 1:
+            return field_choices[0]
+        else:
+            return field_choices
 
 
 
@@ -155,27 +201,6 @@ class DidNotAttendRatesByArea(_DidNotAttendRates, YamlLoader):
     pass
 
 
-class BaseChoice(BaseModel, ABC):
-    """
-    Base class for propensity choices, not to be used directly
-    """
-
-    pass
-
-    @model_validator(mode="after")
-    def check_sum(self):
-        """Check that the propensity values sum to 1.0"""
-
-        propensity_sum = sum(self.model_dump().values())
-        # confirm the propensity values sum to 1.0
-        if (
-            propensity_sum > 1 + PROPENSITY_ACCURACY_THRESHOLD
-            or propensity_sum < 1 - PROPENSITY_ACCURACY_THRESHOLD
-        ):
-            raise ValueError(f"Propensity values must sum to 1.0, got {propensity_sum}")
-        return self
-
-
 class AppointmentStaffChoice(BaseChoice):
     """
     Class to represent the propensity of a given staff type for appointments
@@ -185,30 +210,11 @@ class AppointmentStaffChoice(BaseChoice):
     other: float = Field(alias="Other Practice staff", **PROPENSITY_FIELD_ARGS)
     unknown: float = Field(alias="Unknown", **PROPENSITY_FIELD_ARGS)
 
-    def pick_staff_type(self) -> str:
-        """
-        Randomly selects a staff type based on the given probabilities.
-
-        Returns:
-            str: The selected staff type.
-        """
-        # get the probabilities as a dictionary
-        probabilities_dict: Dict[str, float] = self.model_dump(by_alias=True)
-        # randomly select a staff type based on the probabilities using the random modu` oi,m1¦¦\le
-        staff_type = random.choices(
-            list(probabilities_dict.keys()),
-            weights=list(probabilities_dict.values()),
-            k=1,
-        )[0]
-        # return the selected staff type
-        return staff_type
-
 # not using the _ prefix here as this is just implementing the Rootmodel
 _StaffTypePropensityByArea = RootModel[Dict[str, AppointmentStaffChoice]]
 
 class StaffTypePropensityByArea(_StaffTypePropensityByArea, YamlLoader, AreaModel):
     """Class to load and validate the staff type propensity yaml file for a yaml file of areas"""
-
     pass
 
 
