@@ -165,3 +165,7 @@ outputs/*
 staticWebsite/output/*
 staticWebsite/content/notebooks_html/*
 .vscode/settings.json
+staticWebsite/content/img/appointment_attendance_*.png
+staticWebsite/content/img/appointment_duration_*.png
+staticWebsite/content/data_catalog.md
+staticWebsite/content/notebooks_html/*.html
