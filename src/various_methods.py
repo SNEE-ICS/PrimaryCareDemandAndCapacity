@@ -8,7 +8,6 @@ from functools import lru_cache
 
 import src.constants as const
 
-
 def get_numdays(df_:pd.DataFrame):
     month_values = df_.index.get_level_values('APPOINTMENT_MONTH')
     years, months =  month_values.year, month_values.month
