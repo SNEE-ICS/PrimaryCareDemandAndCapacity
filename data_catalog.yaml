@@ -72,17 +72,17 @@ single_data_sources:
     zip_url: https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2023/04/Annual-CSV-2021-22-Revised-April-23-inc-Oct-21-to-Mar-22-revisions.zip
     csv_file: Annual CSV 2021-22 Revised April 23 (inc Oct 21 to Mar 22 revisions).csv
     website_url: https://www.england.nhs.uk/statistics/statistical-work-areas/outpatient-referrals/
-  - name: General Practice workforce August 2023
+  - name: General Practice workforce December 2023
     description: The General Practice Workforce series of Official Statistics presents a snapshot of the primary care general practice workforce. A snapshot statistic relates
      to the situation at a specific date, which for these workforce statistics is now the last calendar day each month.
-     This monthly snapshot reflects the general practice workforce at 31 August 2023.
+     This monthly snapshot reflects the general practice workforce at 31 December 2023.
      These statistics present full-time equivalent (FTE) and headcount figures by four staff groups, (GPs, Nurses, Direct Patient Care (DPC) and administrative staff), with breakdowns of 
      individual job roles within these high-level groups.
     source_type: csv_in_zip
     load_as: dataframe
     zip_url: https://files.digital.nhs.uk/67/A6C43A/GPWIndividualCSV.082023.zip
     csv_file: "1. General Practice – August 2023 Individual Level.csv"
-    website_url: https://digital.nhs.uk/data-and-information/publications/statistical/general-and-personal-medical-services/31-august-
+    website_url: https://digital.nhs.uk/data-and-information/publications/statistical/general-and-personal-medical-services/31-december-2023
   - name: Appointments in General Practice, September 2023
     website_url: https://digital.nhs.uk/data-and-information/publications/statistical/appointments-in-general-practice/september-2023
     description: The publication includes important information, however it does not show the totality of GP activity/workload. The data presented only contains information which was captured
