@@ -60,4 +60,3 @@ SIMULATION_RESULTS_PATH = NOTEBOOK_OUTPUT_BASE_PATH + "simulation_results/"
 
 
 ONS_POPULATION_SCENARIOS_NAME = "ONS Population projections by single year of age mid-2018 to mid-2043"
-
