@@ -1,4 +1,5 @@
 from typing import Any, Dict, List, Union, TypeAlias, Type
+import datetime as dt
 from abc import ABC
 import yaml
 import random
@@ -11,6 +12,8 @@ from pydantic import (
     ValidationError,
     create_model,
 )
+
+import pandas as pd
 
 # this is used to define the arguments for the pydantic Field class
 # so that probability of non attendance is between 0 and 1
@@ -43,14 +46,14 @@ class YamlLoader(ABC):
             yaml_data = yaml.safe_load(f)
             class_instance = cls(**yaml_data)
             return class_instance
-        
-class AreaModel(ABC):
 
+
+class AreaModel(ABC):
     @property
     def areas(self) -> List[str]:
         """returns the list of areas"""
         return list(self.model_dump().keys())
-    
+
     def get_area(self, area: str) -> Type[BaseModel]:
         """
         Get the propensity for a given area.
@@ -62,7 +65,7 @@ class AreaModel(ABC):
             Dict[str, float]: The propensity for the given area.
         """
         return self.root.get(area)
-    
+
 
 class BaseChoice(BaseModel, ABC):
     """
@@ -84,8 +87,7 @@ class BaseChoice(BaseModel, ABC):
             raise ValueError(f"Propensity values must sum to 1.0, got {propensity_sum}")
         return self
 
-
-    def pick(self, n_choices:int=1)->Union[Any, List[Any]]:
+    def pick(self, n_choices: int = 1) -> Union[Any, List[Any]]:
         """
         Randomly selects one of the fields based on their probabilities (values must be float).
 
@@ -106,43 +108,109 @@ class BaseChoice(BaseModel, ABC):
             return field_choices
 
 
-
-
 # using the pydantic Rootmodel to define a type alias/ schema
 # this is essentially a dictionary structure with a key of type str and value of type int
 _PopulationByYear = RootModel[Dict[int, int]]
-class PopulationByYear(_PopulationByYear):
 
+
+class PopulationByYear(_PopulationByYear):
     @property
     def years(self) -> List[int]:
         """returns the list of years"""
         return list(self.model_dump.keys())
-    
-    def get_year(self, year:int):
+
+    def get_year(self, year: int):
         return self.root.get(year)
+
 
 # then a dictionary keyed by year
 _PopulationByAgeGroup = RootModel[Dict[str, PopulationByYear]]
-class PopulationByAgeGroup(_PopulationByAgeGroup):
 
+
+class PopulationByAgeGroup(_PopulationByAgeGroup):
     @property
     def age_groups(self) -> List[str]:
         """returns the list of age_groups"""
         return list(self.model_dump().keys())
-    
-    def get_age_group(self, age_group:str)->PopulationByYear:
+
+    def get_age_group(self, age_group: str) -> PopulationByYear:
         return self.root.get(age_group)
+
 
 # then a dictionary keyed by area
 # used for a populationEstimate by Area, note the leading underscore so not used directly
 _PopulationByArea = RootModel[Dict[str, PopulationByAgeGroup]]
 
+
 class PopulationByArea(_PopulationByArea, AreaModel):
     """Class to load and validate the population estimates by area"""
 
-    pass
+    def as_dataframe(
+        self, proportions: bool = False, monthly: bool = False
+    ) -> pd.DataFrame:
+        """returns the population by area as a pandas dataframe"""
+        # convert to dict
+        df_ = pd.DataFrame.from_dict(self.model_dump(by_alias=True)).T
+
+        # mangle the dataframe, empty list to hold rows
+        mangled_rows = []
+        # iterate over the rows
+        for i, row in df_.iterrows():
+            # iterate over the columns (age bands)
+            for col in df_.columns:
+                # each entry is a dictionary with the year as key and the population as value
+                for k, v in row[col].items():
+                    # append the row to the list
+                    mangled_rows.append([col, i, k, v])
+        pivot_df = pd.DataFrame(
+            mangled_rows, columns=["age_band", "area", "year", "population"]
+        ).pivot(index=["year", "area"], columns="age_band", values="population")
+
+        if monthly:
+            # add a month column to index
+            expanded_index_df: pd.DataFrame = pd.DataFrame(
+                index=pd.date_range(
+                    dt.date(
+                        pivot_df.index.get_level_values("year").min(), month=1, day=1
+                    ),  # jan 1st of the first year
+                    dt.date(
+                        pivot_df.index.get_level_values("year").max(), month=12, day=1
+                    ),  # dec 1st of the last year
+                    freq="M",
+                )  # month frequency
+            ).assign(
+                month=lambda df: df.index.month, year=lambda df: df.index.year
+            )  # add month and year columns
+
+            # add areas
+            monthly_areas_df: pd.DataFrame = pd.concat(
+                [
+                    expanded_index_df.assign(area=area)
+                    for area in df_.index.get_level_values("area").unique()
+                ]
+            ).set_index(["area", "year", "month"])
+            del expanded_index_df  # free up memory
+            # merge the two dataframes and interpolate the missing values
+            monthly_population_df = monthly_areas_df.join(
+                df_, how="outer"
+            ).interpolate()
+
+            if not proportions:
+                return monthly_population_df
+            else:
+                return monthly_population_df.div(
+                    monthly_population_df.sum(axis=1), axis=0
+                )
+
+        else:
+            if not proportions:
+                return pivot_df
+            else:
+                return pivot_df.div(pivot_df.sum(axis=1), axis=0)
+
 
 _PopulationScenarios = RootModel[Dict[str, PopulationByArea]]
+
 
 class PopulationScenarios(_PopulationScenarios, YamlLoader):
     """Class to load and validate the population scenarios yaml file for a yaml file of areas"""
@@ -151,6 +219,10 @@ class PopulationScenarios(_PopulationScenarios, YamlLoader):
     def scenarios(self) -> List[str]:
         """returns the list of scenarios"""
         return list(self.model_dump().keys())
+
+    def get_scenario(self, scenario: str) -> PopulationByArea:
+        """returns the population by area for a given scenario"""
+        return self.root.get(scenario)
 
 
 # using the pydantic Rootmodel to define a type alias/ schema
@@ -216,13 +288,15 @@ class AppointmentStaffChoice(BaseChoice):
     other: float = Field(alias="Other Practice staff", **PROPENSITY_FIELD_ARGS)
     unknown: float = Field(alias="Unknown", **PROPENSITY_FIELD_ARGS)
 
+
 # not using the _ prefix here as this is just implementing the Rootmodel
 _StaffTypePropensityByArea = RootModel[Dict[str, AppointmentStaffChoice]]
 
+
 class StaffTypePropensityByArea(_StaffTypePropensityByArea, YamlLoader, AreaModel):
     """Class to load and validate the staff type propensity yaml file for a yaml file of areas"""
-    pass
 
+    pass
 
 
 class AppointmentDeliveryChoice(BaseChoice):
@@ -267,4 +341,5 @@ _DeliveryPropensityByArea = RootModel[Dict[str, DeliveryPropensityByStaff]]
 
 class DeliveryPropensityByArea(_DeliveryPropensityByArea, YamlLoader):
     """Class to load and validate the did not attend rates yaml file for a yaml file of areas"""
+
     pass
