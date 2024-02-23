@@ -14,7 +14,7 @@ import src.constants as const
 
 from sklearn import set_config
 
-set_config(transform_output='pandas')
+set_config(transform_output="pandas")
 
 
 DEFAULT_POLY_DEGREE = 2
@@ -43,26 +43,10 @@ PCA_GRID_SEARCH = {
 RIDGE_REGRESSION_GRID_SEARCH = {
     "ridge__alpha": stats.uniform(loc=0, scale=1),
     "ridge__fit_intercept": [True, False],
-    "ridge__normalize": [True, False],
+    "ridge__positive": [True, False],
+    "ridge__positive": [True, False],
+    "ridge__solver": ["auto", "svd", "cholesky", "lsqr", "sparse_cg", "sag", "saga"],
 }
-
-
-BASIC_ONEHOT_GRID_SEARCH = {**LINEAR_REGRESSION_GRID_SEARCH}
-
-ONEHOT_POLYNOMIAL_LINEAR_GRID_SEARCH = {
-    **POLYNOMIAL_GRID_SEARCH,
-    **LINEAR_REGRESSION_GRID_SEARCH,
-}
-
-ONEHOT_POLYNOMIAL_RIDGE_GRID_SEARCH = {
-    **POLYNOMIAL_GRID_SEARCH,
-    **RIDGE_REGRESSION_GRID_SEARCH,
-}
-
-ONEHOT_PCA_LINEAR_GRID_SEARCH = {**PCA_GRID_SEARCH, **LINEAR_REGRESSION_GRID_SEARCH}
-
-ONEHOT_PCA_RIDGE_GRID_SEARCH = {**PCA_GRID_SEARCH, **RIDGE_REGRESSION_GRID_SEARCH}
-
 
 
 REGRESSION_METRICS = [
@@ -70,168 +54,152 @@ REGRESSION_METRICS = [
     metrics.mean_absolute_error,
     metrics.mean_squared_error,
     metrics.median_absolute_error,
-    metrics.r2_score
+    metrics.r2_score,
 ]
-
 
 
 class ModelConfig(BaseModel):
     name: str
     estimator: Pipeline
     grid_search_params: Dict[str, Any]
-    metrics: Dict[str, float | int] = Field(default_factory=dict)
-    best_params_by_metric: Dict[str, Any] = Field(default_factory=dict)
+    train_metrics: Dict[str, float | int] = Field(default_factory=dict)
+    test_metrics: Dict[str, float | int] = Field(default_factory=dict)
+    best_params_by_metric: Dict[str, dict] = Field(default_factory=dict)
 
     class Config:
         arbitrary_types_allowed = True
 
 
-
-
-def basic_onehot_pipeline() -> Pipeline:
-    """
-    Creates a basic pipeline for one-hot encoding categorical features and performing linear regression.
-
-    Args:
-        pipeline_kwargs (Optional[dict]): Optional keyword arguments to set pipeline parameters.
-
-    Returns:
-        Pipeline: The constructed pipeline object.
-    """
-    # Define the pipeline
-    onehot_pipeline = Pipeline(
-        [
-            ("preprocess", ColumnTransformer([("onehot", OneHotEncoder(sparse_output=False), ["month"])], remainder="passthrough")),
-            ("linear_regression", LinearRegression()),
-        ]
-    )
-    onehot_pipeline.set_output(transform='pandas')
-    return onehot_pipeline
-
-
-def onehot_polynomial_linear_pipeline() -> Pipeline:
-    """
-    Creates a pipeline for one-hot encoding, polynomial feature transformation, and linear regression.
-
-    Args:
-        pipeline_kwargs (Optional[dict]): Optional keyword arguments to set pipeline parameters.
-
-    Returns:
-        Pipeline: The constructed pipeline.
-
-    """
-    # Define the pipeline
-    poly_pipeline = Pipeline(
-        [
-            ("preprocess", ColumnTransformer([("onehot", OneHotEncoder(sparse_output=False), ["month"])], remainder="passthrough")),
-            ("polynomial", PolynomialFeatures(degree=DEFAULT_POLY_DEGREE)),
-            ("linear_regression", LinearRegression()),
-        ]
-    )
-    return poly_pipeline
-
-
-def onehot_polynomial_ridge_pipeline() -> Pipeline:
-    """
-    Creates a pipeline for one-hot encoding, polynomial feature transformation, and ridge regression.
-
-    Args:
-        pipeline_kwargs (Optional[dict]): Optional keyword arguments to set pipeline parameters.
-
-    Returns:
-        Pipeline: The constructed pipeline.
-    """
-    # Define the pipeline
-    poly_pipeline = Pipeline(
-        [
-            ("preprocess", ColumnTransformer([("onehot", OneHotEncoder(sparse_output=False), ["month"])], remainder="passthrough")),
-            ("polynomial", PolynomialFeatures(degree=DEFAULT_POLY_DEGREE)),
-            ("ridge", Ridge()),
-        ]
-    )
-    return poly_pipeline
-
-
-def onehot_pca_linear_pipeline() -> Pipeline:
-    """
-    Creates a pipeline for one-hot encoding, PCA dimensionality reduction, and linear regression.
-
-    Args:
-        pipeline_kwargs (Optional[dict]): Optional keyword arguments to set pipeline parameters.
-
-    Returns:
-        Pipeline: The constructed pipeline.
-
-    """
-    # Define the pipeline
-    pca_pipeline = Pipeline(
-        steps=[
-            (
-                "preprocess",
-                ColumnTransformer(
-                    transformers=[
-                        ("onehot", OneHotEncoder(sparse_output=False), ["month"]),
-                        ("scale_pca", Pipeline([
-                            ("scale", StandardScaler()),
-                            ("pca", PCA(n_components=2))
-                        ]), const.GP_LIST_AGE_LABELS),
-                    ],
-                    remainder="passthrough"
-                ),
-            ),
-            ("linear_regression", LinearRegression()),
-        ]
-    )
-    return pca_pipeline
-
-
-def onehot_pca_ridge_pipeline() -> Pipeline:
-    """
-    Creates a pipeline for one-hot encoding, PCA dimensionality reduction, and linear regression.
-
-    Args:
-        pipeline_kwargs (Optional[dict]): Optional keyword arguments to set pipeline parameters.
-
-    Returns:
-        Pipeline: The constructed pipeline.
-
-    """
-    # Define the pipeline
-    pca_pipeline = Pipeline(
-        steps=[
-            (
-                "preprocess",
-                ColumnTransformer(
-                    transformers=[
-                        ("onehot", OneHotEncoder(sparse_output=False), ["month"]),
-                        ("scale_pca", Pipeline([
-                            ("scale", StandardScaler()),
-                            ("pca", PCA(n_components=2))
-                        ]), const.GP_LIST_AGE_LABELS),
-                    ],
-                    remainder="passthrough"
-                ),
-            ),
-            ("ridge", Ridge()),
-        ]
-    )
-    return pca_pipeline
-
-
 # create all the model configs
 MODEL_CONFIGS = [
-    ModelConfig(name="basic", estimator=basic_onehot_pipeline(), grid_search_params=BASIC_ONEHOT_GRID_SEARCH),
-    ModelConfig(name="poly_linear", estimator=onehot_polynomial_linear_pipeline(), grid_search_params=POLYNOMIAL_GRID_SEARCH),
-    ModelConfig(name="poly_ridge", estimator=onehot_polynomial_ridge_pipeline(), grid_search_params=ONEHOT_POLYNOMIAL_RIDGE_GRID_SEARCH),
-    ModelConfig(name="pca_linear", estimator=onehot_pca_linear_pipeline(), grid_search_params=ONEHOT_PCA_LINEAR_GRID_SEARCH),
-    ModelConfig(name="pca_ridge", estimator=onehot_pca_ridge_pipeline(), grid_search_params=ONEHOT_PCA_RIDGE_GRID_SEARCH),
+    ModelConfig(
+        name="basic",
+        estimator=Pipeline(
+            [
+                (
+                    "preprocess",
+                    ColumnTransformer(
+                        [("onehot", OneHotEncoder(sparse_output=False), ["month"])],
+                        remainder="passthrough",
+                    ),
+                ),
+                ("linear_regression", LinearRegression()),
+            ]
+        ),
+        grid_search_params={**LINEAR_REGRESSION_GRID_SEARCH},
+    ),
+    ModelConfig(
+        name="poly_linear",
+        estimator=Pipeline(
+            [
+                (
+                    "preprocess",
+                    ColumnTransformer(
+                        [("onehot", OneHotEncoder(sparse_output=False), ["month"])],
+                        remainder="passthrough",
+                    ),
+                ),
+                ("polynomial", PolynomialFeatures(degree=DEFAULT_POLY_DEGREE)),
+                ("linear_regression", LinearRegression()),
+            ]
+        ),
+        grid_search_params={
+    **POLYNOMIAL_GRID_SEARCH,
+    **LINEAR_REGRESSION_GRID_SEARCH,
+},
+    ),
+    ModelConfig(
+        name="poly_ridge",
+        estimator=Pipeline(
+            [
+                (
+                    "preprocess",
+                    ColumnTransformer(
+                        [("onehot", OneHotEncoder(sparse_output=False), ["month"])],
+                        remainder="passthrough",
+                    ),
+                ),
+                ("polynomial", PolynomialFeatures(degree=DEFAULT_POLY_DEGREE)),
+                ("ridge", Ridge()),
+            ]
+        ),
+        grid_search_params={
+    **POLYNOMIAL_GRID_SEARCH,
+    **RIDGE_REGRESSION_GRID_SEARCH,
+},
+    ),
+    ModelConfig(
+        name="pca_linear",
+        estimator=Pipeline(
+            steps=[
+                (
+                    "preprocess",
+                    ColumnTransformer(
+                        transformers=[
+                            ("onehot", OneHotEncoder(sparse_output=False), ["month"]),
+                            (
+                                "scale_pca",
+                                Pipeline(
+                                    [
+                                        ("scale", StandardScaler()),
+                                        ("pca", PCA(n_components=2)),
+                                    ]
+                                ),
+                                const.GP_LIST_AGE_LABELS,
+                            ),
+                        ],
+                        remainder="passthrough",
+                    ),
+                ),
+                ("linear_regression", LinearRegression()),
+            ]
+        ),
+        grid_search_params={**PCA_GRID_SEARCH, **LINEAR_REGRESSION_GRID_SEARCH},
+    ),
+    ModelConfig(
+        name="pca_ridge",
+        estimator=Pipeline(
+            steps=[
+                (
+                    "preprocess",
+                    ColumnTransformer(
+                        transformers=[
+                            ("onehot", OneHotEncoder(sparse_output=False), ["month"]),
+                            (
+                                "scale_pca",
+                                Pipeline(
+                                    [
+                                        ("scale", StandardScaler()),
+                                        ("pca", PCA(n_components=2)),
+                                    ]
+                                ),
+                                const.GP_LIST_AGE_LABELS,
+                            ),
+                        ],
+                        remainder="passthrough",
+                    ),
+                ),
+                ("ridge", Ridge()),
+            ]
+        ),
+        grid_search_params={**PCA_GRID_SEARCH, **RIDGE_REGRESSION_GRID_SEARCH},
+    ),
 ]
 
+
 def baseline_scorer(y_true, y_pred):
-    #run all the metrics in the regression_metrics list
+    """
+    Calculate the scores for a baseline model.
+
+    Parameters:
+    - y_true: The true values of the target variable.
+    - y_pred: The predicted values of the target variable.
+
+    Returns:
+    - metrics_dict: A dictionary containing the scores for each metric in the REGRESSION_METRICS list.
+    """
     metrics_dict = {}
     for metric in REGRESSION_METRICS:
-            score = metric(y_true, y_pred)
-            metrics_dict[metric.__name__] = score
+        score = metric(y_true, y_pred)
+        metrics_dict[metric.__name__] = score
     return metrics_dict
-    
