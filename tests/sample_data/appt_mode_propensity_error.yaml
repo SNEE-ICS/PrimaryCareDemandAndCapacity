@@ -1,0 +1,38 @@
+92G:
+  GP:
+    Face-to-Face: 0.6143
+    Home Visit: 0.0182
+    Telephone: 0.3521
+    Unknown: 0.002
+    Video/Online: 0.0134
+  Other Practice staff:
+    Face-to-Face: 0.8119
+    Home Visit: 0.0068
+    Telephone: 0.1694
+    Unknown: 0.005
+    Video/Online: 0.0069
+  Unknown:
+    Face-to-Face: 0.00666
+    Home Visit: 0.0
+    Telephone: 0.0094
+    Unknown: 0.9865
+    Video/Online: 0.0
+93C:
+  GP:
+    Face-to-Face: 0.5899
+    Home Visit: 0.0048
+    Telephone: 0.3863
+    Unknown: 0.0034
+    Video/Online: 0.0157
+  Other Practice staff:
+    Face-to-Face: 0.6883
+    Home Visit: 0.0033
+    Telephone: 0.2948
+    Unknown: 0.0077
+    Video/Online: 0.006
+  Unknown:
+    Face-to-Face: 0.4161
+    Home Visit: 0.0164
+    Telephone: 0.5346
+    Unknown: 0.016
+    Video/Online: 0.0169

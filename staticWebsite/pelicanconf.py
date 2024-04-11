@@ -41,7 +41,7 @@ FILENAME_METADATA = '(?P<title>.*)'
 
 DEFAULT_DATE = 'fs'
 
-STATIC_PATHS = ['img', 'extras', 'notebooks_html']
+STATIC_PATHS = ['img', 'extras', 'notebooks_html', 'capacity','demand']
 
 EXTRA_PATH_METADATA = {'extras/favicon.ico': {'path': 'favicon.ico'},}
 
