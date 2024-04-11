@@ -37,6 +37,10 @@ mv outputs/plots/*.png staticWebsite/content/img/
 echo "Moving notebook files to notebooks_html folder..."
 mv outputs/notebooks/*.html staticWebsite/content/notebooks_html/
 
+# step 7: run the catalog builder
+echo "Running catalog builder..."
+python -m src.catalog_to_markdown
+
 # step 5: Run Pelican build
 echo "Running Pelican server..."
 cd staticWebsite

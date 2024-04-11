@@ -62,7 +62,7 @@ class PlotCounter:
 
     @property
     def plot_name(self):
-        # temporary variable to hold count whilst incremented
+        """Generates a unique plot name based on the current count"""
         current_count = self.count
         self.count += 1 # increment count
         return f"{const.NOTEBOOK_OUTPUT_FIGURES_PATH}{self.name}_{current_count}"
@@ -70,18 +70,51 @@ class PlotCounter:
 
 @lru_cache(maxsize=12)
 def _month_to_angle(month:int)->float:
+    """
+    Converts a month (1-12) to its corresponding angle in radians.
+
+    Parameters:
+    month (int): The month to convert.
+
+    Returns:
+    float: The angle in radians.
+
+    Raises:
+    ValueError: If the month is not in the range 1-12.
+    """
     if month not in range(1,13):
         raise ValueError('month must be in range 1-12')
     return month*2*math.pi/12
 
 @lru_cache(maxsize=12)
 def month_num_to_sin(month:int)->float:
+    """
+    Converts a month number to its corresponding sine value.
+
+    Args:
+        month (int): The month number (1-12).
+
+    Returns:
+        float: The sine value of the month number.
+
+    Raises:
+        ValueError: If the month number is not in the range 1-12.
+    """
     if month not in range(1,13):
         raise ValueError('month must be in range 1-12')
     return math.sin(_month_to_angle(month))
 
 @lru_cache(maxsize=12)
 def month_num_to_cos(month:int)->float:
+    """
+    Convert the month number to its corresponding cosine value.
+
+    Parameters:
+    month (int): The month number (1-12).
+
+    Returns:
+    float: The cosine value of the month number.
+    """
     if month not in range(1,13):
         raise ValueError('month must be in range 1-12')
     return math.cos(_month_to_angle(month))
