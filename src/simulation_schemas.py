@@ -1,9 +1,13 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 from typing import Any, Dict, List, Union, TypeAlias, Type
 import datetime as dt
 =======
 from typing import Dict, Iterable, List, Optional, Set, Tuple, Union, TypeAlias, Type
 >>>>>>> e3f590a (moved conftest)
+=======
+from typing import Dict, Iterable, List, Optional, Set, Tuple, Union, TypeAlias, Type
+>>>>>>> d371952 (resolving merge conflict)
 from abc import ABC
 import yaml
 import random
@@ -16,6 +20,7 @@ from pydantic import (
     ValidationError,
     create_model,
 <<<<<<< HEAD
+<<<<<<< HEAD
 )
 
 import pandas as pd
@@ -25,6 +30,12 @@ import pandas as pd
 
 import src.constants as constants   
 >>>>>>> e3f590a (moved conftest)
+=======
+    ConfigDict
+)
+
+import src.constants as constants   
+>>>>>>> d371952 (resolving merge conflict)
 
 # this is used to define the arguments for the pydantic Field class
 # so that probability of non attendance is between 0 and 1
@@ -73,6 +84,7 @@ class AreaModel(ABC):
         return self.root.get(area)
 
 
+<<<<<<< HEAD
 
 
 class AreaModel(ABC):
@@ -133,10 +145,13 @@ class BaseChoice(BaseModel, ABC):
             return field_choices[0]
         else:
             return field_choices
+=======
+>>>>>>> d371952 (resolving merge conflict)
 
 
 # using the pydantic Rootmodel to define a type alias/ schema
 # this is essentially a dictionary structure with a key of type str and value of type int
+<<<<<<< HEAD
 <<<<<<< HEAD
 _PopulationByYear = RootModel[Dict[int, int]]
 =======
@@ -144,6 +159,11 @@ PopulationBaseline = create_model(
     "PopulationBaseline", **{k: (int, ...) for k in constants.GP_LIST_LABELS}
 )
 >>>>>>> e3f590a (moved conftest)
+=======
+PopulationBaseline = create_model(
+    "PopulationBaseline", **{k: (int, ...) for k in constants.GP_LIST_LABELS}
+)
+>>>>>>> d371952 (resolving merge conflict)
 
 
 class PopulationByYear(_PopulationByYear):
@@ -290,7 +310,10 @@ class PopulationGrowthFactorScenarios(_PopulationGrowthFactorScenarios, YamlLoad
     pass
 
 
+<<<<<<< HEAD
 >>>>>>> e3f590a (moved conftest)
+=======
+>>>>>>> d371952 (resolving merge conflict)
 # using the pydantic Rootmodel to define a type alias/ schema
 # this is essentially a dictionary structure with a key of type str and iterable (list) of type float
 AppointmentTimeDistributions = RootModel[Dict[str, List[float]]]
@@ -379,6 +402,7 @@ class AppointmentStaffChoice(BaseChoice):
     unknown: float = Field(alias="Unknown", **PROPENSITY_FIELD_ARGS)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 # not using the _ prefix here as this is just implementing the Rootmodel
 _StaffTypePropensityByArea = RootModel[Dict[str, AppointmentStaffChoice]]
@@ -389,6 +413,8 @@ class StaffTypePropensityByArea(_StaffTypePropensityByArea, YamlLoader, AreaMode
 
     pass
 =======
+=======
+>>>>>>> d371952 (resolving merge conflict)
     def pick_staff_type(self) -> str:
         """
         Randomly selects a staff type based on the given probabilities.
@@ -424,8 +450,11 @@ class StaffTypePropensityByArea(_StaffTypePropensityByArea, YamlLoader):
         return self.root.get(area)
 
 
+<<<<<<< HEAD
 >>>>>>> e3f590a (moved conftest)
 
+=======
+>>>>>>> d371952 (resolving merge conflict)
 
 class AppointmentDeliveryChoice(BaseChoice):
     """
@@ -459,16 +488,22 @@ class AppointmentDeliveryChoice(BaseChoice):
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 class DeliveryPropensityByStaff(BaseModel):
     gp: AppointmentDeliveryChoice = Field(alias="GP")
     other: AppointmentDeliveryChoice = Field(alias="Other Practice staff")
     unknown: AppointmentDeliveryChoice = Field(alias="Unknown")
 =======
+=======
+>>>>>>> d371952 (resolving merge conflict)
 class DeliveryPropensityByStaff(BaseChoice):
     gp: AppointmentDeliveryChoice = Field(alias="GP", **PROPENSITY_FIELD_ARGS)
     other: AppointmentDeliveryChoice = Field(alias="Other Practice staff", **PROPENSITY_FIELD_ARGS)
     unknown: AppointmentDeliveryChoice = Field(alias="Unknown", **PROPENSITY_FIELD_ARGS)
+<<<<<<< HEAD
 >>>>>>> e3f590a (moved conftest)
+=======
+>>>>>>> d371952 (resolving merge conflict)
 
 
 _DeliveryPropensityByArea = RootModel[Dict[str, DeliveryPropensityByStaff]]
@@ -477,8 +512,12 @@ _DeliveryPropensityByArea = RootModel[Dict[str, DeliveryPropensityByStaff]]
 class DeliveryPropensityByArea(_DeliveryPropensityByArea, YamlLoader):
     """Class to load and validate the did not attend rates yaml file for a yaml file of areas"""
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     pass
 =======
     pass
 >>>>>>> e3f590a (moved conftest)
+=======
+    pass
+>>>>>>> d371952 (resolving merge conflict)
