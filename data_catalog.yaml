@@ -45,7 +45,14 @@ single_data_sources:
     description: NHS England / digital published version of GP appointments, by sub-ICB area.
     source_type: csv_in_zip
     load_as: dataframe
-    zip_url: https://files.digital.nhs.uk/75/E658E1/Appointments_GP_Regional_CSV_Dec_23.zip
+    zip_url: https://files.digital.nhs.uk/A4/53CF11/Appointments_GP_Regional_CSV_Apr_24.zip
+    csv_file: Regional_CSV_SuffolkNEEssex.csv
+    website_url: https://digital.nhs.uk/data-and-information/publications/statistical/appointments-in-general-practice
+  - name: NHS GP Appointments by Region, historical
+    description: NHS England / digital published version of GP appointments, by sub-ICB area.
+    source_type: csv_in_zip
+    load_as: dataframe
+    zip_url: https://files.digital.nhs.uk/CF/699F6F/Appointments_GP_Regional_Mar_22.zip
     csv_file: Regional_CSV_SuffolkNEEssex.csv
     website_url: https://digital.nhs.uk/data-and-information/publications/statistical/appointments-in-general-practice
   - name: 2023-24 Monthly Outpatient Referrals Data

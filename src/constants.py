@@ -60,3 +60,6 @@ SIMULATION_RESULTS_PATH = NOTEBOOK_OUTPUT_BASE_PATH + "simulation_results/"
 
 
 ONS_POPULATION_SCENARIOS_NAME = "ONS Population projections by single year of age mid-2018 to mid-2043"
+
+GP_LIST_AGE_BANDS = [i for i in range(0, 95, 5)] + [200]
+GP_LIST_AGE_LABELS = [f"{i}-{i+4}" for i in GP_LIST_AGE_BANDS[:-2]] + ["90+"]

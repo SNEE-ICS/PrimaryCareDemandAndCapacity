@@ -32,12 +32,12 @@ POLYNOMIAL_GRID_SEARCH = {
 }
 
 PCA_GRID_SEARCH = {
-    "preprocess_scale_pca__pca__n_components": [2, 3, 4],
-    "preprocess_scale_pca__pca__svd_solver": ["auto", "full", "arpack", "randomized"],
-    "preprocess_scale_pca__pca__whiten": [True, False],
-    "preprocess_scale_pca__pca__copy": [True, False],
-    "preprocess_scale_pca__pca__iterated_power": [None, "auto", "arpack", "randomized"],
-    "preprocess_scale_pca__pca__tol": [None, 0.0, 0.1, 0.01],
+    "preprocess__scale_pca__pca__n_components": [2, 3, 4],
+    "preprocess__scale_pca__pca__svd_solver": ["auto", "full", "arpack", "randomized"],
+    "preprocess__scale_pca__pca__whiten": [True, False],
+    "preprocess__scale_pca__pca__copy": [True, False],
+    "preprocess__scale_pca__pca__iterated_power": [None, "auto", "arpack", "randomized"],
+    "preprocess__scale_pca__pca__tol": [None, 0.0, 0.1, 0.01],
 }
 
 RIDGE_REGRESSION_GRID_SEARCH = {
