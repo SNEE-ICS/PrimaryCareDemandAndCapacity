@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import datetime as dt
 from collections import defaultdict
-from typing import Union
+from typing import Dict, Literal, Union
 
 STAFF_TYPES = ["GP", "Other practice staff", "Unknown"]
 def get_staff_type(region):
@@ -28,12 +28,11 @@ def get_appointment_duration(region, appointment_mode):
     yield np.random.exponential(20)
 
 # Class representing an individual staff member
-class StaffMember:
-    def __init__(self, env, staff_type, fte):
-        self.env = env  # SimPy environment
+class StaffMembers:
+    def __init__(self, env, staff_type:Literal['GP','Other practice staff','unknown'], fte:float):
+        self.env = env  # Access to the simulation environment
         self.staff_type = staff_type  # Type of staff (e.g., GP)
-        self.daily_time = fte*450  # Available time per day in minutes
-        self.staff_resource = simpy.Resource(env, capacity=1)  # SimPy resource with capacity of 1
+        self.inital_time = fte*450  # Available time per day in minutes
         self.available_time = 450  # Initially, all daily time is available
 
     def use_time(self, duration):
@@ -42,26 +41,50 @@ class StaffMember:
             self.available_time = 0  # Ensure available time does not go below zero
 
 class DailyModel:
-    def __init__(self, date, run_number, region, demand_scenario, capacity_policy):
+    def __init__(self, env, date:dt.date, run_number:int, region:str, demand_scenario:str, capacity_policy:str):
 
-        env = simpy.Environment()
-        n_patients = get_patient_demand(date, region, demand_scenario)
-        availiable_staff = get_staff_by_date(date, region, capacity_policy)
-        general_practitioners = [StaffMember(env, "GP", 1) for _ in range(availiable_staff["GP"])]
-        other_practice_staff = [StaffMember(env, "Other practice staff", 1) for _ in range(availiable_staff["Other practice staff"])]
-        unknown_staff = [StaffMember(env, "Unknown", 1) for _ in range(availiable_staff["Unknown"])]
-        for patient in range(n_patients):
-            # replace with proper distribution/choice by region
-            staff_choice = np.random.choice([general_practitioners, other_practice_staff, unknown_staff])
-            # treatment mode 
-            appointment_mode = np.random.choice(["face-to-face", "telephone", "video"])
-            appointment_duration = get_appointment_duration(region, appointment_mode)
-            # no show
-            no_show = get_no_show_prob(region)
-            # patient process
-            env.process(patient_process(env, staff_choice, appointment_duration, no_show))
+        self.env = env
+        self.date = date
+        self.run_number = run_number
+        self.region = region
+        self.demand_scenario = demand_scenario
+        self.capacity_policy = capacity_policy
+
+        self.n_patients = get_patient_demand(date, region, demand_scenario, forecast_method)
+        self.availiable_staff:Dict[str,float] = get_staff_by_date(date, region, capacity_policy)
+        self.staff = {staff_type:StaffMembers(env, staff_type, fte) for staff_type, fte in self.availiable_staff.items()}
         
-        env.run()
+        self.fufilled_appointments = {staff_type:0 for staff_type in STAFF_TYPES}
+        self.no_show_appointments = {staff_type:0 for staff_type in STAFF_TYPES}
+        self.unmet_demand_appointments = {staff_type:0 for staff_type in STAFF_TYPES}
+
+        self.fufilled_minutes = {staff_type:0 for staff_type in STAFF_TYPES}
+        self.unmet_demand_minutes = {staff_type:0 for staff_type in STAFF_TYPES}
+        self.no_show_minutes = {staff_type:0 for staff_type in STAFF_TYPES}
+        
+    
+        def process_day(self):
+            for patient in range(self.n_patients):
+                # Get the appointment duration
+                duration:int = get_appointment_duration(region, appointment_mode)
+                # Use the appointment duration
+                staff_type:str = get_staff_type(region)
+                if self.staff[staff_type].available_time != 0:
+                    self.staff[staff_type].use_time(duration)
+                    # determine if they show up
+                    if check_no_show(region, staff_type):
+                        self.no_show_appointments[staff_type] += 1
+                        self.no_show_minutes[staff_type] += duration
+                    else:
+                        self.fufilled_appointments[staff_type] += 1
+                        self.fufilled_minutes[staff_type] += duration 
+                else:
+                    self.unmet_demand_appointments[staff_type] += 1
+                    self.unmet_demand_minutes[staff_type] += duration
+                    
+
+                # Yield the simulation environment to the next event
+                return
         
 
 
