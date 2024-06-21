@@ -95,8 +95,8 @@ single_data_sources:
     website_url: https://digital.nhs.uk/data-and-information/publications/statistical/patients-registered-at-a-gp-practice/may-2024
     description: The publication contains data for number of patients registered at GP having details on type of organisation(GP,PCN,ICB,COMM REGION etc) with its org-code & ONS-Code, sex and age group of the patients and the postcode. Data for this publication 
       are extracted each month as a snapshot in time from the Primary Care Registration database within the NHAIS (National Health Application and Infrastructure Services) system. This release is an accurate snapshot as at 16th May 2024.
-    zip_url: https://files.digital.nhs.uk/C1/9B13E8/gp-reg-pat-prac-all.zip
-    csv_file: gp-reg-pat-prac-all.csv
+    zip_url: https://files.digital.nhs.uk/86/6550AA/gp-reg-pat-prac-quin-age.zip
+    csv_file: gp-reg-pat-prac-quin-age.csv
     source_type: csv_in_zip
     load_as: dataframe
 
