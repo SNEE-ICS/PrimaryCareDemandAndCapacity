@@ -35,5 +35,9 @@ unmet_demand:
     rate: 1.38
   - area: 06T # North east essex
     rate: 16.14
+gp_parameters:
+  hours_per_day: 7.5
+  days_per_year: 210.0
+ 
 
   
