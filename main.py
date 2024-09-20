@@ -2,26 +2,83 @@ import simpy
 import numpy as np
 import pandas as pd
 import datetime as dt
+import random
 from collections import defaultdict
 from typing import Dict, Literal, Optional, Union
 from tqdm import tqdm
 from icecream import ic
 
-from src.simulation_schemas import AreaAppointmentTimeDistributions, DeliveryPropensityByArea, PopulationScenarios, DidNotAttendRatesByArea, ClinicalStaffFTEByArea, MonthlyAppointmentForecast, StaffPropensityByArea
+from src.simulation_schemas import (AreaAppointmentTimeDistributions, 
+                                    DeliveryPropensityByArea, 
+                                    PopulationScenarios, 
+                                    DidNotAttendRatesByArea, 
+                                    ClinicalStaffFTEByArea, 
+                                    MonthlyAppointmentForecast, 
+                                    StaffPropensityByArea)
 from src.various_methods import is_working_day
 
 
 # Class representing an individual staff member
 class StaffMembers:
-    def __init__(self, staff_type:Literal['GP','Other practice staff','Unknown'], fte:float):
+    def __init__(self,
+                 staff_type:Literal['GP','Other practice staff','Unknown'], 
+                 fte:float, 
+                 appointment_limit:bool=False):
+        """
+        Initializes a staff member object.
+
+        Parameters:
+        - staff_type: The type of staff member (e.g., 'GP', 'Other practice staff', 'Unknown').
+        - fte: The full-time equivalent (FTE) value of the staff member.
+        - appointment_limit: Whether the staff member practices safe appointment scheduling. Defaults to False.
+
+        Attributes:
+        - staff_type: The type of staff member.
+        - initial_time: The available time per day in minutes, calculated based on the FTE value.
+        - available_time: The initially available time per day in minutes.
+        - safe_practice: Whether the staff member practices safe appointment scheduling.
+        - initial_appointments: The initial number of appointments per day, calculated based on the FTE value and safe_practice.
+        - available_appointments: The initially available number of appointments per day.
+
+        """
         self.staff_type = staff_type  # Type of staff (e.g., GP)
         self.initial_time = fte*450  # Available time per day in minutes
         self.available_time = 450  # Initially, all daily time is available
+        self.safe_practice = appointment_limit  # Whether the staff member practices safe appointment scheduling
+        if appointment_limit:
+            appts = 0 
+            for i in range(int(fte)):
+                appts += random.randint(25,28) # 25-28 appointments per day per fte if constrained 
+                # find the remainder and multiply by the random number of appointments
+                remainder = int((fte - int(fte)) * random.randint(25,28))
+            self.initial_appointments = appts + remainder
+            self.available_appointments = self.initial_appointments
 
-    def use_time(self, duration):
-        self.available_time -= duration  # Deduct the appointment duration from available time
-        if self.available_time < 0:
-            self.available_time = 0  # Ensure available time does not go below zero
+    def patient_request_appointment(self, appointment_duration:float)->bool:
+        """
+        Checks if a patient can request an appointment based on the availability of appointments and time.
+
+        Args:
+            appointment_duration (float): The duration of the appointment in minutes.
+
+        Returns:
+            bool: True if the patient can request an appointment, False otherwise.
+        """
+
+        if self.safe_practice:
+            if self.available_appointments > 0 and self.available_time >= appointment_duration:
+                self.available_appointments -= 1
+                self.available_time -= appointment_duration
+                return True
+            else:
+                return False
+        else:
+            if self.available_time >= appointment_duration:
+                self.available_time -= appointment_duration
+                return True
+            else:
+                return False
+
 
 class SimulationData:
 
@@ -39,6 +96,7 @@ class SimulationData:
         self.staff_type_propensity = StaffPropensityByArea.read_yaml("outputs/assumptions/staff_propensity.yaml")
         self.appointment_mode_propensity = DeliveryPropensityByArea.read_yaml("outputs/assumptions/appointment_modes.yaml")
         self.appointment_durations = AreaAppointmentTimeDistributions.read_yaml("outputs/assumptions/appointment_duration.yaml")
+        # self.main_assumptions = 
  
         
 
@@ -53,6 +111,7 @@ class DailyRegionalModel:
         self.capacity_policy = capacity_policy
 
         if n_appointments is None:
+            # this is where we get the forecast data
             self.n_patients = 5000 # TODO: get_forecast data by date
             # self.n_patients = sim_data.appointment_forecasts.get_forecast(date, region, demand_scenario)
         else:
@@ -67,18 +126,29 @@ class DailyRegionalModel:
         #rename keys to GP, Other practice staff, Unknown
         self.availiable_staff:Dict[str,float] = {staff_type_map[k]:v for k,v in loaded_staff_data.items()}
 
+        # staff parameters, this holds a dictionary of staff types, and the 
         self.staff = {staff_type:StaffMembers(staff_type, fte) for staff_type, fte in self.availiable_staff.items()}
         
+        # appointments output
         self.fufilled_appointments = {staff_type:0 for staff_type in staff_types}
         self.no_show_appointments = {staff_type:0 for staff_type in staff_types}
         self.unmet_demand_appointments = {staff_type:0 for staff_type in staff_types}
 
+        # minutes output
         self.fufilled_minutes = {staff_type:0 for staff_type in staff_types}
         self.unmet_demand_minutes = {staff_type:0 for staff_type in staff_types}
         self.no_show_minutes = {staff_type:0 for staff_type in staff_types}
         
     
     def process_day(self):
+        """
+        - Each patient is processed in turn. 
+        - The patient is assigned to a staff member based on the population propensity to see each staff member.
+        The patient is then assigned an appointment mode based on the staff member's propensity to use that mode. 
+        The patient is then assigned an appointment duration based on the staff member's propensity to use that duration. 
+        The patient is then assigned an appointment time based on the staff member's availability. 
+        If the staff member is available, the patient is assigned to that staff member. If the staff member is not available, the patient is assigned to the unmet demand.
+        """
         for patient in range(self.n_patients):
             # Choose a staff type
             staff_type:str = self.sim_data.staff_type_propensity.pick_staff_type(self.region)
@@ -87,15 +157,16 @@ class DailyRegionalModel:
             # Choose an appointment duration
             duration:int = self.sim_data.appointment_durations.get_area(self.region).get_time()
             # Check if the staff member is available
-            if self.staff[staff_type].available_time != 0:
-                self.staff[staff_type].use_time(duration)
+            if self.staff[staff_type].patient_request_appointment(duration):
                 # determine if they show up
-                # they can only no show if they actually get an appointment
+                # they can only no show if they actually get an appointment!!
                 # returns True if they attended
                 if not self.sim_data.did_not_attend_rates.did_patient_attend(area=self.region, staff_type=staff_type, appointment_mode=appointment_mode):
+                    # patient did not attend
                     self.no_show_appointments[staff_type] += 1
                     self.no_show_minutes[staff_type] += duration
                 else:
+                    # patient attended
                     self.fufilled_appointments[staff_type] += 1
                     self.fufilled_minutes[staff_type] += duration 
             else:
@@ -153,7 +224,14 @@ def run_simulation(start_date:dt.date,end_date:dt.date, n_runs:int):
                                 
                                 run_outputs[simulation_run][population_scenario][forecast_method][capacity_policy][region][day] = {}
                                 # run the simulation
-                                daily_model = DailyRegionalModel(sim_data=simulation_data, date=day, run_number=simulation_run, region=region, demand_scenario=population_scenario, capacity_policy=capacity_policy, n_appointments=num_appointments)
+                                daily_model = DailyRegionalModel(
+                                    sim_data=simulation_data, 
+                                    date=day, 
+                                    run_number=simulation_run, 
+                                    region=region, 
+                                    demand_scenario=population_scenario, 
+                                    capacity_policy=capacity_policy, 
+                                    n_appointments=num_appointments)
                                 daily_model.process_day()
                                 # save the outputs
                             else:
