@@ -1,19 +1,19 @@
 from typing import Callable, Dict, Literal, Type, Any
 
-from scipy.stats import lognormal, expon
-from pydantic import BaseModel, dataclass
+from scipy.stats import lognorm, expon
 import numpy as np
 
 import src.constants as const
+from pydantic import Field, BaseModel
 
 APPOINTMENT_LOWER_LIMIT_MINUTES = 1
 APPOINTMENT_UPPER_LIMIT_MINUTES = 60
 NUM_SAMPLES = 1000000
 AREAS = ['acute', 'community']
-DIST_TYPES:Dict[str, Callable]= {'lognormal': lognormal, 'exponential': expon}
+DIST_TYPES:Dict[str, Callable]= {'lognormal': lognorm, 'exponential': expon}
 
 class AppointmentDistribution(BaseModel):
-    dist_type: Literal[tuple(DIST_TYPES.keys())]
+    dist_type: Literal['lognormal', 'exponential'] = 'lognormal'
     lower_limit:int = Field(default=APPOINTMENT_LOWER_LIMIT_MINUTES)
     upper_limit:int = Field(default=APPOINTMENT_UPPER_LIMIT_MINUTES)
     params:Dict[str, Any] = Field(..., default_factory=dict)
