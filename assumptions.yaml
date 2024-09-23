@@ -35,5 +35,22 @@ unmet_demand:
     rate: 1.38
   - area: 06T # North east essex
     rate: 16.14
+gp_parameters:
+  hours_per_day: 7.5
+  days_per_year: 210.0
+remote_consult_parameters:
+  minutes_per_consultation: 8
+supply_scenario_descriptions:
+  "Supply Constrained" : "Growth as per historic trajectory (supply constrained demand)"
+  "Do Nothing": "Applies projected changes to demand from factors external to the system, with no assumed changes to service capacity, delivery models, productivity or performance"
+  "Realistic": "Applies demand growth as per the Do Nothing scenario then incorporates existing plans for demand reduction, additions to service capacity and improvements to delivery, productivity and performance"
+  "Ambitious": "Applies the Realistic scenario plus potential additional opportunities resulting from radical system transformation"
+safe_practice_guidelines:
+ from: 25 # sometimes cap at 25
+ to: 28 # upper cap at 25
+
+
+
+ 
 
   

@@ -1,4 +1,5 @@
 import calendar
+from typing import Union
 import numpy as np
 import datetime as dt
 import pandas as pd
@@ -20,6 +21,22 @@ def get_numdays(df_:pd.DataFrame):
 
     return num_days_in_month_v_(years,months)
 
+def is_working_day(day: Union[dt.date, pd.Timestamp]):
+    """
+    Check if a given day is a working day.
+
+    Parameters:
+    day (datetime.date or pandas.Timestamp): The day to check.
+
+    Returns:
+    bool: True if the day is a working day, False otherwise.
+    """
+    if day.isoweekday() < 6 and day not in const.ENGLAND_BANK_HOLIDAYS:
+        return True
+    else:
+        return False
+
+
 def get_workingdays(a_:np.array):
     years, months =  a_.year, a_.month
 
@@ -29,13 +46,14 @@ def get_workingdays(a_:np.array):
         day = 1
         while day <= calendar.monthrange(year,month)[1]:
             the_date =  dt.datetime(year,month,day)
-            if the_date.isoweekday() < 6 and the_date not in const.ENGLAND_BANK_HOLIDAYS:
+            if is_working_day(the_date):
                 workingdays +=1
             day += 1
         return workingdays
 
     vec_workingdays = np.vectorize(_num_workingdays_in_month)
     return vec_workingdays(years, months)
+
 
 
 def calc_oadr_status(ons_age_group:str):
