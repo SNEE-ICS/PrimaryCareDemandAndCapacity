@@ -422,9 +422,34 @@ class MonthlyAppointmentForecast(RootModel[Dict[str,Dict[dt.date, int]]], YamlLo
                 return forecast
 
 class ClinicalStaffFTE(BaseModel):
-    gp: float = Field(alias="GP")
-    direct_patient_care:float = Field(alias="Direct Patient Care")
-    nurses:float =  Field(alias="Nurses")
+    gp: float = Field(..., alias="GP")
+    direct_patient_care:float = Field(...,alias="Direct Patient Care")
+    nurses:float =  Field(..., alias="Nurses")
+    advanced_nurse_practictioners:float = Field(..., alias="Advanced Nurse Practitioners")
+    
 
 class ClinicalStaffFTEByArea(RootModel[Dict[str, ClinicalStaffFTE]], YamlLoader, AreaModel):
     """Class to load and validate the clinical staff FTE yaml file for a yaml file of areas"""
+    
+    
+class NonGPStaffMix(BaseModel):
+    advanced_nurse_practictioners:float = Field(..., alias="Advanced Nurse Practitioners", gte=0.0, lte=1.0)
+    direct_patient_care:float = Field(..., alias="Direct Patient Care", gte=0.0, lte=1.0)
+    nurses:float = Field(..., alias="Nurses", gte=0.0, lte=1.0)
+    
+
+class NonGPStaffMixByArea(RootModel[Dict[str, NonGPStaffMix]], YamlLoader, AreaModel):
+    """Class to load and validate the clinical staff FTE yaml file for a yaml file of areas"""
+    
+    def calc_fte_by_staff(self, fte:float, area:str):
+        """returns the non-GP FTE for each clinical staff type, based on the baseline mix"""
+        area_mix = self.get_area(area)
+        return {k:v*fte for k,v in area_mix.model_dump(by_alias=True).items()}
+    
+
+class AdminStaffFTERequirementByArea(RootModel[Dict[str, float]], YamlLoader, AreaModel):
+    """Class to load and validate the admin staff FTE requirement yaml file for a yaml file of areas"""
+    
+
+    
+    
