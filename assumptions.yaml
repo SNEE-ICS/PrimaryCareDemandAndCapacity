@@ -46,8 +46,8 @@ supply_scenario_descriptions:
   "Realistic": "Applies demand growth as per the Do Nothing scenario then incorporates existing plans for demand reduction, additions to service capacity and improvements to delivery, productivity and performance"
   "Ambitious": "Applies the Realistic scenario plus potential additional opportunities resulting from radical system transformation"
 safe_practice_guidelines:
- from: 25 # sometimes cap at 25
- to: 28 # upper cap at 25
+ from: 25 # sometimes cap at 25 appointments / day
+ to: 28 # upper cap at 25 appointments / day
 
 
 
