@@ -1,4 +1,4 @@
-from typing import Final, Dict, NamedTuple, Type
+from typing import Final, Dict, NamedTuple, Type, List
 import datetime as dt
 import holidays
 
@@ -8,6 +8,7 @@ REGIONAL_DATA_ZIP: Final[str] = "https://files.digital.nhs.uk/3D/ED1EDE/Appointm
 # CSV OF INTEREST
 SNEE_CSV: Final[str] = "/content/Regional_CSV_SuffolkNEEssex.csv"
 
+ONS_POPULATION_SCENARIOS_NAME = "ONS Population projections by single year of age mid-2018 to mid-2043"
 # ONS DATA
 SUBNATIONAL_ONS_ZIP: Final[str] = "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/populationandmigration/populationprojections/datasets/localauthoritiesinenglandz1/2018based/2018snpppopulation.zip"
 # Dictionary of ONS CSVs
@@ -24,22 +25,22 @@ WEST_SUFF = "West Suffolk"
 NE_ESSEX = "North East Essex"
 
 # SUB ICB CODES
-SUB_ICB_CODES = {"06L": IPS_EAST_SUFF,
+SUB_ICB_CODES:Final[Dict[str,str]] = {"06L": IPS_EAST_SUFF,
                  "07K": WEST_SUFF,
                  "06T": NE_ESSEX}
 
 # ONS CODE
-ONS_CODES = {"E38000086": IPS_EAST_SUFF,
+ONS_CODES:Final[Dict[str,str]] = {"E38000086": IPS_EAST_SUFF,
                  "E38000204": WEST_SUFF,
                  "E38000117": NE_ESSEX}
 
 # CCG to sub-ICB
-CCG_SUB_ICB = {"NHS Ipswich and East Suffolk CCG": IPS_EAST_SUFF,
+CCG_SUB_ICB:Final[Dict[str,str]] = {"NHS Ipswich and East Suffolk CCG": IPS_EAST_SUFF,
                "NHS West Suffolk CCG": WEST_SUFF,
                "NHS North East Essex CCG": NE_ESSEX}
 
 # ONS TO SUB-ICB
-ICB_ONS_AREAS = {"Tendring": NE_ESSEX,
+ICB_ONS_AREAS:Final[Dict[str,str]] = {"Tendring": NE_ESSEX,
                  "Colchester": NE_ESSEX,
                  "Forest Heath": WEST_SUFF,
                  "St Edmundsbury": WEST_SUFF,
@@ -49,17 +50,21 @@ ICB_ONS_AREAS = {"Tendring": NE_ESSEX,
                  "Ipswich": IPS_EAST_SUFF}
 
 #ORG Code
-ORG_CODE = {'QJG': 'NHS SUFFOLK AND NORTH EAST ESSEX INTEGRATED CARE BOARD'}
+ORG_CODE:Final[Dict[str,str]] = {'QJG': 'NHS SUFFOLK AND NORTH EAST ESSEX INTEGRATED CARE BOARD'}
 
 # Location for outputs
 # these are all relative to the repo root directory ! 
-NOTEBOOK_OUTPUT_BASE_PATH = "outputs/"
-NOTEBOOK_OUTPUT_TABLES_PATH = NOTEBOOK_OUTPUT_BASE_PATH + "tables/"
-NOTEBOOK_OUTPUT_FIGURES_PATH = NOTEBOOK_OUTPUT_BASE_PATH + "plots/"
-SIMULATION_RESULTS_PATH = NOTEBOOK_OUTPUT_BASE_PATH + "simulation_results/"
+NOTEBOOK_OUTPUT_BASE_PATH:Final[str] = "outputs/"
+NOTEBOOK_OUTPUT_TABLES_PATH:Final[str] = NOTEBOOK_OUTPUT_BASE_PATH + "tables/"
+NOTEBOOK_OUTPUT_FIGURES_PATH:Final[str] = NOTEBOOK_OUTPUT_BASE_PATH + "plots/"
+SIMULATION_RESULTS_PATH:Final[str] = NOTEBOOK_OUTPUT_BASE_PATH + "simulation_results/"
 
 
-ONS_POPULATION_SCENARIOS_NAME = "ONS Population projections by single year of age mid-2018 to mid-2043"
 
-GP_LIST_AGE_BANDS = [i for i in range(0, 95, 5)] + [200]
-GP_LIST_AGE_LABELS = [f"{i}-{i+4}" for i in GP_LIST_AGE_BANDS[:-2]] + ["90+"]
+GP_LIST_AGE_BANDS:Final[List[int]] = [i for i in range(0, 95, 5)] + [200]
+GP_LIST_AGE_LABELS:Final[List[str]] = [f"{i}-{i+4}" for i in GP_LIST_AGE_BANDS[:-2]] + ["90+"]
+
+
+WORKFORCE_ADMIN_REQUIREMENTS_FILENAME  ="workforce_admin_fte_requirements.yaml"
+WORKFORCE_NON_GP_CLINICAL_STAFF_SPLIT_FILENAME = "workforce_non_gp_clinical_staff_mix.yaml"
+WORKFORCE_CURRENT_STAFF_FTE = "workforce_current_staff_fte.yaml"
