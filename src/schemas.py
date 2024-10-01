@@ -1,11 +1,11 @@
-from typing import Dict, Any, List, Literal, Optional, Union
+from typing import Dict, Any, List, Literal, Optional, Union, Annotated
 from enum import Enum
 from abc import ABC, abstractmethod
 from io import BytesIO
 from zipfile import ZipFile
 
 
-from typing_extensions import Annotated
+# from typing_extensions import Annotated
 import requests
 from pydantic import BaseModel, Field
 import yaml
