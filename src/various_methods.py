@@ -6,6 +6,7 @@ import pandas as pd
 from dataclasses import dataclass
 import math
 from functools import lru_cache
+import joblib
 
 import src.constants as const
 
@@ -40,7 +41,6 @@ def is_working_day(day: Union[dt.date, pd.Timestamp]):
 def get_workingdays(a_:np.array):
     years, months =  a_.year, a_.month
 
-    #
     def _num_workingdays_in_month(year,month):
         workingdays = 0
         day = 1
@@ -136,3 +136,41 @@ def month_num_to_cos(month:int)->float:
     if month not in range(1,13):
         raise ValueError('month must be in range 1-12')
     return math.cos(_month_to_angle(month))
+
+
+@dataclass
+class ModelWrapper:
+    def __init__(self, model_path):
+        """
+        Initializes the ModelWrapper and caches the model after loading it with Joblib.
+
+        Args:
+            model_path (str): Path to the pickled (joblib) scikit-learn model file.
+        """
+        self.model_path = model_path
+        self.model = None  # Initialize model as None
+        self._load_model()  # Load the model and cache it
+
+    def _load_model(self):
+        """
+        Loads the model from a joblib file and caches it.
+
+        Returns:
+            object: The loaded scikit-learn model.
+        """
+        if self.model is None:  # Only load if not already cached
+            self.model = joblib.load(self.model_path)
+        return self.model
+
+    def predict(self, X):
+        """
+        Predicts the output using the cached model.
+
+        Args:
+            X (array-like): Input data to be used for prediction.
+
+        Returns:
+            array-like: The predicted values from the model.
+        """
+        return self.model.predict(X)
+
