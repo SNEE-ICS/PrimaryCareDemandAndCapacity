@@ -52,7 +52,7 @@ class StaffMembers:
         self.staff_type = staff_type  # Type of staff (e.g., GP)
         self.initial_time = fte* MINUTES_PER_DAY  # Available time per day in minutes
         self.available_time = self.initial_time  # Initially, all daily time is available
-        self.safe_practice = appointment_limit  # Whether the staff member practices safe appointment scheduling
+        self.appointment_limit = appointment_limit  # Whether the staff member practices safe appointment scheduling
         if appointment_limit: # give them a set number of appointments per day.
             appts = 0 
             for i in range(int(fte)):
@@ -63,7 +63,7 @@ class StaffMembers:
             self.initial_appointments = appts + remainder
             self.available_appointments = self.initial_appointments
         else:
-            # these aren't constrained
+            # these aren't constrained, so just setting arbitary values
             self.initial_appointments = fte * 99
             self.available_appointments = fte * 99
 
@@ -78,7 +78,7 @@ class StaffMembers:
             bool: True if the patient request is successful
         """
         # if safe_practice, then constrain appointments & appointment time
-        if self.safe_practice:
+        if self.appointment_limit:
             if self.available_appointments > 0 and self.available_time >= appointment_duration:
                 self.available_appointments -= 1
                 self.available_time -= appointment_duration
@@ -243,7 +243,7 @@ def run_simulation(start_date:dt.date,end_date:dt.date, n_runs:int):
                         for day in tqdm(pd.date_range(start=start_date,end=end_date)):
                             if is_working_day(day):
 
-                                num_appointments =simulation_data.appointment_forecasts.get_forecast(region,day)
+                                num_appointments = simulation_data.appointment_forecasts.get_forecast(region,day)
                                 
                                 run_outputs[simulation_run][population_scenario][forecast_method][capacity_policy][region][day] = {}
                                 # run the simulation
