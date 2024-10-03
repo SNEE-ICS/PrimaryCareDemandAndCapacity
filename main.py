@@ -1,4 +1,3 @@
-import simpy
 import numpy as np
 import pandas as pd
 import datetime as dt
@@ -16,7 +15,12 @@ from src.simulation_schemas import (AreaAppointmentTimeDistributions,
                                     MonthlyAppointmentForecast, 
                                     StaffPropensityByArea)
 from src.various_methods import is_working_day
-from src.constants import SARIMA_FORECAST_OUTPUT_FILENAME, APPOINTMENT_DURATION_OUTPUT_FILENAME, STAFF_TYPE_PROPENSITY_OUTPUT_FILENAME, APPOINTMENT_MODE_PROPENSITY_OUTPUT_FILENAME
+from src.constants import (SARIMA_FORECAST_OUTPUT_FILENAME, 
+                           APPOINTMENT_DURATION_OUTPUT_FILENAME, 
+                           STAFF_TYPE_PROPENSITY_OUTPUT_FILENAME, 
+                           APPOINTMENT_MODE_PROPENSITY_OUTPUT_FILENAME, 
+                           POPULATION_PROJECTIONS_OUTPUT_FILENAME,
+                           ACUTE_REFERRAL_RATES_OUTPUT_FILENAME)
 
 MINUTES_PER_DAY:int = 450
 CONSTRAINED_APPOINTMENT_RANGE:Tuple[int] = (25,28)
@@ -101,7 +105,7 @@ class SimulationData:
 
        
         #population scenarios
-        self.population_scenarios:PopulationScenarios = PopulationScenarios.read_yaml("outputs/population_projections.yaml")
+        self.population_scenarios:PopulationScenarios = PopulationScenarios.read_yaml(POPULATION_PROJECTIONS_OUTPUT_FILENAME)
         # staffing levels
         self.staff_fte = ClinicalStaffFTEByArea.read_yaml("outputs/staff_fte.yaml")
         # prpoensity to attend
@@ -115,6 +119,7 @@ class SimulationData:
         self.staff_type_propensity = StaffPropensityByArea.read_yaml(STAFF_TYPE_PROPENSITY_OUTPUT_FILENAME)
         self.appointment_mode_propensity = DeliveryPropensityByArea.read_yaml(APPOINTMENT_MODE_PROPENSITY_OUTPUT_FILENAME)
         self.appointment_durations = AreaAppointmentTimeDistributions.read_yaml(APPOINTMENT_DURATION_OUTPUT_FILENAME)
+        self.referral_rates = ACUTE_REFERRAL_RATES_OUTPUT_FILENAME # TODO: make schema
     
         
 
