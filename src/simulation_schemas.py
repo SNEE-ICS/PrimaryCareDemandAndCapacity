@@ -91,7 +91,7 @@ class BaseChoice(BaseModel, ABC):
             return
 
 
-class SumTo1Choice(BaseChoice, ABC):
+class SumTo1Choice(BaseModel, ABC):
     """
     Base class for propensity choices, not to be used directly.
     The fields are the choices and the values are the probabilities.
@@ -449,6 +449,16 @@ class NonGPStaffMixByArea(RootModel[Dict[str, NonGPStaffMix]], YamlLoader, AreaM
 
 class AdminStaffFTERequirementByArea(RootModel[Dict[str, float]], YamlLoader, AreaModel):
     """Class to load and validate the admin staff FTE requirement yaml file for a yaml file of areas"""
+    
+    
+class DailyForecastAppointments(RootModel[Dict[dt.date, int]]):
+    """class to load in forecasts of appointments per day"""
+    pass
+
+class DailyForecastAppointmentsByArea(RootModel[Dict[str, DailyForecastAppointments]], YamlLoader, AreaModel):
+    """Class to load and validate the daily forecast appointments yaml file for a yaml file of areas"""
+    pass
+    
     
 
     
