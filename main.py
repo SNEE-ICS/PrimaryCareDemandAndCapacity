@@ -4,7 +4,7 @@ import pandas as pd
 import datetime as dt
 import random
 from collections import defaultdict
-from typing import Dict, Literal, Optional, Union
+from typing import Dict, Literal, Optional, Union, Tuple
 from tqdm import tqdm
 from icecream import ic
 
@@ -16,6 +16,10 @@ from src.simulation_schemas import (AreaAppointmentTimeDistributions,
                                     MonthlyAppointmentForecast, 
                                     StaffPropensityByArea)
 from src.various_methods import is_working_day
+from src.constants import SARIMA_FORECAST_OUTPUT_FILENAME, APPOINTMENT_DURATION_OUTPUT_FILENAME, STAFF_TYPE_PROPENSITY_OUTPUT_FILENAME, APPOINTMENT_MODE_PROPENSITY_OUTPUT_FILENAME
+
+MINUTES_PER_DAY:int = 450
+CONSTRAINED_APPOINTMENT_RANGE:Tuple[int] = (25,28)
 
 
 # Class representing an individual staff member
@@ -25,7 +29,7 @@ class StaffMembers:
                  fte:float, 
                  appointment_limit:bool=False):
         """
-        Initializes a staff member object.
+        Initializes a staff member object, this is effectively a pool of staff resources for 1 working day.
 
         Parameters:
         - staff_type: The type of staff member (e.g., 'GP', 'Other practice staff', 'Unknown').
@@ -42,17 +46,22 @@ class StaffMembers:
 
         """
         self.staff_type = staff_type  # Type of staff (e.g., GP)
-        self.initial_time = fte*450  # Available time per day in minutes
-        self.available_time = 450  # Initially, all daily time is available
+        self.initial_time = fte* MINUTES_PER_DAY  # Available time per day in minutes
+        self.available_time = self.initial_time  # Initially, all daily time is available
         self.safe_practice = appointment_limit  # Whether the staff member practices safe appointment scheduling
-        if appointment_limit:
+        if appointment_limit: # give them a set number of appointments per day.
             appts = 0 
             for i in range(int(fte)):
-                appts += random.randint(25,28) # 25-28 appointments per day per fte if constrained 
+                # make a set of appointments for each FTE
+                appts += random.randint(*CONSTRAINED_APPOINTMENT_RANGE) # 25-28 appointments per day per fte if constrained 
                 # find the remainder and multiply by the random number of appointments
-                remainder = int((fte - int(fte)) * random.randint(25,28))
+                remainder = int((fte - int(fte)) * random.randint(*CONSTRAINED_APPOINTMENT_RANGE))
             self.initial_appointments = appts + remainder
             self.available_appointments = self.initial_appointments
+        else:
+            # these aren't constrained
+            self.initial_appointments = fte * 99
+            self.available_appointments = fte * 99
 
     def patient_request_appointment(self, appointment_duration:float)->bool:
         """
@@ -62,9 +71,9 @@ class StaffMembers:
             appointment_duration (float): The duration of the appointment in minutes.
 
         Returns:
-            bool: True if the patient can request an appointment, False otherwise.
+            bool: True if the patient request is successful
         """
-
+        # if safe_practice, then constrain appointments & appointment time
         if self.safe_practice:
             if self.available_appointments > 0 and self.available_time >= appointment_duration:
                 self.available_appointments -= 1
@@ -73,6 +82,7 @@ class StaffMembers:
             else:
                 return False
         else:
+            # only depends on time, safe practice is not observed
             if self.available_time >= appointment_duration:
                 self.available_time -= appointment_duration
                 return True
@@ -81,6 +91,10 @@ class StaffMembers:
 
 
 class SimulationData:
+    """
+    This class effectively holds all the data calculated from the notebooks in one big class.
+    Might be approprate to break this into several classes in time.
+    """
 
 
     def __init__(self):
@@ -90,14 +104,18 @@ class SimulationData:
         self.population_scenarios:PopulationScenarios = PopulationScenarios.read_yaml("outputs/population_projections.yaml")
         # staffing levels
         self.staff_fte = ClinicalStaffFTEByArea.read_yaml("outputs/staff_fte.yaml")
-        # did not attend
+        # prpoensity to attend
         self.did_not_attend_rates = DidNotAttendRatesByArea.read_yaml("outputs/assumptions/dna_appointments.yaml")
-        self.appointment_forecasts = MonthlyAppointmentForecast.read_yaml("outputs/ets_forecast_results.yaml")
-        self.staff_type_propensity = StaffPropensityByArea.read_yaml("outputs/assumptions/staff_propensity.yaml")
-        self.appointment_mode_propensity = DeliveryPropensityByArea.read_yaml("outputs/assumptions/appointment_modes.yaml")
-        self.appointment_durations = AreaAppointmentTimeDistributions.read_yaml("outputs/assumptions/appointment_duration.yaml")
-        # self.main_assumptions = 
- 
+        # DEMAND SCENARIOS
+        self.appointment_forecasts = {'SARIMA' : SARIMA_FORECAST_OUTPUT_FILENAME,
+                                      'Regression - Principle Projection': None,
+                                      'Regression - High International Migration Variant':None,
+                                      'Regression - Low International Migration Variant': None
+        } # TODO: Complete these
+        self.staff_type_propensity = StaffPropensityByArea.read_yaml(STAFF_TYPE_PROPENSITY_OUTPUT_FILENAME)
+        self.appointment_mode_propensity = DeliveryPropensityByArea.read_yaml(APPOINTMENT_MODE_PROPENSITY_OUTPUT_FILENAME)
+        self.appointment_durations = AreaAppointmentTimeDistributions.read_yaml(APPOINTMENT_DURATION_OUTPUT_FILENAME)
+    
         
 
 class DailyRegionalModel:
