@@ -1,5 +1,5 @@
 import datetime as dt
-from typing import Dict, Iterable, List, Literal, Optional, Set, Tuple, Union, TypeAlias, Type, Any
+from typing import Dict, List, Literal, Union, Type, Any
 from abc import ABC
 import yaml
 import random
@@ -10,11 +10,8 @@ from pydantic import (
     BaseModel,
     Field,
     RootModel,
-    model_validator,
-    ValidationError,
-    create_model)
-
-import src.constants as constants   
+    model_validator
+    )
 
 
 # this is used to define the arguments for the pydantic Field class
@@ -48,6 +45,7 @@ class YamlLoader(ABC):
             yaml_data = yaml.safe_load(f)
             class_instance = cls(**yaml_data)
             return class_instance
+ 
         
 class AreaModel(ABC):
     """Base class to define the methods that the area model must implement"""
@@ -63,6 +61,7 @@ class AreaModel(ABC):
             Dict[str, float]: The propensity for the given area.
         """
         return self.root.get(area)
+
     
 class BaseChoice(BaseModel, ABC):
     """
@@ -89,6 +88,11 @@ class BaseChoice(BaseModel, ABC):
             return field_choices[0]
         else:
             return
+
+
+# Define a custom exception class for better error handling
+class PropensityError(Exception):
+    pass
 
 
 class SumTo1Choice(BaseChoice, ABC):
@@ -118,8 +122,18 @@ class SumTo1Choice(BaseChoice, ABC):
         else:
             return
         
-
         
+    @model_validator(mode='after')
+    def validate_sum_to_one(self, values):
+        """Ensure the sum of all propensities for staff types is approximately 1."""
+        # Sum the values for the keys present in your YAML data
+        total_sum = sum(self.model_dump().values())
+
+        # Use the custom exception for raising errors
+        if not (1 - PROPENSITY_ACCURACY_THRESHOLD <= total_sum <= 1 + PROPENSITY_ACCURACY_THRESHOLD):
+            raise PropensityError(f"The sum of delivery propensities must be close to 1 (within tolerance {PROPENSITY_ACCURACY_THRESHOLD}). Got {total_sum:.4f} instead.")
+        
+        return values
 
 
 
@@ -284,16 +298,12 @@ class AppointmentTimeDistributions(BaseModel):
         elif distribution =='expon':
             return stats.expon.rvs(*self.expon, size=1)[0]
         else:
-            raise ValueError(f"Unknown distribution {distribution}, must be one of 'lognorm' or 'expon'")
+            raise ValueError(f"Unknown distribution {distribution}, must be one of 'lognorm' or 'expon'")   
     
-    
-
 
 class AreaAppointmentTimeDistributions(RootModel[Dict[str, AppointmentTimeDistributions]], YamlLoader, AreaModel):
     """Class to load and validate the appointment time distributions yaml file,
     fields can have any name"""
-    
-
 
 
 class StaffDidNotAttendRatesByDelivery(BaseChoice):
@@ -306,7 +316,6 @@ class StaffDidNotAttendRatesByDelivery(BaseChoice):
     telephone: float = Field(alias="Telephone", **PROPENSITY_FIELD_ARGS)
     unknown: float = Field(alias="Unknown", **PROPENSITY_FIELD_ARGS)
     video_online: float = Field(alias="Video/Online", **PROPENSITY_FIELD_ARGS)
-
 
 
 class AreaDidNotAttendRates(BaseModel):
@@ -335,8 +344,7 @@ class DidNotAttendRatesByArea(RootModel[Dict[str, AreaDidNotAttendRates]], YamlL
         random_num = random.random() # random between 0 and 1
         did_not_attend_probability = self.get_area(area).get_staff_type(staff_type).model_dump(by_alias=True)[appointment_mode]
         # if the random number is better than probability, the patient attended
-        return random_num > did_not_attend_probability
-        
+        return random_num > did_not_attend_probability       
 
 
 class AppointmentStaffChoice(SumTo1Choice):
@@ -347,7 +355,7 @@ class AppointmentStaffChoice(SumTo1Choice):
     gp: float = Field(alias="GP", **PROPENSITY_FIELD_ARGS)
     other: float = Field(alias="Other Practice Staff", **PROPENSITY_FIELD_ARGS)
     unknown: float = Field(alias="Unknown", **PROPENSITY_FIELD_ARGS)
-
+    
 
 class StaffPropensityByArea(RootModel[Dict[str, AppointmentStaffChoice]], YamlLoader, AreaModel):
     """Class to load and validate the staff type propensity yaml file for a yaml file of areas"""
@@ -356,16 +364,13 @@ class StaffPropensityByArea(RootModel[Dict[str, AppointmentStaffChoice]], YamlLo
         # randomly choose a staff type depending on the area
         area_model:AppointmentStaffChoice = self.get_area(area)
 
-        return area_model.pick()
-
-    
+        return area_model.pick()    
 
 
-class AppointmentDeliveryChoice(SumTo1Choice):
+class AppointmentDeliveryChoice(BaseModel):
     """
-    Class to represent the propensity of a given delivery type for appointments
+    Class to represent the propensity of a given delivery type for appointments.
     """
-
     face_to_face: float = Field(alias="Face-to-Face", **PROPENSITY_FIELD_ARGS)
     home_visit: float = Field(alias="Home Visit", **PROPENSITY_FIELD_ARGS)
     telephone: float = Field(alias="Telephone", **PROPENSITY_FIELD_ARGS)
@@ -401,8 +406,6 @@ class DeliveryPropensityByStaff(BaseModel):
         return getattr(self, str(staff_type).lower().replace(" ","_"))
 
 
-
-
 class DeliveryPropensityByArea(RootModel[Dict[str, DeliveryPropensityByStaff]], YamlLoader, AreaModel):
     """Class to load and validate the did not attend rates yaml file for a yaml file of areas"""
 
@@ -420,6 +423,7 @@ class MonthlyAppointmentForecast(RootModel[Dict[str,Dict[dt.date, int]]], YamlLo
         for forecast_month, forecast in area_forecast.items():
             if date.month == forecast_month.month and date.year == forecast_month.year:
                 return forecast
+
 
 class ClinicalStaffFTE(BaseModel):
     gp: float = Field(..., alias="GP")
@@ -449,7 +453,3 @@ class NonGPStaffMixByArea(RootModel[Dict[str, NonGPStaffMix]], YamlLoader, AreaM
 
 class AdminStaffFTERequirementByArea(RootModel[Dict[str, float]], YamlLoader, AreaModel):
     """Class to load and validate the admin staff FTE requirement yaml file for a yaml file of areas"""
-    
-
-    
-    
