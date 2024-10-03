@@ -64,14 +64,16 @@ SIMULATION_RESULTS_PATH:Final[str] = NOTEBOOK_OUTPUT_BASE_PATH + "simulation_res
 GP_LIST_AGE_BANDS:Final[List[int]] = [i for i in range(0, 95, 5)] + [200]
 GP_LIST_AGE_LABELS:Final[List[str]] = [f"{i}-{i+4}" for i in GP_LIST_AGE_BANDS[:-2]] + ["90+"]
 
+# notebook 2c
+WORKFORCE_ADMIN_REQUIREMENTS_FILENAME  ="outputs/workforce_admin_fte_requirements.yaml"
+WORKFORCE_NON_GP_CLINICAL_STAFF_SPLIT_FILENAME = "outputs/workforce_non_gp_clinical_staff_mix.yaml"
+WORKFORCE_CURRENT_STAFF_FTE = "outputs/workforce_current_staff_fte.yaml"
 
-WORKFORCE_ADMIN_REQUIREMENTS_FILENAME  ="workforce_admin_fte_requirements.yaml"
-WORKFORCE_NON_GP_CLINICAL_STAFF_SPLIT_FILENAME = "workforce_non_gp_clinical_staff_mix.yaml"
-WORKFORCE_CURRENT_STAFF_FTE = "workforce_current_staff_fte.yaml"
-
+APPOINTMENTS_REGRESSION_MODEL_FILENAME= "outputs/demographic-month-sklearn.pkl"
 POPULATION_PROJECTIONS_OUTPUT_FILENAME = "outputs/population_projections.yaml"
 APPOINTMENT_DURATION_OUTPUT_FILENAME = "outputs/appointment_durations.yaml"
-APPOINTMENT_MODE_PROPENSITY_OUTPUT_FILENAME = "outputs/assumptions/appointment_modes.yaml"
-STAFF_TYPE_PROPENSITY_OUTPUT_FILENAME = "outputs/assumptions/staff_propensity.yaml"
+APPOINTMENT_MODE_PROPENSITY_OUTPUT_FILENAME = "outputs/appointment_modes.yaml"
+SAME_DAY_APPOINTMENT_OUTPUT_FILENAME = "outputs/same_day_appointment.yaml"
+STAFF_TYPE_PROPENSITY_OUTPUT_FILENAME = "outputs/staff_propensity.yaml"
 SARIMA_FORECAST_OUTPUT_FILENAME = "outputs/forecasts-SARIMA.yaml"
 ACUTE_REFERRAL_RATES_OUTPUT_FILENAME = "outputs/acute_referral_rates.yaml"
