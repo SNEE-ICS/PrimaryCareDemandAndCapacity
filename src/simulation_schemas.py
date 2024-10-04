@@ -101,39 +101,20 @@ class SumTo1Choice(BaseChoice, ABC):
     The fields are the choices and the values are the probabilities.
     The sum of the field values must be 1.0.
     """
-
-    def pick(self, n_choices: int = 1) -> Union[Any, List[Any]]:
-        """
-        Randomly selects one of the fields based on their probabilities (values must be float).
-
-        Returns:
-            str: The selected staff field name.
-        """
-        # get the probabilities as a dictionary
-        probabilities_dict: Dict[str, float] = self.model_dump(by_alias=True)
-        # randomly select a staff type based on the probabilities using the random module
-        field_choices = random.choices(
-            list(probabilities_dict.keys()),
-            weights=list(probabilities_dict.values()),
-            k=n_choices,
-        )
-        if n_choices == 1:
-            return field_choices[0]
-        else:
-            return
-        
         
     @model_validator(mode='after')
-    def validate_sum_to_one(self, values):
+    def validate_sum_to_one(self):
         """Ensure the sum of all propensities for staff types is approximately 1."""
         # Sum the values for the keys present in your YAML data
-        total_sum = sum(self.model_dump().values())
-
-        # Use the custom exception for raising errors
-        if not (1 - PROPENSITY_ACCURACY_THRESHOLD <= total_sum <= 1 + PROPENSITY_ACCURACY_THRESHOLD):
-            raise PropensityError(f"The sum of delivery propensities must be close to 1 (within tolerance {PROPENSITY_ACCURACY_THRESHOLD}). Got {total_sum:.4f} instead.")
         
-        return values
+
+        propensity_sum =sum(self.model_dump.values())
+        # Use the custom exception for raising errors
+        if not (1 - PROPENSITY_ACCURACY_THRESHOLD <= propensity_sum <= 1 + PROPENSITY_ACCURACY_THRESHOLD):
+            raise PropensityError(f"The sum of delivery propensities must be close to 1 (within tolerance\
+                {PROPENSITY_ACCURACY_THRESHOLD}). Got {propensity_sum:.4f} instead.")
+        
+        return self
 
 
 
@@ -353,7 +334,7 @@ class AppointmentStaffChoice(SumTo1Choice):
     """
 
     gp: float = Field(alias="GP", **PROPENSITY_FIELD_ARGS)
-    other: float = Field(alias="Other Practice Staff", **PROPENSITY_FIELD_ARGS)
+    other_practice_staff: float = Field(alias="Other Practice Staff", **PROPENSITY_FIELD_ARGS)
     unknown: float = Field(alias="Unknown", **PROPENSITY_FIELD_ARGS)
     
 
@@ -367,7 +348,7 @@ class StaffPropensityByArea(RootModel[Dict[str, AppointmentStaffChoice]], YamlLo
         return area_model.pick()    
 
 
-class AppointmentDeliveryChoice(BaseModel):
+class AppointmentDeliveryChoice(SumTo1Choice):
     """
     Class to represent the propensity of a given delivery type for appointments.
     """
@@ -376,26 +357,6 @@ class AppointmentDeliveryChoice(BaseModel):
     telephone: float = Field(alias="Telephone", **PROPENSITY_FIELD_ARGS)
     unknown: float = Field(alias="Unknown", **PROPENSITY_FIELD_ARGS)
     video_online: float = Field(alias="Video/Online", **PROPENSITY_FIELD_ARGS)
-
-    # def pick_delivery_type(self) -> str:
-    #     """
-    #     Randomly selects a delivery type based on the given probabilities.
-
-    #     Returns:
-    #         str: The selected delivery type.
-    #     """
-    #     # get the probabilities as a dictionary
-    #     probabilities_dict: Dict[str, float] = self.model_dump(by_alias=True)
-
-    #     # randomly select a staff type based on the probabilities using the random module
-    #     delivery_type = random.choices(
-    #         list(probabilities_dict.keys()),
-    #         weights=list(probabilities_dict.values()),
-    #         k=1,
-    #     )[0]
-    #     # return the selected staff type
-    #     return delivery_type
-
 
 class DeliveryPropensityByStaff(BaseModel):
     gp: AppointmentDeliveryChoice = Field(alias="GP")
