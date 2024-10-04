@@ -20,7 +20,8 @@ from src.constants import (SARIMA_FORECAST_OUTPUT_FILENAME,
                            STAFF_TYPE_PROPENSITY_OUTPUT_FILENAME, 
                            APPOINTMENT_MODE_PROPENSITY_OUTPUT_FILENAME, 
                            POPULATION_PROJECTIONS_OUTPUT_FILENAME,
-                           ACUTE_REFERRAL_RATES_OUTPUT_FILENAME)
+                           ACUTE_REFERRAL_RATES_OUTPUT_FILENAME,
+                           WORKFORCE_CURRENT_STAFF_FTE)
 
 MINUTES_PER_DAY:int = 450
 CONSTRAINED_APPOINTMENT_RANGE:Tuple[int] = (25,28)
@@ -107,7 +108,7 @@ class SimulationData:
         #population scenarios
         self.population_scenarios:PopulationScenarios = PopulationScenarios.read_yaml(POPULATION_PROJECTIONS_OUTPUT_FILENAME)
         # staffing levels
-        self.staff_fte = ClinicalStaffFTEByArea.read_yaml("outputs/staff_fte.yaml")
+        self.staff_fte = ClinicalStaffFTEByArea.read_yaml(WORKFORCE_CURRENT_STAFF_FTE)
         # prpoensity to attend
         self.did_not_attend_rates = DidNotAttendRatesByArea.read_yaml("outputs/assumptions/dna_appointments.yaml")
         # DEMAND SCENARIOS
