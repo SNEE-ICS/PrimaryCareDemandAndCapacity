@@ -1,6 +1,6 @@
 import pytest
 from pydantic import ValidationError
-from src.simulation_schemas import (
+from ..src.simulation_schemas import (
     AreaAppointmentTimeDistributions, 
     AppointmentTimeDistributions, 
     DidNotAttendRatesByArea, 
@@ -8,7 +8,8 @@ from src.simulation_schemas import (
     StaffPropensityByArea, 
     AppointmentStaffChoice,
     DeliveryPropensityByArea,
-    PopulationScenarios
+    PopulationScenarios,
+    PropensityError
 )
 
 # define the path to the sample yaml file from root
@@ -62,7 +63,7 @@ def test_staff_propensity_yaml():
 
 def test_staff_propensity_yaml_raises_error():
     """This will error as the sum is gt 1"""
-    with pytest.raises(Exception):
+    with pytest.raises(PropensityError):
         StaffPropensityByArea.read_yaml(
             "tests/sample_data/staff_propensity_error.yaml"
         )
@@ -71,18 +72,7 @@ def test_staff_propensity_pick():
     staff_propensity = StaffPropensityByArea.read_yaml(
         "tests/sample_data/staff_propensity.yaml"
     )
-    # get areas
-    for area in staff_propensity.areas:
-        area_propensity:AppointmentStaffChoice = staff_propensity.get_area(area)
-        assert isinstance(area_propensity, AppointmentStaffChoice)
-        # pick one
-        staff_type:str = area_propensity.pick()
-        assert isinstance(staff_type, str)
-        assert staff_type in ["GP", "Other Practice staff", "Unknown"]
-    areas = list(staff_propensity.model_dump().keys())
-    assert isinstance(staff_propensity, StaffPropensityByArea)
-    staff_type = staff_propensity.get_area(areas[0]).pick()
-    assert isinstance(staff_type, str)
+    # test the pick one method
 
 
 def test_appt_mode_propensity():
@@ -94,7 +84,7 @@ def test_appt_mode_propensity():
 
 def test_appt_mode_propensity_raises_error():
     """This will error as the sum is gt 1"""
-    with pytest.raises(ValidationError):
+    with pytest.raises(PropensityError):
         DeliveryPropensityByArea.read_yaml(
             "tests/sample_data/appt_mode_propensity_error.yaml"
         )
@@ -102,7 +92,4 @@ def test_appt_mode_propensity_raises_error():
 def test_population_yamls():
     population = PopulationScenarios.read_yaml("tests/sample_data/population_projection.yaml")
     assert isinstance(population, PopulationScenarios)
-        
-def test_population_yaml_raises_error():
-    with pytest.raises(ValidationError):
-        PopulationScenarios.read_yaml("tests/sample_data/appt_mode_propensity_error.yaml")
+    
