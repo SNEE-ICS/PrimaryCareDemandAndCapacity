@@ -108,7 +108,7 @@ class SumTo1Choice(BaseChoice, ABC):
         # Sum the values for the keys present in your YAML data
         
 
-        propensity_sum =sum(self.model_dump.values())
+        propensity_sum =sum(self.model_dump().values())
         # Use the custom exception for raising errors
         if not (1 - PROPENSITY_ACCURACY_THRESHOLD <= propensity_sum <= 1 + PROPENSITY_ACCURACY_THRESHOLD):
             raise PropensityError(f"The sum of delivery propensities must be close to 1 (within tolerance\
