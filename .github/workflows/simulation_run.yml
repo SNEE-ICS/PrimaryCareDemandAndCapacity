@@ -6,7 +6,7 @@ on:
         branch_name:
             description: 'Branch name for simulation run'
             required: true
-            default: '134-fix-pelican-website'
+            default: 'develop'
 
 
 jobs:
