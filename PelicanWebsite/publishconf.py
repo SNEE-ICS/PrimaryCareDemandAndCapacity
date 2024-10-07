@@ -20,7 +20,8 @@ THEME = "snee_theme"
 DELETE_OUTPUT_DIRECTORY = True
 PATH = 'content'
 TIMEZONE = 'GMT'
-STATIC_PATHS = pelicanconf.STATIC_PATHS
+STATIC_PATHS = ['img','extras']
+PAGE_PATHS = ['notebooks-html']
 PAGE_ORDER_BY = 'order'
 ARTICLE_ORDER_BY = 'order'
 
