@@ -1,5 +1,5 @@
 import datetime as dt
-from typing import Dict, Iterable, List, Literal, Optional, Set, Tuple, Union, TypeAlias, Type, Any
+from typing import Dict, List, Literal, Union, Type, Any
 from abc import ABC
 import yaml
 import random
@@ -10,11 +10,8 @@ from pydantic import (
     BaseModel,
     Field,
     RootModel,
-    model_validator,
-    ValidationError,
-    create_model)
-
-import src.constants as constants   
+    model_validator
+    )
 
 
 # this is used to define the arguments for the pydantic Field class
@@ -48,6 +45,7 @@ class YamlLoader(ABC):
             yaml_data = yaml.safe_load(f)
             class_instance = cls(**yaml_data)
             return class_instance
+ 
         
 class AreaModel(ABC):
     """Base class to define the methods that the area model must implement"""
@@ -63,6 +61,7 @@ class AreaModel(ABC):
             Dict[str, float]: The propensity for the given area.
         """
         return self.root.get(area)
+
     
 class BaseChoice(BaseModel, ABC):
     """
@@ -91,35 +90,31 @@ class BaseChoice(BaseModel, ABC):
             return
 
 
+# Define a custom exception class for better error handling
+class PropensityError(Exception):
+    pass
+
+
 class SumTo1Choice(BaseChoice, ABC):
     """
     Base class for propensity choices, not to be used directly.
     The fields are the choices and the values are the probabilities.
     The sum of the field values must be 1.0.
     """
-
-    def pick(self, n_choices: int = 1) -> Union[Any, List[Any]]:
-        """
-        Randomly selects one of the fields based on their probabilities (values must be float).
-
-        Returns:
-            str: The selected staff field name.
-        """
-        # get the probabilities as a dictionary
-        probabilities_dict: Dict[str, float] = self.model_dump(by_alias=True)
-        # randomly select a staff type based on the probabilities using the random module
-        field_choices = random.choices(
-            list(probabilities_dict.keys()),
-            weights=list(probabilities_dict.values()),
-            k=n_choices,
-        )
-        if n_choices == 1:
-            return field_choices[0]
-        else:
-            return
+        
+    @model_validator(mode='after')
+    def validate_sum_to_one(self):
+        """Ensure the sum of all propensities for staff types is approximately 1."""
+        # Sum the values for the keys present in your YAML data
         
 
+        propensity_sum =sum(self.model_dump().values())
+        # Use the custom exception for raising errors
+        if not (1 - PROPENSITY_ACCURACY_THRESHOLD <= propensity_sum <= 1 + PROPENSITY_ACCURACY_THRESHOLD):
+            raise PropensityError(f"The sum of delivery propensities must be close to 1 (within tolerance\
+                {PROPENSITY_ACCURACY_THRESHOLD}). Got {propensity_sum:.4f} instead.")
         
+        return self
 
 
 
@@ -284,16 +279,12 @@ class AppointmentTimeDistributions(BaseModel):
         elif distribution =='expon':
             return stats.expon.rvs(*self.expon, size=1)[0]
         else:
-            raise ValueError(f"Unknown distribution {distribution}, must be one of 'lognorm' or 'expon'")
+            raise ValueError(f"Unknown distribution {distribution}, must be one of 'lognorm' or 'expon'")   
     
-    
-
 
 class AreaAppointmentTimeDistributions(RootModel[Dict[str, AppointmentTimeDistributions]], YamlLoader, AreaModel):
     """Class to load and validate the appointment time distributions yaml file,
     fields can have any name"""
-    
-
 
 
 class StaffDidNotAttendRatesByDelivery(BaseChoice):
@@ -306,7 +297,6 @@ class StaffDidNotAttendRatesByDelivery(BaseChoice):
     telephone: float = Field(alias="Telephone", **PROPENSITY_FIELD_ARGS)
     unknown: float = Field(alias="Unknown", **PROPENSITY_FIELD_ARGS)
     video_online: float = Field(alias="Video/Online", **PROPENSITY_FIELD_ARGS)
-
 
 
 class AreaDidNotAttendRates(BaseModel):
@@ -335,8 +325,7 @@ class DidNotAttendRatesByArea(RootModel[Dict[str, AreaDidNotAttendRates]], YamlL
         random_num = random.random() # random between 0 and 1
         did_not_attend_probability = self.get_area(area).get_staff_type(staff_type).model_dump(by_alias=True)[appointment_mode]
         # if the random number is better than probability, the patient attended
-        return random_num > did_not_attend_probability
-        
+        return random_num > did_not_attend_probability       
 
 
 class AppointmentStaffChoice(SumTo1Choice):
@@ -345,9 +334,9 @@ class AppointmentStaffChoice(SumTo1Choice):
     """
 
     gp: float = Field(alias="GP", **PROPENSITY_FIELD_ARGS)
-    other: float = Field(alias="Other Practice Staff", **PROPENSITY_FIELD_ARGS)
+    other_practice_staff: float = Field(alias="Other Practice Staff", **PROPENSITY_FIELD_ARGS)
     unknown: float = Field(alias="Unknown", **PROPENSITY_FIELD_ARGS)
-
+    
 
 class StaffPropensityByArea(RootModel[Dict[str, AppointmentStaffChoice]], YamlLoader, AreaModel):
     """Class to load and validate the staff type propensity yaml file for a yaml file of areas"""
@@ -356,41 +345,18 @@ class StaffPropensityByArea(RootModel[Dict[str, AppointmentStaffChoice]], YamlLo
         # randomly choose a staff type depending on the area
         area_model:AppointmentStaffChoice = self.get_area(area)
 
-        return area_model.pick()
-
-    
+        return area_model.pick()    
 
 
 class AppointmentDeliveryChoice(SumTo1Choice):
     """
-    Class to represent the propensity of a given delivery type for appointments
+    Class to represent the propensity of a given delivery type for appointments.
     """
-
     face_to_face: float = Field(alias="Face-to-Face", **PROPENSITY_FIELD_ARGS)
     home_visit: float = Field(alias="Home Visit", **PROPENSITY_FIELD_ARGS)
     telephone: float = Field(alias="Telephone", **PROPENSITY_FIELD_ARGS)
     unknown: float = Field(alias="Unknown", **PROPENSITY_FIELD_ARGS)
     video_online: float = Field(alias="Video/Online", **PROPENSITY_FIELD_ARGS)
-
-    # def pick_delivery_type(self) -> str:
-    #     """
-    #     Randomly selects a delivery type based on the given probabilities.
-
-    #     Returns:
-    #         str: The selected delivery type.
-    #     """
-    #     # get the probabilities as a dictionary
-    #     probabilities_dict: Dict[str, float] = self.model_dump(by_alias=True)
-
-    #     # randomly select a staff type based on the probabilities using the random module
-    #     delivery_type = random.choices(
-    #         list(probabilities_dict.keys()),
-    #         weights=list(probabilities_dict.values()),
-    #         k=1,
-    #     )[0]
-    #     # return the selected staff type
-    #     return delivery_type
-
 
 class DeliveryPropensityByStaff(BaseModel):
     gp: AppointmentDeliveryChoice = Field(alias="GP")
@@ -399,8 +365,6 @@ class DeliveryPropensityByStaff(BaseModel):
 
     def get_staff_type(self, staff_type:str)->AppointmentDeliveryChoice:
         return getattr(self, str(staff_type).lower().replace(" ","_"))
-
-
 
 
 class DeliveryPropensityByArea(RootModel[Dict[str, DeliveryPropensityByStaff]], YamlLoader, AreaModel):
@@ -420,6 +384,7 @@ class MonthlyAppointmentForecast(RootModel[Dict[str,Dict[dt.date, int]]], YamlLo
         for forecast_month, forecast in area_forecast.items():
             if date.month == forecast_month.month and date.year == forecast_month.year:
                 return forecast
+
 
 class ClinicalStaffFTE(BaseModel):
     gp: float = Field(..., alias="GP")
@@ -449,7 +414,3 @@ class NonGPStaffMixByArea(RootModel[Dict[str, NonGPStaffMix]], YamlLoader, AreaM
 
 class AdminStaffFTERequirementByArea(RootModel[Dict[str, float]], YamlLoader, AreaModel):
     """Class to load and validate the admin staff FTE requirement yaml file for a yaml file of areas"""
-    
-
-    
-    

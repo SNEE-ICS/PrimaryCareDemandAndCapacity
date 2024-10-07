@@ -8,7 +8,7 @@ import math
 from functools import lru_cache
 import joblib
 
-import src.constants as const
+from . import constants
 
 def get_numdays(df_:pd.DataFrame):
     month_values = df_.index.get_level_values('APPOINTMENT_MONTH')
@@ -32,7 +32,7 @@ def is_working_day(day: Union[dt.date, pd.Timestamp]):
     Returns:
     bool: True if the day is a working day, False otherwise.
     """
-    if day.isoweekday() < 6 and day not in const.ENGLAND_BANK_HOLIDAYS:
+    if day.isoweekday() < 6 and day not in constants.ENGLAND_BANK_HOLIDAYS:
         return True
     else:
         return False
@@ -83,7 +83,7 @@ class PlotCounter:
         """Generates a unique plot name based on the current count"""
         current_count = self.count
         self.count += 1 # increment count
-        return f"{const.NOTEBOOK_OUTPUT_FIGURES_PATH}{self.name}_{current_count}"
+        return f"{constants.NOTEBOOK_OUTPUT_FIGURES_PATH}{self.name}_{current_count}"
     
 
 @lru_cache(maxsize=12)
