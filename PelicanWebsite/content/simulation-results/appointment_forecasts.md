@@ -50,12 +50,11 @@ Cos transformation: cos(2π×month/12)
 
 
 ## Primary care Appointments in England and SNEE-ICB 
-![alt text](../../../outputs/plots/num_appointments_1.png)
+![alt text](../img/num_appointments_1.png)
 <br>
-![alt text](../../../outputs/plots/num_appointments_2.png)
-
+![alt text](../img/num_appointments_2.png)
 ## Trend plot for Primary care Appointments/working-day in SNEE-ICB
-![alt text](../../../outputs/plots/num_appointments_3.png)
+![alt text](../img/num_appointments_3.png)
 
 
 ## Statistical Forecast
@@ -74,7 +73,7 @@ There is a clear 12-month observed where the number of appointments peaks around
 
 
 ## Ridge Regression Models Outputs
-![alt text](../../../outputs/plots/num_appointments_5.png)
+![alt text](../img/num_appointments_5.png)
 <b>Actual vs. Predicted Values (Left Plot):</b>
 - This plot compares the actual target values to the values predicted by the model.
 - The red dashed line represents the ideal scenario where the predicted values exactly match the actual values (i.e., perfect predictions).
