@@ -32,6 +32,7 @@ SOCIAL = (
 DEFAULT_PAGINATION = False
 THEME = "snee_theme"
 STATIC_PATHS = ['img','extras']
+PAGE_PATHS = ['notebooks-html']
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
