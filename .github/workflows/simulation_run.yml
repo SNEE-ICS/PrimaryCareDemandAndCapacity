@@ -14,7 +14,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Run notebooks
-              uses: ..github/workflows/notebook_run.yml
+              uses: ./.github/workflows/notebook_run.yml
 
     simulation:
         runs-on: ubuntu-latest
@@ -43,9 +43,9 @@ jobs:
                   name: notebook-outputs
                   path: outputs/tables
 
-            - name: Run simulation
-              run: |
-                  python -m  src.main
+            # - name: Run simulation
+            #   run: |
+            #       python -m  src.main
 
             - name: Store simulation outputs
             # 
