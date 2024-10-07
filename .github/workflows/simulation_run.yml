@@ -43,9 +43,9 @@ jobs:
                   name: notebook-outputs
                   path: outputs/tables
 
-            - name: Run simulation
-              run: |
-                  python -m  src.main
+            # - name: Run simulation
+            #   run: |
+            #       python -m  src.main
 
             - name: Store simulation outputs
             # 
