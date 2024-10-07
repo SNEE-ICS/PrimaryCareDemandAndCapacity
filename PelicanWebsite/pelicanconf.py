@@ -1,6 +1,6 @@
 AUTHOR = 'A.Jarman & I.Khan'
 SITENAME = 'Primary Care Demand and Capacity Modelling'
-SITEURL = ""
+SITEURL = "http://snee-ics.github.io/primarycaredemandandcapacity"
 
 PATH = "content"
 

@@ -16,6 +16,13 @@ FEED_ALL_ATOM = "feeds/all.atom.xml"
 CATEGORY_FEED_ATOM = "feeds/{slug}.atom.xml"
 
 DELETE_OUTPUT_DIRECTORY = True
+THEME = "snee_theme"
+DELETE_OUTPUT_DIRECTORY = True
+PATH = 'content'
+TIMEZONE = 'GMT'
+STATIC_PATHS = pelicanconf.STATIC_PATHS
+PAGE_ORDER_BY = 'order'
+ARTICLE_ORDER_BY = 'order'
 
 # Following items are often useful when publishing
 
