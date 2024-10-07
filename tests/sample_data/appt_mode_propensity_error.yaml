@@ -3,9 +3,9 @@
     Face-to-Face: 0.6143
     Home Visit: 0.0182
     Telephone: 0.3521
-    Unknown: 0.002
-    Video/Online: 0.0134
-  Other Practice staff:
+    Unknown: 0.2
+    Video/Online: 0.999
+  Other Practice Staff:
     Face-to-Face: 0.8119
     Home Visit: 0.0068
     Telephone: 0.1694
@@ -24,7 +24,7 @@
     Telephone: 0.3863
     Unknown: 0.0034
     Video/Online: 0.0157
-  Other Practice staff:
+  Other Practice Staff:
     Face-to-Face: 0.6883
     Home Visit: 0.0033
     Telephone: 0.2948

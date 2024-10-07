@@ -6,8 +6,9 @@ import pandas as pd
 from dataclasses import dataclass
 import math
 from functools import lru_cache
+import joblib
 
-import src.constants as const
+from . import constants
 
 def get_numdays(df_:pd.DataFrame):
     month_values = df_.index.get_level_values('APPOINTMENT_MONTH')
@@ -31,7 +32,7 @@ def is_working_day(day: Union[dt.date, pd.Timestamp]):
     Returns:
     bool: True if the day is a working day, False otherwise.
     """
-    if day.isoweekday() < 6 and day not in const.ENGLAND_BANK_HOLIDAYS:
+    if day.isoweekday() < 6 and day not in constants.ENGLAND_BANK_HOLIDAYS:
         return True
     else:
         return False
@@ -40,7 +41,6 @@ def is_working_day(day: Union[dt.date, pd.Timestamp]):
 def get_workingdays(a_:np.array):
     years, months =  a_.year, a_.month
 
-    #
     def _num_workingdays_in_month(year,month):
         workingdays = 0
         day = 1
@@ -83,7 +83,7 @@ class PlotCounter:
         """Generates a unique plot name based on the current count"""
         current_count = self.count
         self.count += 1 # increment count
-        return f"{const.NOTEBOOK_OUTPUT_FIGURES_PATH}{self.name}_{current_count}"
+        return f"{constants.NOTEBOOK_OUTPUT_FIGURES_PATH}{self.name}_{current_count}"
     
 
 @lru_cache(maxsize=12)
@@ -136,3 +136,41 @@ def month_num_to_cos(month:int)->float:
     if month not in range(1,13):
         raise ValueError('month must be in range 1-12')
     return math.cos(_month_to_angle(month))
+
+
+@dataclass
+class ModelWrapper:
+    def __init__(self, model_path):
+        """
+        Initializes the ModelWrapper and caches the model after loading it with Joblib.
+
+        Args:
+            model_path (str): Path to the pickled (joblib) scikit-learn model file.
+        """
+        self.model_path = model_path
+        self.model = None  # Initialize model as None
+        self._load_model()  # Load the model and cache it
+
+    def _load_model(self):
+        """
+        Loads the model from a joblib file and caches it.
+
+        Returns:
+            object: The loaded scikit-learn model.
+        """
+        if self.model is None:  # Only load if not already cached
+            self.model = joblib.load(self.model_path)
+        return self.model
+
+    def predict(self, X):
+        """
+        Predicts the output using the cached model.
+
+        Args:
+            X (array-like): Input data to be used for prediction.
+
+        Returns:
+            array-like: The predicted values from the model.
+        """
+        return self.model.predict(X)
+
