@@ -3,13 +3,12 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 100%;
     background-color: #f2f0ef;
-    color: #064169;
     width: 80%;
     min-width: 400px;
     min-height: 200px;
-    padding: 1em;
-    margin: 5% 10%;
-    border: thin solid #00386E;
+    padding: 2em;
+    margin: 4% 8%;
+    border: solid black;
     border-radius: 5px;
     display: block;
 }
@@ -22,16 +21,18 @@ body {
 
 /* Header styling */
 .header {
-    margin: 0em 1em 1em 1em;
     padding: 1em;
-    border: thin solid #00386E;
+    border:groove black;
     display: block;
+    border-radius: 15px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    margin-bottom: 1em;
 }
 
 /* Flexbox to align title on left and logo on right */
 .header-content {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between; /* Ensures the title is on the left and logo on the right */
 }
 
@@ -39,13 +40,13 @@ body {
 .header-content h1 {
     color: #064169;
     margin: 0;
-    font-size: 3em;
+    font-size: 2.8em;
     font-weight: bold;
 }
 
 /* Navbar styles */
 .navbar {
-    background-color: #003863;
+    background-color: #408cc4;
     overflow: hidden;
     border-radius: 15px;
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
@@ -80,13 +81,36 @@ body {
 }
 
 .nav-item:hover {
-    background-color: #99bee2;
+    background-color: #0056b3;
 }
 
-.nav-item a.active {
+.nav-item a.visited {
     background-color: #330072;
     color: #ffffff;
     border-bottom: 3px solid #AE2573; /* Adds an underline to highlight active link */
+}
+
+/* Global link color (for all links except nav menu) */
+a:link {
+    color: #064169;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #085A8F;
+    text-decoration: underline;
+}
+
+/* Override link color for navbar links */
+.navbar a:link,
+.navbar a:visited {
+    color: white;
+    text-decoration: none;
+}
+
+.navbar a:hover,
+.navbar a:focus {
+    text-decoration: underline;
 }
 
 /* Image max width */
@@ -97,17 +121,6 @@ img {
 /* Table max width */
 table {
     max-width: 80em;
-}
-
-/* Link colors */
-a:link {
-    color: #b41e8c;
-    text-decoration: none;
-}
-
-a:hover {
-    color: #330072;
-    text-decoration: underline;
 }
 
 /* General text styling */
@@ -132,4 +145,50 @@ pre {
 #post-list {
     margin-bottom: 1em;
     margin-top: 1em;
+}
+
+/* Styling for back and home buttons */
+.navigation-buttons {
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
+}
+
+.navigation-buttons button {
+    background-color: #408cc4;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.navigation-buttons button:hover {
+    background-color: #0056b3;
+}
+
+/* Go to Top Button */
+#goToTopBtn {
+    display: none;              /* Hidden by default */
+    position: fixed;            /* Fixed position */
+    bottom: 10%;                /* Adjusted to be near the center of the page vertically */
+    right: 50%;                 /* Center horizontally */
+    transform: translate(50%, 50%); /* Center the button exactly */
+    z-index: 99;                /* Ensure the button is above other content */
+    background-color: #408cc4; /* Button background color */
+    color: white;            /* Button text color */
+    border: none;
+    padding: 20px;              /* Increased padding for larger button */
+    border-radius: 50%;         /* Makes the button circular */
+    cursor: pointer;
+    font-size: 22px;            /* Larger font for visibility */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3); /* More prominent shadow */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth hover transition */
+}
+
+/* Hover effect */
+#goToTopBtn:hover {
+    background-color: #00386e;               /* Lighter shade on hover */
+    transform: translate(50%, 50%) scale(1.1); /* Slightly enlarges on hover */
 }

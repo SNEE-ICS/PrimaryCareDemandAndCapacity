@@ -6,13 +6,33 @@
         <title>{% block title %}{% endblock %}</title>
         <link rel="stylesheet" type="text/css" href="{{ SITEURL }}/theme/css/style.css" />
         <script src="https://cdn.plot.ly/plotly-2.27.1.min.js" charset="utf-8"></script>
+        <!-- JavaScript for Back button functionality -->
+        <script> function goBack() {window.history.back();} </script>
+        <!-- JavaScript for Go to top button functionality -->
+        <script>
+            // When the user scrolls down 200px from the top of the document, show the button
+            window.onscroll = function() { scrollFunction() };
+            function scrollFunction() {
+                const goToTopBtn = document.getElementById("goToTopBtn");
+                const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                if (scrollTop > 200) {
+                    goToTopBtn.style.display = "block";
+                } else {
+                    goToTopBtn.style.display = "none";
+                }
+            }
+            function scrollToTop() {
+                document.body.scrollTop = 0; // For Safari
+                document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+            }
+        </script>
     </head>
     <body>
         
         <header class="header">
             <div class="header-content">
                 <h1>Primary Care Demand and Capacity</h1>
-                <a href="https://www.sneeics.org.uk/can-do-health-and-care/creative/knowledge-and-intelligence/">
+                <a href="https://www.sneeics.org.uk/can-do-health-and-care/creative/knowledge-and-intelligence/" target="_blank">
                     <img src="{{ SITEURL }}/theme/images/snee_ics_if_logo.png" alt="logo" class="logo"/>
                 </a>
             </div>
@@ -28,9 +48,17 @@
                 <li class="nav-item"><a href="{{ SITEURL }}/notebooks.html">Notebooks</a></li>
             </ul>
         </nav>
+
+        <!-- Back and Home Buttons -->
+        <div class="navigation-buttons">
+            <button onclick="goBack()">← Back</button>
+            <a href="{{ SITEURL }}/"><button>🏠 Home</button></a>
+        </div>
  
         <div class="container">
             {% block content %}{% endblock %}
         </div>
-</html>
-    
+
+        <!-- Go to top Button -->
+        <button onclick="scrollToTop()" id="goToTopBtn" title="Go to Top">&#x1F51D;</button>
+</html>  

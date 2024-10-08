@@ -15,24 +15,32 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
-# Blogroll
-LINKS = (
-    ("Pelican", "https://getpelican.com/"),
-    ("NHS", "https://www.nhs.uk/"),
-    ("Suffolk County Council", "https://www.suffolk.gov.uk/"),
-    ("Jinja2", "https://palletsprojects.com/p/jinja/")
-)
-
-# Social widget
-SOCIAL = (
-    ("You can add links in your config file", "#"),
-    ("Another social link", "#"),
-)
-
 DEFAULT_PAGINATION = False
 THEME = "snee_theme"
-STATIC_PATHS = ['img','extras']
-PAGE_PATHS = ['notebooks-html']
+STATIC_PATHS = ['img','extras','notebooks-html']
+#PAGE_PATHS = ['notebooks-html']
+
+EXTRA_PATH_METADATA = {
+    'notebooks-html/1a_AppointmentDuration.html': {'path': '1a_AppointmentDuration.html'},
+    'notebooks-html/1c_DemographicPopGrowth.html': {'path': '1c_DemographicPopGrowth.html'},
+}
+
+ARTICLE_EXCLUDES = ['notebooks-html']
+
+# # Blogroll
+# LINKS = (
+#     ("Pelican", "https://getpelican.com/"),
+#     ("NHS", "https://www.nhs.uk/"),
+#     ("Suffolk County Council", "https://www.suffolk.gov.uk/"),
+#     ("Jinja2", "https://palletsprojects.com/p/jinja/")
+# )
+
+# # Social widget
+# SOCIAL = (
+#     ("You can add links in your config file", "#"),
+#     ("Another social link", "#"),
+# )
+
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
