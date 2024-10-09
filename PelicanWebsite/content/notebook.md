@@ -6,11 +6,11 @@ Summary: List of all available notebooks.
 
 ## Available Notebooks
 
-- [Appointment Duration](1a_AppointmentDuration.html)
+- [Appointment Duration](1a_AppointmentDuration.html){:target="_blank"}
 <iframe src="1a_AppointmentDuration.html" width="100%" height="500px"></iframe>
 <br>
 
-- [Demographic Population Growth](1c_DemographicPopGrowth.html)
+- [Demographic Population Growth](1c_DemographicPopGrowth.html){:target="_blank"}
 <iframe src="1c_DemographicPopGrowth.html" width="100%" height="500px"></iframe>
   
 <!-- Another way of displaying files 
