@@ -1,6 +1,6 @@
 Title: About SNEE Intelligence Function
 Date: 2024-10-04
-Modified: 2024-01-18
+Modified: 2024-10-10
 Category: About SNEE-IF
 Author: A.Jarman & I.Khan
 Summary: Learn more about the purpose of this site and its creator.
@@ -32,5 +32,8 @@ We deliver healthcare intelligence from data analysis that helps us understand p
 
 ## Contact
 For more information and useful links --> 
-<a href="https://www.sneeics.org.uk/can-do-health-and-care/creative/knowledge-and-intelligence/" target="_blank" rel="noopener noreferrer">Visit out website.</a>.
-<hr>
+<a href="https://www.sneeics.org.uk/can-do-health-and-care/creative/knowledge-and-intelligence/" target="_blank" rel="noopener noreferrer">Visit out website.</a>
+<br>
+You can also visit out GitHub page for a sneek into codes --> 
+<a href="https://github.com/SNEE-ICS" target="_blank" rel="noopener noreferrer">Visit out GitHub.</a>
+<br><hr><br>

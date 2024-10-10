@@ -23,6 +23,8 @@ STATIC_PATHS = ['img','extras','notebooks-html']
 EXTRA_PATH_METADATA = {
     'notebooks-html/1a_AppointmentDuration.html': {'path': '1a_AppointmentDuration.html'},
     'notebooks-html/1c_DemographicPopGrowth.html': {'path': '1c_DemographicPopGrowth.html'},
+    'notebooks-html/Referral_rate_2_sankey.html': {'path': 'Referral_rate_2_sankey.html'},
+    'notebooks-html/Referral_rate_4_sankey.html': {'path': 'Referral_rate_4_sankey.html'},
 }
 
 ARTICLE_EXCLUDES = ['notebooks-html']

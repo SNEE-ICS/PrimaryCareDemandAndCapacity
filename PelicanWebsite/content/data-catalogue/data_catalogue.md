@@ -1,15 +1,15 @@
-Title: A list of all the Datasets used in the analysis
+Title: Data Catalogue
 Date: 2024-01-18
-Modified: 2024-01-18
-Category: Data Catalog
+Modified: 2024-10-10
+Category: Data Catalogue
 Authors: A.Jarman & I.Khan
-Summary:  
+Summary: A list of all the Datasets used in the analysis
 
 ## NHS England Datasets
 
 <!-- START TABLE 1-->
 
-<table border="1" class="dataframe">
+<table border="1">
   <thead>
     <tr style="text-align: right;">
       <th>Name</th>
@@ -72,12 +72,14 @@ Summary:
   </tbody>
 </table>
 <!-- END TABLE 1-->
+<br> <hr> <br>
+
 
 ## ONS Population Scenarios
 
 <!-- START TABLE 2-->
 
-<table border="1" class="dataframe">
+<table border="1">
   <thead>
     <tr style="text-align: right;">
       <th>Name</th>
@@ -126,4 +128,4 @@ Summary:
   </tbody>
 </table>
 <!-- END TABLE 2-->
-
+<br> <hr> <br>
