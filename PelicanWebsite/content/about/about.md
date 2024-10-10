@@ -31,9 +31,9 @@ We deliver healthcare intelligence from data analysis that helps us understand p
 
 
 ## Contact
-For more information and useful links --> 
-<a href="https://www.sneeics.org.uk/can-do-health-and-care/creative/knowledge-and-intelligence/" target="_blank" rel="noopener noreferrer">Visit out website.</a>
+Explore our website for more information and valuable resources --> 
+<a href="https://www.sneeics.org.uk/can-do-health-and-care/creative/knowledge-and-intelligence/" target="_blank" rel="noopener noreferrer">Explore More!</a>
 <br>
-You can also visit out GitHub page for a sneek into codes --> 
-<a href="https://github.com/SNEE-ICS" target="_blank" rel="noopener noreferrer">Visit out GitHub.</a>
+Moreover, If you're tech-savvy, dive into our GitHub page for a sneak peek into our code and projects! --> 
+<a href="https://github.com/SNEE-ICS" target="_blank" rel="noopener noreferrer">Geek Out Here!</a>
 <br><hr><br>

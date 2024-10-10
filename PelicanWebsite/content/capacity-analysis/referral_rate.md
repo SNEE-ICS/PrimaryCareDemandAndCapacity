@@ -1,6 +1,6 @@
 Title: Referral Rate
 Date: 2024-01-04
-Modified: 2024-01-04
+Modified: 2024-10-10
 Category: Capacity Analysis
 Authors: A.Jarman & I.Khan
 Summary: Analysis on primary care rate of referrals in SNEE-ICB 
@@ -48,9 +48,9 @@ Interpretation of the data via a Sankey Diagram revealed noteworthy insights:
 - Post SNEE-ICB, the highest number of referrals by both GPs and Other practice staff were directed towards the 'Cambridgeshire and Peterborough ICB'.
 
 <hr>
-<iframe src="Referral_rate_2_sankey.html" width="60%" height="900px"></iframe>
+<iframe src="Referral_rate_2_sankey.html" width="80%" height="1000px"></iframe>
 <hr><br><br>
-<iframe src="Referral_rate_4_sankey.html" width="60%" height="900px"></iframe>
+<iframe src="Referral_rate_4_sankey.html" width="80%" height="1000px"></iframe>
 <hr><br><br>
 
 ## Results
