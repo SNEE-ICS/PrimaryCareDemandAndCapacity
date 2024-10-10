@@ -40,29 +40,33 @@ scenario_data_sources:
         load_as: dataframe
         csv_file: 2018 SNPP CCG pop persons.csv
         readme: SNPP Z2 low CCG Pop_read me.txt
+
 single_data_sources:
   - name: NHS GP Appointments by Region
     description: NHS England / digital published version of GP appointments, by sub-ICB area.
     source_type: csv_in_zip
     load_as: dataframe
-    zip_url: https://files.digital.nhs.uk/A4/53CF11/Appointments_GP_Regional_CSV_Apr_24.zip
+    zip_url: https://files.digital.nhs.uk/D5/4B437E/Appointments_GP_Regional_CSV_Aug_24.zip
     csv_file: Regional_CSV_SuffolkNEEssex.csv
     website_url: https://digital.nhs.uk/data-and-information/publications/statistical/appointments-in-general-practice
+
   - name: NHS GP Appointments by Region, historical
     description: NHS England / digital published version of GP appointments, by sub-ICB area.
     source_type: csv_in_zip
     load_as: dataframe
-    zip_url: https://files.digital.nhs.uk/CF/699F6F/Appointments_GP_Regional_Mar_22.zip
+    zip_url: https://files.digital.nhs.uk/6E/998DC7/Appointments_GP_Regional_CSV_Jul_24.zip 
     csv_file: Regional_CSV_SuffolkNEEssex.csv
     website_url: https://digital.nhs.uk/data-and-information/publications/statistical/appointments-in-general-practice
+  
   - name: 2023-24 Monthly Outpatient Referrals Data
     description: The Monthly Referral Return (MRR) contains data relating to GP and other referrals for first consultant-led outpatient appointments focusing on all treatment
      functions and specific acute treatment functions. MRR figures are submitted monthly from June 2020 by NHS trusts and independent sector providers treating NHS patients.
     source_type: csv_in_zip
     load_as: dataframe
-    zip_url: https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2023/10/Annual-CSV-2023-24-Published-October-2023-HJYTR.zip
-    csv_file: Annual CSV 2023-24 Published October 2023 HJYTR.csv
+    zip_url: https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2024/05/Annual-CSV-2023-24-Published-May-2024-59834-1.zip
+    csv_file: Annual CSV 2023-24 Published May 2024 59834.csv
     website_url: https://www.england.nhs.uk/statistics/statistical-work-areas/outpatient-referrals/
+  
   - name: 2022-23 Monthly Outpatient Referrals Data
     description: The Monthly Referral Return (MRR) contains data relating to GP and other referrals for first consultant-led outpatient appointments focusing on all treatment 
      functions and specific acute treatment functions. MRR figures are submitted monthly from June 2020 by NHS trusts and independent sector providers treating NHS patients.
@@ -71,6 +75,7 @@ single_data_sources:
     zip_url: https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2023/07/Annual-CSV-2022-23-including-revisions-Oct-22-Feb-23-final-1.zip
     csv_file: Annual CSV 2022-23 including revisions Oct 22- Feb 23 final 1.csv
     website_url: https://www.england.nhs.uk/statistics/statistical-work-areas/outpatient-referrals/
+  
   - name: 2021-22 Monthly Outpatient Referrals Data
     description: The Monthly Referral Return (MRR) contains data relating to GP and other referrals for first consultant-led outpatient appointments focusing on all treatment
      functions and specific acute treatment functions. MRR figures are submitted monthly from June 2020 by NHS trusts and independent sector providers treating NHS patients.
@@ -79,6 +84,7 @@ single_data_sources:
     zip_url: https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2023/04/Annual-CSV-2021-22-Revised-April-23-inc-Oct-21-to-Mar-22-revisions.zip
     csv_file: Annual CSV 2021-22 Revised April 23 (inc Oct 21 to Mar 22 revisions).csv
     website_url: https://www.england.nhs.uk/statistics/statistical-work-areas/outpatient-referrals/
+  
   - name: General Practice workforce
     description: The General Practice Workforce series of Official Statistics presents a snapshot of the primary care general practice workforce. A snapshot statistic relates
      to the situation at a specific date, which for these workforce statistics is now the last calendar day each month.
@@ -87,23 +93,24 @@ single_data_sources:
      individual job roles within these high-level groups.
     source_type: csv_in_zip
     load_as: dataframe
-    zip_url: https://files.digital.nhs.uk/21/435540/GPWIndividualCSV.042024.zip
-    csv_file: "1.General Practice – April 2024 Individual Level.csv"
-    website_url: https://digital.nhs.uk/data-and-information/publications/statistical/general-and-personal-medical-services/30-april-2024
-  - name: Appointments in General Practice, September 2023
-    website_url: https://digital.nhs.uk/data-and-information/publications/statistical/appointments-in-general-practice/september-2023
+    zip_url: https://files.digital.nhs.uk/45/72481B/GPWIndividualCSV.082024.zip
+    csv_file: '1.General Practice – August 2024 Individual Level.csv'
+    website_url: https://digital.nhs.uk/data-and-information/publications/statistical/general-and-personal-medical-services
+  
+  - name: Appointments in General Practice, August 2024
     description: The publication includes important information, however it does not show the totality of GP activity/workload. The data presented only contains information which was captured
      on the GP practice and PCN appointment systems. This limits the activity reported on and does not represent all work happening within a primary care setting or assess the complexity of activity.
-    zip_url: https://files.digital.nhs.uk/87/A548F7/Appointments_GP_Actual_Duration_CSV_Sep_23.zip
-    csv_file: Actual_Duration_CSV_Sep_23.csv
     source_type: csv_in_zip
     load_as: dataframe
-  - name: Patients Registered at a GP practice, October 2023
-    website_url: https://digital.nhs.uk/data-and-information/publications/statistical/patients-registered-at-a-gp-practice/october-2023
+    zip_url: https://files.digital.nhs.uk/1A/D586F6/Appointments_GP_Actual_Duration_CSV_Aug_24.zip
+    csv_file: Actual_Duration_CSV_Aug_24.csv
+    website_url: https://digital.nhs.uk/data-and-information/publications/statistical/appointments-in-general-practice
+  
+  - name: Patients Registered at a GP practice, September 2024
     description: The publication contains data for number of patients registered at GP having details on type of organisation(GP,PCN,ICB,COMM REGION etc) with its org-code & ONS-Code, sex and age group of the patients and the postcode. Data for this publication 
       are extracted each month as a snapshot in time from the Primary Care Registration database within the NHAIS (National Health Application and Infrastructure Services) system. This release is an accurate snapshot as at 1st October 2023.
-    zip_url: https://files.digital.nhs.uk/4B/EA9F9C/gp-reg-pat-prac-quin-age.zip
-    csv_file: gp-reg-pat-prac-quin-age.csv
     source_type: csv_in_zip
     load_as: dataframe
-
+    zip_url: https://files.digital.nhs.uk/31/AA1C9E/gp-reg-pat-prac-quin-age.zip
+    csv_file: gp-reg-pat-prac-quin-age.csv
+    website_url: https://digital.nhs.uk/data-and-information/publications/statistical/patients-registered-at-a-gp-practice
