@@ -44,8 +44,8 @@ Upon preparing both datasets, the referral rate for each SNEE-ICB area was compu
 ## Insights through Sankey Diagram
 Interpretation of the data via a Sankey Diagram revealed noteworthy insights:
 
-- The sub-ICB, Ipswich & East Suffolk, demonstrated the highest volume of referrals in comparison to the other two sub-ICBs.
-- Post SNEE-ICB, the highest number of referrals by both GPs and Other practice staff were directed towards the 'Cambridgeshire and Peterborough ICB'.
+- Of the three Sub-ICB's, **Ipswich & East Suffolk** had the **highest volume of referrals**.
+- Aside from SNEE-ICB, the highest number of referrals by both GPs and Other practice staff were directed towards **Cambridgeshire and Peterborough ICB**.
 
 <hr>
 <iframe src="Referral_rate_2_sankey.html" width="80%" height="1000px"></iframe>
@@ -66,17 +66,17 @@ The results were set of referrals rates which can be re-created during simulatio
     </thead>
     <tbody>
         <tr>
-            <td>06L</td>
+            <td>Ipswich & East Suffolk (06L)</td>
             <td>0.0983</td>
             <td>0.0491</td>
         </tr>
         <tr>
-            <td>06T</td>
+            <td>North East Essex (06T)</td>
             <td>0.0602</td>
             <td>0.0324</td>
         </tr>
         <tr>
-            <td>07K</td>
+            <td>West Suffolk (07K)</td>
             <td>0.0759</td>
             <td>0.0595</td>
         </tr>
