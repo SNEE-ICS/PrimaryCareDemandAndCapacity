@@ -1,7 +1,7 @@
 Title: Appointments
 Date: 2024-01-04
 Modified: 2024-10-11
-Category: Demand Analysis
+Category: Capacity Analysis
 Authors: A.Jarman & I.Khan
 Summary: Analysis on primary care appointments (Attended/DNA) in SNEE-ICB
 
