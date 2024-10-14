@@ -1,9 +1,9 @@
-Title: Primary Care Appointments (Attended/DNA) in SNEE
+Title: Appointments
 Date: 2024-01-04
-Modified: 2024-01-04
-Category: Demand Analysis
+Modified: 2024-10-11
+Category: Capacity Analysis
 Authors: A.Jarman & I.Khan
-Summary: Appointments Attended/DNA analysis
+Summary: Analysis on primary care appointments (Attended/DNA) in SNEE-ICB
 
 
 # Introduction & Background
@@ -12,8 +12,23 @@ Understanding the frequency of missed appointments in SNEE footprints is crucial
 
 # Data Sources
 The primary data for this analysis is derived from the extensive appointments dataset provided by NHS England, spanning from April 2021 to August 2023. While FY21 and FY22 were based on complete annual data, the assessment for FY23 is limited to the available data from April to August.
-Dataset --> [NHS Digital - Appointments in General Practice](https://digital.nhs.uk/data-and-information/publications/statistical/appointments-in-general-practice)
-
+<table>
+    <thead>
+        <tr>
+            <th>Dataset used</th>
+            <th>Website URL</th>
+            <th>Download zip</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Appointments dataset</td>
+            <td><a href="https://digital.nhs.uk/data-and-information/publications/statistical/appointments-in-general-practice">NHS Digital - Appointments in General Practice</a></td>
+            <td><a href="https://files.digital.nhs.uk/D5/4B437E/Appointments_GP_Regional_CSV_Aug_24.zip">Regional CSV SuffolkNEEssex (Mar22 - Aug24)</a></td>
+        </tr>
+    </tbody>
+</table>
+<br><br>
 
 # Methodology
 

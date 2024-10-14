@@ -1,11 +1,11 @@
 Title: About SNEE Intelligence Function
 Date: 2024-10-04
-Modified: 2024-01-18
+Modified: 2024-10-10
 Category: About SNEE-IF
 Author: A.Jarman & I.Khan
 Summary: Learn more about the purpose of this site and its creator.
 
-This platform is designed to showcase data analytics and capacity planning projects. Our goal is to provide valuable insights in **Primary Care Demand and Capacity Modelling**.<br><br>
+This platform is designed to showcase data analytics and capacity planning projects. Our goal is to assess the capacity requirements in primary care to meet current and future demand in SNEE.<br><br>
 
 ## Our Mission statement
 A system-wide, multi-disciplinary analytical collaborative that produces high-quality, locally tailored intelligence from data analytics, to enable leaders at all levels of the Suffolk and North East Essex Integrated Care System to make decisions informed by evidence when planning and delivering care.​<br>​<br>
@@ -31,6 +31,9 @@ We deliver healthcare intelligence from data analysis that helps us understand p
 
 
 ## Contact
-For more information and useful links --> 
-<a href="https://www.sneeics.org.uk/can-do-health-and-care/creative/knowledge-and-intelligence/" target="_blank" rel="noopener noreferrer">Visit out website.</a>.
-<hr>
+Explore our website for more information and valuable resources --> 
+<a href="https://www.sneeics.org.uk/can-do-health-and-care/creative/knowledge-and-intelligence/" target="_blank" rel="noopener noreferrer">Explore More!</a>
+<br>
+Moreover, If you're tech-savvy, dive into our GitHub page for a sneak peek into our code and projects! --> 
+<a href="https://github.com/SNEE-ICS" target="_blank" rel="noopener noreferrer">Geek Out Here!</a>
+<br><hr><br>
