@@ -118,11 +118,6 @@ img {
     max-width: 50em;
 }
 
-/* Table max width */
-table {
-    max-width: 80em;
-}
-
 /* General text styling */
 h1, h2, h3, h4, h5, h6 {
     color: #064169 !important;
@@ -237,12 +232,13 @@ th {
     background-color: #66a2d1;         
     color: white;                      
     padding: 12px;                     
-    text-align: left;                 
+    text-align: center;  
+    border: 1px solid #708090;          
 }
 
 /* Table cells */
 td {
-    border: 1px solid #ddd;           
+    border: 1px solid #708090;           
     padding: 12px;                    
     text-align: left;                  
 }

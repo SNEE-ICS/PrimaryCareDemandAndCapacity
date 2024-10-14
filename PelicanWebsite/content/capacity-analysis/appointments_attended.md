@@ -5,12 +5,13 @@ Category: Capacity Analysis
 Authors: A.Jarman & I.Khan
 Summary: Analysis on primary care appointments (Attended/DNA) in SNEE-ICB
 
+<br>
 
-# Introduction & Background
+## Introduction & Background
 Understanding the frequency of missed appointments in SNEE footprints is crucial.  This analysis endeavors to construct a model that captures the instances of missed appointments, allowing patients to re-enter the system at a later date.
+<br><br>
 
-
-# Data Sources
+## Data Sources
 The primary data for this analysis is derived from the extensive appointments dataset provided by NHS England, spanning from April 2021 to August 2023. While FY21 and FY22 were based on complete annual data, the assessment for FY23 is limited to the available data from April to August.
 <table>
     <thead>
@@ -28,28 +29,28 @@ The primary data for this analysis is derived from the extensive appointments da
         </tr>
     </tbody>
 </table>
-<br><br>
+<br>
 
-# Methodology
 
+## Methodology
 Before the analysis, the data was pre-processed. 
 
 - Appointment months were converted into FY-years.
-- Extracted national average and proportion for all appointment types.
+- Calculated the national averages and proportional representation for each appointment type.
 
 1- Comparison with SNEE Area:
 
-- Compared national average and proportion with SNEE area for FY-YEAR 2021, 2022, and 2023.
-- Plotted the comparisons.
+- Conducted a comparative analysis between the national averages and proportions with the SNEE area for fiscal years 2022, 2023, and 2024.
+- Visualized the results through detailed comparison plots.
 
 2- Detailed Proportion Analysis:
 
-- Extracted proportions of attended, DNA, and unknown appointments based on SUB-ICB, healthcare professional type (hcp_type), and appointment mode.
-- Plotted the changes in missed appointments over the years.
+- Extracted proportions of attended, did not attend (DNA), and unknown appointments based on SUB-ICB, healthcare professional type (hcp_type), and appointment mode.
+- Plotted the changes in did not attend (DNA) appointments over the years.
 
 3- Correlation Matrix:
 
-- Conducted a correlation matrix analysis to identify factors affecting the likelihood of missing appointments (DNA) in the SNEE area.
+- Conducted a correlation matrix analysis to identify factors affecting the likelihood of DNA appointments  in the SNEE area.
 
 4- Identifying Appointment Trends:
 
@@ -57,61 +58,148 @@ Before the analysis, the data was pre-processed.
 - Conducted additional analysis on appointment types with higher likelihood of being missed.
 
 This approach involves a comprehensive examination of various factors influencing appointment attendance, utilizing visualizations for better understanding. This structured analysis should provide valuable insights into missed appointments trends and potential influencing factors in the SNEE area.
+<br><br>
 
+## Results and inferences 
 
-# Results and inferences 
-
-## 1. Missed Appointments Comparison of Proportion and Average (per month): SNEE sub-ICB and National average
-
-
-<style>
-  table { border-collapse: collapse; width: 100%;}
-  th { border: 1px solid black; padding: 8px; text-align: center;}
-  td { border: 1px solid black; padding: 8px; text-align: left;}
-</style>
+### 1. Missed Appointments Comparison of Proportion and Average (per month): SNEE-ICB and National average
 
 <table>
   <thead>
-    <tr><th rowspan="2">Year</th><th colspan="3">National (avg, %) each month of the year</th><th colspan="3">SNEE (AVG, %)</th></tr>
-    <tr><th>Attended</th><th>DNA</th><th>Unknown</th><th>Attended</th><th>DNA</th><th>Unknown</th></tr>
+    <tr>
+      <th rowspan="2">Year</th>
+      <th colspan="2">Attended (Count, %)</th>
+      <th colspan="2">DNA (Count, %)</th>
+      <th colspan="2">Unknown (Count, %)</th>
+    </tr>
+    <tr>
+      <th>Nation wide</th>
+      <th>SNEE</th>
+      <th>Nation wide</th>
+      <th>SNEE</th>
+      <th>Nation wide</th>
+      <th>SNEE</th>
+    </tr>
   </thead>
   <tbody>
-    <tr><td>FY-2021</td><td>579332.27 (91.56%)</td><td>27252.8 (4.26%)</td><td>25638.21 (4.18%)</td><td>450111.8 (93.55%)</td><td>16323.2 (3.32%)</td><td>15382.2 (3.13%)</td></tr>
-    <tr><td>FY-2022</td><td>608099.22 (91.21%)</td><td>31568.7 (4.63%)</td><td>27095.84 (4.17%)</td><td>465021.9 (93.22%)</td><td>17822.6 (3.51%)</td><td>16936.3 (3.27%)</td></tr>
-    <tr><td>FY-2023 (April-August)</td><td>591085.91 (90.55%)</td><td>29004.74 (4.35%)</td><td>33054.93 (5.10%)</td><td>448269.2 (92.17%)</td><td>14968 (3.05%)</td><td>23803 (4.78%)</td></tr>
+    <tr>
+      <td>FY-2022</td>
+      <td>608,099 (91.21%)</td>
+      <td>465,022 (93.22%)</td>
+      <td>31,569 (4.63%)</td>
+      <td>17,823 (3.51%)</td>
+      <td>27,096 (4.17%)</td>
+      <td>16,936 (3.27%)</td>
+    </tr>
+    <tr>
+      <td>FY-2023</td>
+      <td>628,297 (90.04%)</td>
+      <td>481,801 (91.84%)</td>
+      <td>31,723 (4.45%)</td>
+      <td>16,480 (3.11%)</td>
+      <td>38,692 (5.51%)</td>
+      <td>27,284 (5.06%)</td>
+    </tr>
+    <tr>
+      <td>FY-2024 (Apr-Aug)</td>
+      <td>629,349 (90.06%)</td>
+      <td>493,590 (92.03%)</td>
+      <td>30,356 (4.22%)</td>
+      <td>15,572 (2.88%)</td>
+      <td>40,010 (5.72%)</td>
+      <td>27,752 (5.09%)</td>
+    </tr>
   </tbody>
 </table>
+<br>
 
+Based on the above table:
 
-Based on the provided table:
-
-- The average percentage of **DNA appointments** for SNEE-ICB is marginally **lower**, consistently falling notably below the National Average for each year.
-- Conversely, the average percentage of **Attended appointments** for SNEE-ICB is slightly **higher**, distinctly surpassing the National Average for each year
-We can infer that SNEE icb is performing marginally better than the National average
+- The average percentage of **DNA appointments** for SNEE-ICB is consistently **lower** than the National Average across all observed years
+- Conversely, the average percentage of **Attended appointments** for SNEE-ICB is consistently **higher** than the National Average for each year, suggesting a more favorable attendance trend in SNEE.
+Overall, these findings highlight the effectiveness of SNEE-ICB's initiatives in reducing missed appointments while promoting higher attendance rates compared to the national landscape.<br>
 
 We can confirm the lower average of (Attended/DNA) AppointmentsSNEE compared to other ICB'S from the graph below
-<!--![Average appointments]({attach}/img/appointment_attendance_9.png)-->
+<br>
 
-### The table below illustrates the percentage of appointments categorized as Attended, DNA (Did Not Attend), and Unknown in SNEE-SUB-ICB's
+![Average appointments]({attach}/img/appointment_attendance_1.png)
 
+<br>
+
+### Breaking Down Appointment Trends by SNEE Sub-ICB Areas
 <table>
-  <tr><th>SUB_ICB_LOCATION_CODE</th><th>FY_YEAR</th><th>Attended</th><th>DNA</th><th>Unknown</th></tr>
-  <tr><td rowspan="3">06L</td><td>FY2021</td><td>94.44%</td><td>2.4%</td><td>3.16%</td></tr>
-  <tr><td>FY2022</td><td>93.62%</td><td>2.79%</td><td>3.59%</td></tr>
-  <tr><td>FY2023</td><td>91.95%</td><td>2.7%</td><td>5.35%</td></tr>
-  <tr><td rowspan="3">06T</td><td>FY2021</td><td>91.55%</td><td>4.97%</td><td>3.48%</td></tr>
-  <tr><td>FY2022</td><td>91.16%</td><td>4.91%</td><td>3.92%</td></tr>
-  <tr><td>FY2023</td><td>91%</td><td>3.83%</td><td>5.17%</td></tr>
-  <tr><td rowspan="3">07K</td><td>FY2021</td><td>94.66%</td><td>2.58%</td><td>2.76%</td></tr>
-  <tr><td>FY2022</td><td>94.88%</td><td>2.84%</td><td>2.29%</td></tr>
-  <tr><td>FY2023</td><td>93.56%</td><td>2.62%</td><td>3.82%</td></tr>
+  <tr>
+    <th>SUB_ICB_LOCATION_CODE</th>
+    <th>FY_YEAR</th>
+    <th>Attended (%)</th>
+    <th>DNA (%)</th>
+    <th>Unknown (%)</th>
+  </tr>
+  <tr>
+    <td rowspan="3">Ipswich & East Suffolk (06L)</td>
+    <td>FY2022</td>
+    <td>93.62%</td>
+    <td>2.79%</td>
+    <td>3.59%</td>
+  </tr>
+  <tr>
+    <td>FY2023</td>
+    <td>91.44%</td>
+    <td>2.79%</td>
+    <td>5.77%</td>
+  </tr>
+  <tr>
+    <td>FY2024</td>
+    <td>92.04%</td>
+    <td>2.50%</td>
+    <td>5.46%</td>
+  </tr>
+  <tr>
+    <td rowspan="3">North East Essex (06T)</td>
+    <td>FY2022</td>
+    <td>91.16%</td>
+    <td>4.91%</td>
+    <td>3.92%</td>
+  </tr>
+  <tr>
+    <td>FY2023</td>
+    <td>90.65%</td>
+    <td>3.85%</td>
+    <td>5.50%</td>
+  </tr>
+  <tr>
+    <td>FY2024</td>
+    <td>90.38%</td>
+    <td>3.79%</td>
+    <td>5.83%</td>
+  </tr>
+  <tr>
+    <td rowspan="3">West Suffolk (07K)</td>
+    <td>FY2022</td>
+    <td>94.88%</td>
+    <td>2.84%</td>
+    <td>2.29%</td>
+  </tr>
+  <tr>
+    <td>FY2023</td>
+    <td>93.42%</td>
+    <td>2.68%</td>
+    <td>3.90%</td>
+  </tr>
+  <tr>
+    <td>FY2024</td>
+    <td>93.67%</td>
+    <td>2.36%</td>
+    <td>3.97%</td>
+  </tr>
 </table>
 
-- The sub-ICB North East Essex (06T) demonstrates the highest proportion of DNA appointments, indicating a significant number of missed appointments.
-- Conversely, the sub-ICB West Suffolk (07K) exhibits the maximum proportion of Attended appointments,
+- The sub-ICB North East Essex (06T) demonstrates the highest proportion of DNA appointments, suggesting a significant challenge in managing appointment attendance within this region.
+- Conversely, the sub-ICB West Suffolk (07K) exhibits the maximum proportion of Attended appointments, indicating a strong performance in appointment adherence.
+<br><br>
 
 
-## 2. Appointment Trends Over Time/Years
+### 2. Appointment Trends Over Time/Years
 
 ![DNA-FY(21-22-23)]({attach}/img/appointment_attendance_5.png)
 
@@ -124,84 +212,209 @@ We can easily infer that -
 
 ![DNA-FY(21-22-23)]({attach}/img/appointment_attendance_7.png)
 
+<br><br>
 
 
-## 3. To understand if Across staff groups & Sub-ICB, are some appointments more likely to be missed/attended
+### 3. To understand if Across staff groups & Sub-ICB, are some appointments more likely to be missed/attended
 
-### Below table shows the comaparison between % of appointments (Attended,DNA and Unknwon) National vs SNEE, based on HCP type and Appointment mode
+**Below table shows the comaparison between proportion of appointments (Attended,DNA and Unknown) National vs SNEE, based on HCP type and Appointment mode**
 
 <table>
-  <tr><th colspan="2">TYPE</th><th colspan="3">National</th><th colspan="3">SNEE</th></tr>
-  <tr><th>HCP_TYPE</th><th>APPT_MODE</th><th>Attended</th><th>DNA</th><th>Unknown</th><th>Attended</th><th>DNA</th><th>Unknown</th></tr>
-  <tr><td rowspan="5">GP</td><td>Face-to-Face</td><td>93.36%</td><td>3.43%</td><td>3.2%</td><td>95.26%</td><td>2.2%</td><td>2.54%</td></tr>
-  <tr><td>Home Visit</td><td>83.07%</td><td>2.31%</td><td>14.62%</td><td>93.53%</td><td>1.78%</td><td>4.69%</td></tr>
-  <tr><td>Telephone</td><td>95.99%</td><td>1.52%</td><td>2.49%</td><td>97.81%</td><td>0.68%</td><td>1.51%</td></tr>
-  <tr><td>Unknown</td><td>59.83%</td><td>3.01%</td><td>37.23%</td><td>44.41%</td><td>2.79%</td><td>52.79%</td></tr>
-  <tr><td>Video/Online</td><td>91.13%</td><td>1.46%</td><td>7.4%</td><td>91.22%</td><td>2.39%</td><td>6.39%</td></tr>
-   <tr><td rowspan="5">Other Practice staff</td><td>Face-to-Face</td><td>87.69%</td><td>7.26%</td><td>5.05%</td><td>90.12%</td><td>5.22%</td><td>4.66%</td></tr>
-  <tr><td>Home Visit</td><td>80.95%</td><td>3.35%</td><td>15.71%</td><td>88.89%</td><td>3.58%</td><td>7.53%</td></tr>
-  <tr><td>Telephone</td><td>92.91%</td><td>3.13%</td><td>3.96%</td><td>95.89%</td><td>1.19%</td><td>2.91%</td></tr>
-  <tr><td>Unknown</td><td>50.56%</td><td>4.09%</td><td>45.35%</td><td>34.29%</td><td>2.37%</td><td>63.34%</td></tr>
-  <tr><td>Video/Online</td><td>86.81%</td><td>3.72%</td><td>9.48%</td><td>89.92%</td><td>6.38%</td><td>3.7%</td></tr>
-  <tr><td rowspan="5">Unknown</td><td>Face-to-Face</td><td>76.37%</td><td>2.96%</td><td>23%</td><td>18.38%</td><td>72.26%</td><td>9.36%</td></tr>
-  <tr><td>Home Visit</td><td>66.85%</td><td>3.99%</td><td>31.43%</td><td>87.96%</td><td>0.93%</td><td>11.12%</td></tr>
-  <tr><td>Telephone</td><td>89.61%</td><td>2.6%</td><td>10.56%</td><td>91.25%</td><td>3.13%</td><td>5.62%</td></tr>
-  <tr><td>Unknown</td><td>79.38%</td><td>2.74%</td><td>30.33%</td><td>92.12%</td><td>2.3%</td><td>5.58%</td></tr>
-  <tr><td>Video/Online</td><td>81.71%</td><td>3.77%</td><td>19.86%</td><td>79.56%</td><td>3.28%</td><td>17.16%</td></tr>
+  <tr>
+    <th colspan="2">TYPE</th>
+    <th colspan="2">Attended</th>
+    <th colspan="2">DNA</th>
+    <th colspan="2">Unknown</th>
+  </tr>
+  <tr>
+    <th>HCP_TYPE</th>
+    <th>APPT_MODE</th>
+    <th>National</th>
+    <th>SNEE</th>
+    <th>National</th>
+    <th>SNEE</th>
+    <th>National</th>
+    <th>SNEE</th>
+  </tr>
+  <tr>
+    <td rowspan="5">GP</td>
+    <td>Face-to-Face</td>
+    <td>93.02%</td>
+    <td>94.93%</td>
+    <td>3.61%</td>
+    <td>2.21%</td>
+    <td>3.37%</td>
+    <td>2.86%</td>
+  </tr>
+  <tr>
+    <td>Home Visit</td>
+    <td>84.79%</td>
+    <td>94.10%</td>
+    <td>2.02%</td>
+    <td>1.48%</td>
+    <td>13.20%</td>
+    <td>4.42%</td>
+  </tr>
+  <tr>
+    <td>Telephone</td>
+    <td>95.14%</td>
+    <td>97.31%</td>
+    <td>1.64%</td>
+    <td>0.65%</td>
+    <td>3.22%</td>
+    <td>2.04%</td>
+  </tr>
+  <tr>
+    <td>Unknown</td>
+    <td>50.21%</td>
+    <td>54.27%</td>
+    <td>2.15%</td>
+    <td>2.32%</td>
+    <td>47.63%</td>
+    <td>43.41%</td>
+  </tr>
+  <tr>
+    <td>Video/Online</td>
+    <td>89.91%</td>
+    <td>93.06%</td>
+    <td>0.80%</td>
+    <td>0.88%</td>
+    <td>9.30%</td>
+    <td>6.06%</td>
+  </tr>
+  <tr>
+    <td rowspan="5">Other Practice Staff</td>
+    <td>Face-to-Face</td>
+    <td>87.68%</td>
+    <td>89.53%</td>
+    <td>6.99%</td>
+    <td>4.95%</td>
+    <td>5.33%</td>
+    <td>5.52%</td>
+  </tr>
+  <tr>
+    <td>Home Visit</td>
+    <td>82.84%</td>
+    <td>89.38%</td>
+    <td>3.16%</td>
+    <td>3.22%</td>
+    <td>14.01%</td>
+    <td>7.40%</td>
+  </tr>
+  <tr>
+    <td>Telephone</td>
+    <td>92.03%</td>
+    <td>95.14%</td>
+    <td>3.38%</td>
+    <td>1.20%</td>
+    <td>4.59%</td>
+    <td>3.66%</td>
+  </tr>
+  <tr>
+    <td>Unknown</td>
+    <td>41.40%</td>
+    <td>47.27%</td>
+    <td>2.94%</td>
+    <td>3.10%</td>
+    <td>55.67%</td>
+    <td>49.63%</td>
+  </tr>
+  <tr>
+    <td>Video/Online</td>
+    <td>89.44%</td>
+    <td>93.37%</td>
+    <td>1.39%</td>
+    <td>2.87%</td>
+    <td>9.17%</td>
+    <td>3.76%</td>
+  </tr>
+  <tr>
+    <td rowspan="5">Unknown</td>
+    <td>Face-to-Face</td>
+    <td>75.70%</td>
+    <td>41.70%</td>
+    <td>2.29%</td>
+    <td>49.28%</td>
+    <td>24.33%</td>
+    <td>9.02%</td>
+  </tr>
+  <tr>
+    <td>Home Visit</td>
+    <td>67.79%</td>
+    <td>89.15%</td>
+    <td>3.80%</td>
+    <td>0.92%</td>
+    <td>30.63%</td>
+    <td>9.93%</td>
+  </tr>
+  <tr>
+    <td>Telephone</td>
+    <td>90.15%</td>
+    <td>93.40%</td>
+    <td>2.35%</td>
+    <td>3.82%</td>
+    <td>10.79%</td>
+    <td>2.77%</td>
+  </tr>
+  <tr>
+    <td>Unknown</td>
+    <td>74.19%</td>
+    <td>90.67%</td>
+    <td>2.27%</td>
+    <td>2.26%</td>
+    <td>31.84%</td>
+    <td>7.06%</td>
+  </tr>
+  <tr>
+    <td>Video/Online</td>
+    <td>79.00%</td>
+    <td>100.00%</td>
+    <td>2.73%</td>
+    <td>2.76%</td>
+    <td>21.19%</td>
+    <td>18.84%</td>
+  </tr>
 </table>
 
- #### Inferences for Attended Appointments
-  - GP: The **attendance** rate is **higher** Nationally and in SNEE area, compared to other HCP_TYPE. highest Where APPT_MODE is **Face-to-Face** followed by **Telephone**
-  - Other Practice Staff:  **Telephone** appointments with **Other Practice Staff** have **high attendance** rates both nationally and in SNEE.
+**Major Highlights**
 
- #### Inferences for DNA Appointments
- - GP: GP appointments with **unknown modes** have the **highest DNA** rates both nationally and in SNEE.
- - Other Practice Staff: **Face-to-Face** appointments with **Other Practice Staff** have **highest DNA** rates followed by **Video/Online**.
-
- #### Other critical Inferences:
- - Appointments with **unknown HCP types**, under all **APPT_MODE**, have significantly **higher DNA** rates compared to other types.
- - Telephone appointments exhibit high attendance rates across all HCP types. This suggests a growing acceptance and comfort with telemedicine, emphasizing the importance of remote healthcare options.
+- SNEE consistently outperforms national averages across most appointment modes and HCP types, especially in home visits and telephone appointments.
+- Face-to-Face Appointments: High attendance rates with low DNA rates, but a small percentage of unknown outcomes.
+- Home Visits: Moderate attendance rates with low DNA rates, but a notable percentage of unknown outcomes.
+- Telephone Appointments: Very high attendance rates with minimal DNA rates and low unknown outcomes.
+- Unknown Mode: Low attendance rates with a high percentage of unknown outcomes, indicating a need for better tracking.
+- Video/Online Appointments: High attendance rates with very low DNA rates and a moderate percentage of unknown outcomes
 
 ### Graphical representation for the above table
 
+**Nation Wide**
+
 ![DNA-FY(21-22-23)]({attach}/img/appointment_attendance_4.png)
 
-### Below graph represents the same information for SNEE-ICB areas
+**SNEE-ICB**
 
 ![DNA-FY(21-22-23)]({attach}/img/appointment_attendance_8.png)
 
+<br><br>
 
 
-## 4. Likelihood of Missing Appointments: from a combination of Sub-ICB, Staff type, Appointment type.
+### 4. Likelihood of Missing Appointments: from a combination of Sub-ICB, Staff type, Appointment type.
 
 - To understand this in detail, we have generated a Correlation matrix between all the indicators under SNEE-ICB areas.
 - Correlation between variables signifies the degree and direction of the relationship between them. It measures how changes in one variable correspond to changes in another.
 Correlation is measured on a scale from -1 to 1:
-
 - Close to 1 shows a strong positive relationship: both variables move in the same direction or increase together.
 - Close to -1 indicates a strong negative relationship: the variables move in opposite directions, means as one variable goes up, the other tends to go down.
 - Around 0 suggests a weak or no clear relationship between the variables.
 
-<table border="1">
-  <tr><th>Feature</th><th>Coefficient</th></tr>
-  <tr><td>APPT_MODE_Face-to-Face</td><td>0.204919</td></tr>
-  <tr><td>HCP_TYPE_Unknown</td><td>0.165292</td></tr>
-  <tr><td>SUB_ICB_LOCATION_CODE_06T</td><td>0.101825</td></tr>
-  <tr><td>APPT_MODE_Unknown</td><td>0.091138</td></tr>
-  <tr><td>HCP_TYPE_Other Practice staff</td><td>0.050375</td></tr>
-  <tr><td>SUB_ICB_LOCATION_CODE_06L</td><td>0.004799</td></tr>
-  <tr><td>APPT_MODE_Video/Online</td><td>-0.019436</td></tr>
-  <tr><td>SUB_ICB_LOCATION_CODE_07K</td><td>-0.110447</td></tr>
-  <tr><td>APPT_MODE_Home Visit</td><td>-0.119116</td></tr>
-  <tr><td>APPT_MODE_Telephone</td><td>-0.143173</td></tr>
-  <tr><td>HCP_TYPE_GP</td><td>-0.190721</td></tr>
-</table>
+<table> <tr> <th>Feature</th> <th>Coefficient</th> </tr> <tr> <td>Appointment Mode: Face-to-Face</td> <td>0.133321</td> </tr> <tr> <td>Appointment Mode: Unknown</td> <td>0.112205</td> </tr> <tr> <td>HCP Type: Other Practice Staff</td> <td>0.099106</td> </tr> <tr> <td>HCP Type: Unknown</td> <td>0.096461</td> </tr> <tr> <td>SUB ICB Location Code: 06L</td> <td>0.050065</td> </tr> <tr> <td>SUB ICB Location Code: 06T</td> <td>0.039058</td> </tr> <tr> <td>Appointment Mode: Video/Online</td> <td>-0.047138</td> </tr> <tr> <td>Appointment Mode: Home Visit</td> <td>-0.082667</td> </tr> <tr> <td>SUB ICB Location Code: 07K</td> <td>-0.090500</td> </tr> <tr> <td>Appointment Mode: Telephone</td> <td>-0.117008</td> </tr> <tr> <td>HCP Type: GP</td> <td>-0.175618</td> </tr> </table>
 
-- In summary, **face-to-face appointments**, **unknown healthcare providers**, and specific location codes **(like '06T')** have **positive correlations** with **DNA** appointments, indicating that these factors increase the chances of appointment being missed. 
-- While **home visits**, **telephone appointments**, **GPs**, and specific location codes **(like '07K')** have weak negative correlations, therefore these factors will decrese the chances of appointment being missed
+- In summary, **Appointment mode:Face-to-Face/Unknown**, **HCP Type: Unkown/Other practice staff**, and specific location codes **like '06L'** have **positive correlations** with **DNA** appointments, indicating that these factors increase the chances of appointment being missed. 
+- While **HCP Type:GPs**, **Appointment mode: home visits/telephone**, and specific location codes **like '07K'** have weak negative correlations, therefore these factors will decrease the chances of appointment being missed
+<br><br>
 
 
-## 5. Creating YAML for results
+### 5. Creating YAML for results
 
 Finally, the results were processed into a YAML file for the simulation application, providing proportions of DNA appointments by sub-ICB areas, HCP types, and appointment modes.
 - code "06L": Ipswich & East Suffolk, "07K": West Suffolk, "06T": North East Essex, corresponds to sub-areas under SNEE-ICB.
