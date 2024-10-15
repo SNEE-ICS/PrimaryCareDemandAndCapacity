@@ -1,17 +1,17 @@
-Title: Primary Care Appointment Duration in SNEE
+Title: Appointments Duration
 Date: 2023-12-03
-Modified: 2023-12-03
+Modified: 2024-10-15
 Category: Demand Analysis
 Authors: A.Jarman & I.Khan
-Summary: Appointment duration analysis
+Summary: Analysis on primary care appointments duration in SNEE-ICB
 
-# Appointment Duration in SNEE Primary Care.
+<br>
 
 ## Introduction & Background
 In order to estimate future staffing requirements and demand in the SNEE footprint, it is important to understand how much demand (in time) is used for each appointment.  
 Unfortunately, the exact time taken per appointment is not provided; so it is very difficult to perform analyses to produce summary statistics or useful insights that would be possible with record-level data. With this binned data, we can still use maximum likelihood estimation (MLE) to determine the parameters of a probability distribution which can be used in further modelling of appointment times. 
 In this analysis we fit two empirical/theoretical distributions to the data in each sub-icb location for use in the system dynamics/ discrete event simulation analysis, the exponential distribution and a lognormal distribution. We use two, so that we can decide later on after discussion with stakeholders, which is more suitable for the model. We could also choose another distribution type.  
-![Plot3]({attach}/img/appointment_duration_4.png)
+![Plot3]({attach}/img/Appointment_duration_4.png)
 
 
 
@@ -24,9 +24,9 @@ NHS England appointment data [link](https://digital.nhs.uk/data-and-information/
 
 ## Method
 After cleaning the data, we aggregated and counted the number of appointments in each time bin in each sub-ICB area as shown by the plots below. This was also grouped by financial year, to determine if there are any patterns or trends in the data. The distribution of the data is shown below, with the bin sizes reflective of how the data is provided.
-![Appointment duration ]({attach}/img/appointment_duration_1.png)
-![Plot2]({attach}/img/appointment_duration_2.png)
-![Plot3]({attach}/img/appointment_duration_3.png)  
+![Appointment duration ]({attach}/img/Appointment_duration_1.png)
+![Plot2]({attach}/img/Appointment_duration_2.png)
+![Plot3]({attach}/img/Appointment_duration_3.png)  
 After examining the data, it was decided that FY2023 is probably the most 'normal' year representing more typical demand after COVID-19 disrupted the previous years, both in terms of appointment times and also formats.
 
 ### Maximum Likelihood estimation

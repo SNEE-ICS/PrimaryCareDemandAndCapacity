@@ -1,4 +1,4 @@
-Title: Appointments
+Title: Appointments attendance
 Date: 2024-01-04
 Modified: 2024-10-11
 Category: Capacity Analysis
@@ -122,7 +122,7 @@ Overall, these findings highlight the effectiveness of SNEE-ICB's initiatives in
 We can confirm the lower average of (Attended/DNA) AppointmentsSNEE compared to other ICB'S from the graph below
 <br>
 
-![Average appointments]({attach}/img/appointment_attendance_1.png)
+![Average appointments]({attach}/img/Appointment_attendance_1.png)
 
 <br>
 
@@ -201,7 +201,7 @@ We can confirm the lower average of (Attended/DNA) AppointmentsSNEE compared to 
 
 ### 2. Appointment Trends Over Time/Years
 
-![DNA-FY(21-22-23)]({attach}/img/appointment_attendance_5.png)
+![DNA-FY(21-22-23)]({attach}/img/Appointment_attendance_5.png)
 
 We can infer that -
 
@@ -210,7 +210,7 @@ We can infer that -
 
 - Below graph represents the same information for SNEE-ICB areas
 
-![DNA-FY(21-22-23)]({attach}/img/appointment_attendance_7.png)
+![DNA-FY(21-22-23)]({attach}/img/Appointment_attendance_7.png)
 
 <br><br>
 
@@ -389,11 +389,11 @@ We can infer that -
 
 **Nation Wide**
 
-![DNA-FY(21-22-23)]({attach}/img/appointment_attendance_4.png)
+![DNA-FY(21-22-23)]({attach}/img/Appointment_attendance_4.png)
 
 **SNEE-ICB**
 
-![DNA-FY(21-22-23)]({attach}/img/appointment_attendance_8.png)
+![DNA-FY(21-22-23)]({attach}/img/Appointment_attendance_8.png)
 
 <br><br>
 

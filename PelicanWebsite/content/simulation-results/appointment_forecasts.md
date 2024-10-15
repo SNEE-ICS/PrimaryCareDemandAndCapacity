@@ -1,13 +1,15 @@
-Title: Primary care appointment demand forecasting with regression
+Title: Forecasting
 Date: 2024-01-04
-Modified: 2024-10-01
+Modified: 2024-10-15
 Category: Simulation Results
 Authors: A.Jarman & I.Khan
-Summary: Primary care appointment demand forecasting
+Summary: Analysis on primary care appointment demand forecasting with regression
 
+<br>
 
 ## Introduction
 Appointment volumes have been increasing in SNEE. In order to estimate future appointments demand in the SNEE footprint, the project aims to leverage historical appointments data, analyze key patterns and trends, and develop a predictive/machine learning model to forecast the number of GP appointments at a regional level within the NHS framework. The project is focused on providing data-driven insights that can assist healthcare providers in better resource allocation, planning, and operational management. As patient numbers fluctuate due to various factors, predicting the number of future appointments can help mitigate overbooking or underutilization of healthcare services. The ultimate goal is to create a reliable and efficient predictive model that accounts for historical data and other relevant factors.
+<br><br>
 
 
 ## Data source 
@@ -50,11 +52,13 @@ Cos transformation: cos(2π×month/12)
 
 
 ## Primary care Appointments in England and SNEE-ICB 
-![alt text]({attach}/img/num_appointments_1.png)
+![alt text]({attach}/img/Num_appointments_1.png)
 <br>
-![alt text]({attach}/img/num_appointments_2.png)
+
+![alt text]({attach}/img/Num_appointments_2.png)
+
 ## Trend plot for Primary care Appointments/working-day in SNEE-ICB
-![alt text]({attach}/img/num_appointments_3.png)
+![alt text]({attach}/img/Num_appointments_3.png)
 
 
 ## Statistical Forecast
@@ -73,7 +77,7 @@ There is a clear 12-month observed where the number of appointments peaks around
 
 
 ## Ridge Regression Models Outputs
-![alt text]({attach}/img/num_appointments_5.png)
+![alt text]({attach}/img/Num_appointments_5.png)
 <b>Actual vs. Predicted Values (Left Plot):</b>
 - This plot compares the actual target values to the values predicted by the model.
 - The red dashed line represents the ideal scenario where the predicted values exactly match the actual values (i.e., perfect predictions).
