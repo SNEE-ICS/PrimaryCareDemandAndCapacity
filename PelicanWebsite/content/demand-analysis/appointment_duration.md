@@ -60,11 +60,13 @@ After cleaning the data, we aggregated and counted the number of appointments in
 ![Appointment duration:WS]({attach}/img/Appointment_duration_7.png)  
 
 <br>
-After examining the data, it was decided that FY2023 is probably the most 'normal' year representing more typical demand after COVID-19 disrupted the previous years, both in terms of appointment times and also formats.
+After examining the data, it was decided that FY2024 is probably the most 'normal' year representing more typical demand after COVID-19 disrupted the previous years, both in terms of appointment times and also formats.
+<br><br>
 
 ### Maximum Likelihood estimation
-We used numpy arrays to linearly space the observations within the bin edges, then used scipy's built in fit method (using MLE) to determine the best parameters for each distribution using the FY2023 data.
+We used numpy arrays to linearly space the observations within the bin edges, then used scipy's built in fit method (using MLE) to determine the best parameters for each distribution using the FY2024 data.
 
+<br>
 
 ## Results
 The results were a fitted set of distribution parameters which can be re-created during simulation runs. This is saved to a `yaml` file which is then easily read by the simulation application using a built in python package. These are positional arguments to scipy functions which recreate the distributions.
@@ -72,28 +74,28 @@ The results were a fitted set of distribution parameters which can be re-created
 Ipswich & East Suffolk:
   expon:
   - 1.0
-  - 13.060152140044291
+  - 13.335295514170516
   lognorm:
-  - 0.7551821071544044
-  - -0.974990417176186
-  - 11.467940407080306
+  - 0.7178872142941628
+  - -1.3059899480227346
+  - 12.221354792237264
 North East Essex:
   expon:
   - 1.0
-  - 12.806261222109528
+  - 13.167760538037228
   lognorm:
-  - 0.6468566283947731
-  - -1.8350298084742074
-  - 12.754426837792252
+  - 0.6337657169020359
+  - -2.0401683136291373
+  - 13.320485301272308
 West Suffolk:
   expon:
   - 1.0
-  - 12.905713262336715
+  - 13.14423782677568
   lognorm:
-  - 0.7234164989792777
-  - -1.1943306133419396
-  - 11.754347636020235
-
+  - 0.7037994624017062
+  - -1.3999270911865338
+  - 12.253406378839662
 ```
+
 
 <br><hr><br>
