@@ -203,7 +203,7 @@ We can confirm the lower average of (Attended/DNA) AppointmentsSNEE compared to 
 
 ![DNA-FY(21-22-23)]({attach}/img/appointment_attendance_5.png)
 
-We can easily infer that -
+We can infer that -
 
 - Nationally the missed appointments are consistent over years when appointment mode is Face to Face, home visit or telephonic.
 - Nationally inconsistencies is observed in appointments with unknown or video/online modes over the years.
