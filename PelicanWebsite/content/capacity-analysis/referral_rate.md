@@ -12,7 +12,9 @@ The referral rate is calculated as the number of referrals divided by the total 
 <br><br>
 
 ## Data Sources
-For this analysis, the primary data sources utilized were NHS England's referrals and appointments datasets, predominantly encompassing data points from April 2023 to March 2024.
+For this analysis, the primary data sources utilized were NHS England's referrals and appointments datasets.
+- The referrals dataset is predominantly encompassing data points from April 2023 to March 2024.
+- The appointments dataset is spanning from March 2022 to August 2024. While FY22 and FY23 were based on complete annual data, the assessment for FY24 is limited to the available data from April to August.
 <table>
     <thead>
         <tr>

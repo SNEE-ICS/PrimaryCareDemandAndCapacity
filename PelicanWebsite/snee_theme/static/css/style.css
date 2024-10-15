@@ -115,7 +115,9 @@ a:hover {
 
 /* Image max width */
 img {
-    max-width: 50em;
+    max-width: 65em;
+    display: block;
+    margin: 0 auto;
 }
 
 /* General text styling */

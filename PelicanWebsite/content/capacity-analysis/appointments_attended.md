@@ -1,4 +1,4 @@
-Title: Appointments attendance
+Title: Appointments Attendance
 Date: 2024-01-04
 Modified: 2024-10-11
 Category: Capacity Analysis
@@ -12,7 +12,7 @@ Understanding the frequency of missed appointments in SNEE footprints is crucial
 <br><br>
 
 ## Data Sources
-The primary data for this analysis is derived from the extensive appointments dataset provided by NHS England, spanning from April 2021 to August 2023. While FY21 and FY22 were based on complete annual data, the assessment for FY23 is limited to the available data from April to August.
+The primary data for this analysis is derived from the extensive appointments dataset provided by NHS England, spanning from March 2022 to August 2024. While FY22 and FY23 were based on complete annual data, the assessment for FY24 is limited to the available data from April to August.
 <table>
     <thead>
         <tr>
@@ -60,9 +60,9 @@ Before the analysis, the data was pre-processed.
 This approach involves a comprehensive examination of various factors influencing appointment attendance, utilizing visualizations for better understanding. This structured analysis should provide valuable insights into missed appointments trends and potential influencing factors in the SNEE area.
 <br><br>
 
-## Results and inferences 
+## Results and Inferences 
 
-### 1. Missed Appointments Comparison of Proportion and Average (per month): SNEE-ICB and National average
+### 1. Missed (DNA) appointments comparison of proportion and average (per month): SNEE-ICB and National average
 
 <table>
   <thead>
@@ -119,14 +119,14 @@ Based on the above table:
 - Conversely, the average percentage of **Attended appointments** for SNEE-ICB is consistently **higher** than the National Average for each year, suggesting a more favorable attendance trend in SNEE.
 Overall, these findings highlight the effectiveness of SNEE-ICB's initiatives in reducing missed appointments while promoting higher attendance rates compared to the national landscape.<br>
 
-We can confirm the lower average of (Attended/DNA) AppointmentsSNEE compared to other ICB'S from the graph below
+The plot below confirms that the average number of attended/DNA appointments in SNEE is lower compared to other ICBs.
 <br>
 
 ![Average appointments]({attach}/img/Appointment_attendance_1.png)
 
 <br>
 
-### Breaking Down Appointment Trends by SNEE Sub-ICB Areas
+### Breaking down appointment trends by SNEE Sub-ICB Areas
 <table>
   <tr>
     <th>SUB_ICB_LOCATION_CODE</th>
@@ -199,9 +199,12 @@ We can confirm the lower average of (Attended/DNA) AppointmentsSNEE compared to 
 <br><br>
 
 
-### 2. Appointment Trends Over Time/Years
+### 2. Did not attend appointments trends over Time/Years
 
-![DNA-FY(21-22-23)]({attach}/img/Appointment_attendance_5.png)
+**Nation Wide**
+<br>
+
+![DNA-FY(21-22-23)]({attach}/img/Appointment_attendance_7.png)
 
 We can infer that -
 
@@ -210,7 +213,10 @@ We can infer that -
 
 - Below graph represents the same information for SNEE-ICB areas
 
-![DNA-FY(21-22-23)]({attach}/img/Appointment_attendance_7.png)
+**SNEE-ICB**
+<br>
+
+![DNA-FY(21-22-23)]({attach}/img/Appointment_attendance_8.png)
 
 <br><br>
 
@@ -385,17 +391,7 @@ We can infer that -
 - Unknown Mode: Low attendance rates with a high percentage of unknown outcomes, indicating a need for better tracking.
 - Video/Online Appointments: High attendance rates with very low DNA rates and a moderate percentage of unknown outcomes
 
-### Graphical representation for the above table
-
-**Nation Wide**
-
-![DNA-FY(21-22-23)]({attach}/img/Appointment_attendance_4.png)
-
-**SNEE-ICB**
-
-![DNA-FY(21-22-23)]({attach}/img/Appointment_attendance_8.png)
-
-<br><br>
+<br>
 
 
 ### 4. Likelihood of Missing Appointments: from a combination of Sub-ICB, Staff type, Appointment type.
@@ -2292,3 +2288,5 @@ X2C4Y:
     Face-to-Face: .nan
     Unknown: 0.0306
 ```
+
+<br><hr><br>
