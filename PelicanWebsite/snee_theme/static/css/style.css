@@ -115,12 +115,9 @@ a:hover {
 
 /* Image max width */
 img {
-    max-width: 50em;
-}
-
-/* Table max width */
-table {
-    max-width: 80em;
+    max-width: 65em;
+    display: block;
+    margin: 0 auto;
 }
 
 /* General text styling */
@@ -237,12 +234,13 @@ th {
     background-color: #66a2d1;         
     color: white;                      
     padding: 12px;                     
-    text-align: left;                 
+    text-align: center;  
+    border: 1px solid #708090;          
 }
 
 /* Table cells */
 td {
-    border: 1px solid #ddd;           
+    border: 1px solid #708090;           
     padding: 12px;                    
     text-align: left;                  
 }

@@ -5,13 +5,16 @@ Category: Capacity Analysis
 Authors: A.Jarman & I.Khan
 Summary: Analysis on primary care rate of referrals in SNEE-ICB 
 
+<br>
 
 ## Introduction & Background
 The referral rate is calculated as the number of referrals divided by the total number of appointments per year, it is a critical metric in understanding healthcare dynamics. In this part of analysis, our focus is on comprehending the volume of referrals originating from each sub-ICB (Integrated Care Board) under SNEE (Suffolk and North East Essex) that remain within the area (ESNEFT and WSFT) and those extending beyond its borders.
 <br><br>
 
 ## Data Sources
-For this analysis, the primary data sources utilized were NHS England's referrals and appointments datasets, predominantly encompassing data points from April 2023 to March 2024.
+For this analysis, the primary data sources utilized were NHS England's referrals and appointments datasets.
+- The referrals dataset is predominantly encompassing data points from April 2023 to March 2024.
+- The appointments dataset is spanning from March 2022 to August 2024. While FY22 and FY23 were based on complete annual data, the assessment for FY24 is limited to the available data from April to August.
 <table>
     <thead>
         <tr>
@@ -33,13 +36,13 @@ For this analysis, the primary data sources utilized were NHS England's referral
         </tr>
     </tbody>
 </table>
-<br><br>
+<br>
 
 ## Methodology
 The initial step involved filtering the referrals dataset to collate the total number of referrals directed to all ICBs between April 2023 and March 2024 within the three SNEE areas—namely, Ipswich & East Suffolk (06L), West Suffolk (07K), and North East Essex (06T). Simultaneously, the appointments dataframe underwent a cleaning process where 'Unknown' entries under HCP-type were replaced with 'Other practice staff'. Subsequently, this dataset was filtered akin to the referrals dataset.
 
 Upon preparing both datasets, the referral rate for each SNEE-ICB area was computed by dividing the referrals dataset by the appointments dataset. The resulting table, included at the conclusion of this document, outlines the referral rates for each SNEE SUB-ICB area concerning GP and Other practice staff.
-<br><br><br>
+<br><br>
 
 ## Insights through Sankey Diagram
 Interpretation of the data via a Sankey Diagram revealed noteworthy insights:
@@ -49,9 +52,9 @@ Interpretation of the data via a Sankey Diagram revealed noteworthy insights:
 
 <hr>
 <iframe src="Referral_rate_2_sankey.html" width="80%" height="1000px"></iframe>
-<hr><br><br>
+<br><br>
 <iframe src="Referral_rate_4_sankey.html" width="80%" height="1000px"></iframe>
-<hr><br><br>
+<br>
 
 ## Results
 The results were set of referrals rates which can be re-created during simulation runs. This is saved to a `yaml` file which is then easily read by the simulation application using a built in python package.
@@ -82,6 +85,5 @@ The results were set of referrals rates which can be re-created during simulatio
         </tr>
     </tbody>
 </table>
-
 
 <br><hr><br>
