@@ -106,4 +106,4 @@ if __name__ == '__main__':
         n_runs=2)
     # save the outputs
     with open('outputs/simulation_outputs.json', 'w') as f:
-        json.dump(simulation_outputs, f, cls=DateTimeEncoder)
+        json.dump(simulation_outputs, f)
