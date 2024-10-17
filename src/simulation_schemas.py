@@ -99,7 +99,7 @@ class SumTo1Choice(BaseChoice, ABC):
         # Use the custom exception for raising errors
         lower_threshold = 1 - PROPENSITY_ACCURACY_THRESHOLD
         upper_threshold = 1 + PROPENSITY_ACCURACY_THRESHOLD
-        if not (lower_threshold <= propensity_sum <= 1 + upper_threshold):
+        if not (lower_threshold <= propensity_sum <= upper_threshold):
             raise PropensityError(f"The sum of delivery propensities must be close to 1 (within tolerance\
                 {PROPENSITY_ACCURACY_THRESHOLD}). Got {propensity_sum:.6f} instead.")
         
